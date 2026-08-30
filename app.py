@@ -1,115 +1,144 @@
 import streamlit as st
 import google.generativeai as genai
 
-# 1. KONFIGURASI HALAMAN UTAMA
+# 1. KONFIGURASI HALAMAN UTAMA (TAMPILAN MODERN)
 st.set_page_config(
     page_title="Generator 22 Perangkat Kurikulum Merdeka",
     page_icon="🤖",
-    layout="wide"
+    layout="wide",
+    initial_sidebar_state="expanded"
 )
 
-# 2. STRUKTUR SIDEBAR (PENGATURAN & KEAMANAN API)
+# KUSTOMISASI MODEREN LEWAT CSS (Menghilangkan margin berlebih & mempercantik teks)
+st.markdown("""
+    <style>
+    .main .block-container {
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+    h1 {
+        color: #1E3A8A;
+        font-weight: 700;
+    }
+    h3 {
+        color: #4B5563;
+    }
+    div[data-testid="stSidebarUserContent"] {
+        padding-top: 1rem;
+    }
+    </style>
+""", unsafe_allow_html=True)
+
+
+# 2. STRUKTUR SIDEBAR (BILAH SAMPING YANG RAPI & BERSIH)
 with st.sidebar:
-    # Logo Tut Wuri Handayani untuk identitas pendidikan Indonesia
-    st.image("https://wikimedia.org", width=100)
-    st.title("Pengaturan Generator")
+    # Menggunakan URL Logo resmi Kemendikbud dengan format gambar stabil
+    st.markdown("<div style='text-align: center;'><img src='https://wikimedia.org' width='120'></div>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #1E3A8A; margin-bottom: 20px;'>Administrasi Guru</h2>", unsafe_allow_html=True)
     st.write("---")
     
-    # Kolom API Key Mandiri agar pemilik web (Anda) tidak bangkrut membayar token ribuan guru
+    # Kolom API Key Keamanan Pengguna
     api_key_input = st.text_input(
-        "Masukkan Gemini API Key Anda:",
+        "🔑 Masukkan Gemini API Key Anda:",
         type="password",
-        help="Dapatkan API Key gratis di Google AI Studio (://google.com) menggunakan akun Google Anda."
+        help="Dapatkan kunci akses gratis dari Google AI Studio untuk menghidupkan kecerdasan buatan."
     )
     
-    st.markdown("""
-    **Cara Mendapatkan API Key Gratis:**
-    1. Buka [Google AI Studio](https://://google.com/)
-    2. Login dengan akun Google/Gmail Anda.
-    3. Klik tombol **"Get API Key"**.
-    4. Salin kodenya dan tempel di kolom atas.
-    """)
+    # Memasukkan petunjuk ke dalam komponen lipat (Expander) agar tampilan sidebar tetap ringkas
+    with st.expander("💡 Cara Dapat API Key Gratis"):
+        st.markdown("""
+        1. Buka [Google AI Studio](https://google.com)
+        2. Masuk dengan akun Gmail Anda.
+        3. Klik tombol **"Get API Key"**.
+        4. Klik **"Create API Key"**.
+        5. Salin kodenya dan tempel di kolom atas.
+        """)
+        
     st.write("---")
-    st.caption("Versi 1.1.0 (Skala Nasional) © 2026")
+    st.caption("🤖 **Versi 1.2.0 (Edisi Nasional)**")
+    st.caption("Platform Otomasi Administrasi Kurikulum Merdeka © 2026")
 
-# 3. AREA FORMULIR UTAMA GURU
+
+# 3. AREA UTAMA (FORMULIR GURU DALAM KOTAK/CONTAINER)
 st.title("🤖 Generator 22 Perangkat Pembelajaran")
 st.subheader("Kurikulum Merdeka — Otomatis & Standar Kemendikbudristek")
-st.write("Sistem ini dirancang untuk membantu guru di seluruh Indonesia menyusun administrasi mengajar secara instan dan akurat.")
+st.write("Silakan isi komponen identitas sekolah dan pilih jenis administrasi yang ingin Anda buat di bawah ini secara teliti.")
 
-# Pembuatan Grid 2 Kolom untuk Form Input
-col1, col2 = st.columns(2)
-
-with col1:
-    nama_mapel = st.text_input("1. Nama Mata Pelajaran:", placeholder="Contoh: Matematika, Bahasa Indonesia, IPAS")
-    fase_kelas = st.selectbox(
-        "2. Pilih Kelas & Fase:",
-        [
-            "Fase A - Kelas 1", "Fase A - Kelas 2",
-            "Fase B - Kelas 3", "Fase B - Kelas 4",
-            "Fase C - Kelas 5", "Fase C - Kelas 6",
-            "Fase D - Kelas 7", "Fase D - Kelas 8", "Fase D - Kelas 9",
-            "Fase E - Kelas 10",
-            "Fase F - Kelas 11", "Fase F - Kelas 12"
-        ]
-    )
-    semester = st.radio("3. Pilih Semester:", ["Ganjil", "Genap", "Tahunan (Ganjil & Genap)"], horizontal=True)
-
-with col2:
-    alokasi_waktu = st.text_input("4. Total Alokasi Waktu / JP:", placeholder="Contoh: 144 JP per tahun atau 4 JP per minggu")
+# Mengelompokkan input ke dalam Wadah Komponen (Container) agar terlihat menyatu dan mewah
+with st.container(border=True):
+    st.markdown("<h4 style='color: #1E3A8A; margin-top: 0;'>📋 Form Pengisian Identitas Pembelajaran</h4>", unsafe_allow_html=True)
     
-    # 22 Daftar Perangkat Pembelajaran Sesuai Standar Nasional
-    perangkat_pilihan = st.selectbox(
-        "5. Pilih Jenis Perangkat yang Ingin Dibuat:",
-        [
-            "1. Cover Perangkat Pembelajaran",
-            "2. Kalender Pendidikan Sekolah (Format Analisis)",
-            "3. Analisis Alokasi Waktu & Minggu Efektif",
-            "4. Pemetaan Capaian Pembelajaran (CP) berdasarkan Elemen",
-            "5. Perumusan Tujuan Pembelajaran (TP)",
-            "6. Penyusunan Alur Tujuan Pembelajaran (ATP)",
-            "7. Program Tahunan (Prota)",
-            "8. Program Semester (Promes/Prosem)",
-            "9. Kriteria Ketercapaian Tujuan Pembelajaran (KKTP)",
-            "10. Modul Ajar (MA) Utama / RPP Plus",
-            "11. Bahan Ajar & Ringkasan Materi",
-            "12. LKPD (Lembar Kerja Peserta Didik)",
-            "13. Kisi-Kisi Asesmen (Formatif & Sumatif)",
-            "14. Instrumen Asesmen Formatif (Rubrik & Catatan Anekdot)",
-            "15. Soal Asesmen Sumatif (Pilihan Ganda & Esai + Kunci Jawaban)",
-            "16. Modul Projek Penguatan Profil Pelajar Pancasila (P5)",
-            "17. Jurnal Mengajar Harian Guru",
-            "18. Daftar Absensi & Catatan Perkembangan Karakter Siswa",
-            "19. Daftar Nilai Rapor Kurikulum Merdeka",
-            "20. Program Remedial dan Pengayaan",
-            "21. Analisis Hasil Asesmen / Evaluasi Pembelajaran",
-            "22. Laporan Refleksi Guru dan Rencana Tindak Lanjut (RTL)"
-        ]
-    )
+    # Grid 2 Kolom untuk menyusun pertanyaan formulir
+    col1, col2 = st.columns(2)
+    
+    with col1:
+        nama_mapel = st.text_input("1. Nama Mata Pelajaran:", placeholder="Contoh: Matematika, Bahasa Indonesia, IPAS")
+        fase_kelas = st.selectbox(
+            "2. Pilih Kelas & Fase:",
+            [
+                "Fase A - Kelas 1", "Fase A - Kelas 2",
+                "Fase B - Kelas 3", "Fase B - Kelas 4",
+                "Fase C - Kelas 5", "Fase C - Kelas 6",
+                "Fase D - Kelas 7", "Fase D - Kelas 8", "Fase D - Kelas 9",
+                "Fase E - Kelas 10",
+                "Fase F - Kelas 11", "Fase F - Kelas 12"
+            ]
+        )
+        semester = st.radio("3. Pilih Semester:", ["Ganjil", "Genap", "Tahunan (Ganjil & Genap)"], horizontal=True)
 
-st.write("---")
+    with col2:
+        alokasi_waktu = st.text_input("4. Total Alokasi Waktu / JP Pembelajaran:", placeholder="Contoh: 144 JP per tahun atau 4 JP per minggu")
+        perangkat_pilihan = st.selectbox(
+            "5. Pilih Jenis Perangkat Kurikulum Merdeka:",
+            [
+                "1. Cover Perangkat Pembelajaran",
+                "2. Kalender Pendidikan Sekolah (Format Analisis)",
+                "3. Analisis Alokasi Waktu & Minggu Efektif",
+                "4. Pemetaan Capaian Pembelajaran (CP) berdasarkan Elemen",
+                "5. Perumusan Tujuan Pembelajaran (TP)",
+                "6. Penyusunan Alur Tujuan Pembelajaran (ATP)",
+                "7. Program Tahunan (Prota)",
+                "8. Program Semester (Promes/Prosem)",
+                "9. Kriteria Ketercapaian Tujuan Pembelajaran (KKTP)",
+                "10. Modul Ajar (MA) Utama / RPP Plus",
+                "11. Bahan Ajar & Ringkasan Materi",
+                "12. LKPD (Lembar Kerja Peserta Didik)",
+                "13. Kisi-Kisi Asesmen (Formatif & Sumatif)",
+                "14. Instrumen Asesmen Formatif (Rubrik & Catatan Anekdot)",
+                "15. Soal Asesmen Sumatif (Pilihan Ganda & Esai + Kunci Jawaban)",
+                "16. Modul Projek Penguatan Profil Pelajar Pancasila (P5)",
+                "17. Jurnal Mengajar Harian Guru",
+                "18. Daftar Absensi & Catatan Perkembangan Karakter Siswa",
+                "19. Daftar Nilai Rapor Kurikulum Merdeka",
+                "20. Program Remedial dan Pengayaan",
+                "21. Analisis Hasil Asesmen / Evaluasi Pembelajaran",
+                "22. Laporan Refleksi Guru dan Rencana Tindak Lanjut (RTL)"
+            ]
+        )
 
-# Tombol Proses Dokumen
-tombol_generate = st.button("🚀 Susun Perangkat Pembelajaran Sekarang", use_container_width=True)
+st.write("") # Memberikan jarak spasi vertikal sedikit
 
-# 4. PROSES EKSEKUSI OLEH MESIN AI
+# Tombol Eksekusi Besar yang Memenuhi Lebar Halaman
+tombol_generate = st.button("🚀 Susun & Terbitkan Perangkat Pembelajaran Sekarang", use_container_width=True)
+
+
+# 4. PROSES LOGIKA MESIN AI GEMINI TERBARU
 if tombol_generate:
-    # Validasi Input Penting
     if not api_key_input:
-        st.warning("⚠️ **Akses Ditolak:** Mohon masukkan **Gemini API Key** Anda di bilah samping (sidebar) terlebih dahulu untuk menghidupkan kecerdasan buatan.")
+        st.warning("⚠️ **Akses Ditolak:** Silakan masukkan **Gemini API Key** Anda pada kolom di bilah samping (*sidebar*) kiri untuk mengaktifkan fitur kecerdasan buatan.")
     elif not nama_mapel:
-        st.error("❌ **Kesalahan Input:** Kolom 'Nama Mata Pelajaran' wajib diisi!")
+        st.error("❌ **Kesalahan Input:** Kolom Nama Mata Pelajaran tidak boleh kosong. Harap isi terlebih dahulu!")
     else:
-        # Menampilkan animasi loading yang interaktif saat AI sedang berpikir
-        with st.spinner(f"⏳ AI sedang menyusun dokumen **{perangkat_pilihan}**... Proses ini memakan waktu 10-30 detik. Mohon tidak menutup halaman ini."):
+        # Tampilan proses memuat dokumen dengan indikator visual yang rapi
+        with st.spinner(f"⏳ Kecerdasan Buatan sedang memproses dokumen '{perangkat_pilihan}'... Mohon tunggu 10-30 detik."):
             try:
-                # Inisialisasi API Key dari Input Guru
+                # Konfigurasi token API pengguna
                 genai.configure(api_key=api_key_input)
                 
-                # Menggunakan model Gemini 1.5 Flash yang sangat cepat dan mendukung teks panjang
+                # Menggunakan model Gemini paling mutakhir tahun 2026 sesuai instruksi sistem Google AI
                 model = genai.GenerativeModel('gemini-3.5-flash')
                 
-                # Formula Rekayasa Perintah (Master Prompt Engineering) Otomatis
+                # Rekayasa prompt tingkat tinggi agar AI mengeluarkan hasil dokumen yang sangat terstruktur
                 master_prompt = f"""
                 Bertindaklah sebagai Ahli Kurikulum Merdeka, Pengawas Sekolah Senior, dan AI Administrasi Guru Kemendikbudristek RI.
                 
@@ -129,18 +158,17 @@ if tombol_generate:
                 Langsung berikan isi dokumen dari judul teratas tanpa ada kalimat pembuka basa-basi seperti "Berikut adalah dokumen yang Anda minta...".
                 """
                 
-                # Mengirim perintah ke server Google AI
                 response = model.generate_content(master_prompt)
                 
-                # Menampilkan Hasil Pembentukan Dokumen ke Layar
-                st.success(f"✨ Dokumen **{perangkat_pilihan}** Berhasil Disusun!")
-                st.write("---")
+                # Menampilkan lembar hasil dokumen di dalam blok sukses terpisah yang bersih
+                st.success(f"✨ Dokumen '{perangkat_pilihan}' Berhasil Disusun!")
                 
-                # Menampilkan hasil teks dalam format Markdown yang rapi dan bisa diblok/disalin
-                st.markdown(response.text)
+                # Lembar Kerja Hasil Keluaran AI
+                with st.container(border=True):
+                    st.markdown(response.text)
                 
                 st.write("---")
-                st.info("💡 **Tips untuk Guru:** Anda bisa memblok teks di atas, menyalinnya (*Copy*), lalu menempelkannya (*Paste*) langsung ke Microsoft Word atau Google Docs untuk dicetak.")
+                st.info("💡 **Petunjuk Penggunaan Berkas:** Anda dapat langsung memblok seluruh isi dokumen di atas, lalu lakukan salin (*Copy*) dan tempel (*Paste*) ke dalam aplikasi Microsoft Word atau Google Docs Anda untuk proses penyuntingan akhir dan pencetakan.")
                 
             except Exception as e:
-                st.error(f"❌ Terjadi kesalahan pada sistem AI. Pastikan API Key Anda valid. Detail Eror: {str(e)}")
+                st.error(f"❌ Terjadi gangguan komunikasi dengan server Google AI. Pastikan API Key Anda aktif dan benar. Detail Eror: {str(e)}")
