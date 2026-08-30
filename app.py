@@ -40,7 +40,6 @@ st.markdown("""
         max-width: 1140px;
     }
 
-    /* Container Logo Terpusat Simetris */
     .brand-icon-box {
         display: flex;
         justify-content: center;
@@ -48,7 +47,6 @@ st.markdown("""
         margin-bottom: 12px;
     }
 
-    /* Top Banner Header */
     .app-header {
         background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 55%, #2563EB 100%);
         border-radius: 16px;
@@ -72,7 +70,6 @@ st.markdown("""
         line-height: 1.5;
     }
 
-    /* Card Box Modern */
     div[data-testid="stVerticalBlock"] > div[style*="border"] {
         background: #FFFFFF !important;
         border-radius: 16px !important;
@@ -82,7 +79,6 @@ st.markdown("""
         margin-bottom: 12px;
     }
 
-    /* Tab Navigasi Minimalis */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
         border-bottom: 1px solid #E2E8F0;
@@ -100,7 +96,6 @@ st.markdown("""
         border-bottom: 2px solid #2563EB !important;
     }
 
-    /* Primary Button */
     .stButton > button {
         background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
         color: #FFFFFF !important;
@@ -124,7 +119,6 @@ st.markdown("""
         font-size: 14px !important;
     }
 
-    /* Paper A4 Canvas Simulation */
     .paper-a4 {
         background: #FFFFFF;
         border: 1px solid #CBD5E1;
@@ -177,7 +171,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# URL Logo Edukasi HD Resmi & Simetris (Bebas Blokir)
 LOGO_URL = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f393.png"
 
 def render_logo(lebar=90):
@@ -614,7 +607,7 @@ if tombol_proses:
             status_slot.markdown("<p style='text-align:center; font-size:13px; color:#64748B;'>📝 Menyusun naskah dan tabel baku Kurikulum Merdeka...</p>", unsafe_allow_html=True)
             progress_bar.progress(50)
 
-            # Daftar Model Cadangan
+            # Fallback Model Cadangan
             model_list = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-3.6-flash']
             response = None
             last_err = None
@@ -700,7 +693,7 @@ if st.session_state.hasil_teks:
 # ==========================================
 st.markdown("""
 <div class="footer-box">
-    PERANGKAT GURU • Oleh Saye Sendiri RI<br>
-    © 2026 Engine AI Perangkat Pembelajaran
+    PERANGKAT GURU • Semoge Mamberi Manfaat <br>
+    © 2026 Perangkat Guru
 </div>
 """, unsafe_allow_html=True)
