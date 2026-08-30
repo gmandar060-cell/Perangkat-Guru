@@ -41,6 +41,31 @@ st.markdown("""
         max-width: 1140px;
     }
 
+    /* Container Logo Terpusat & Simetris */
+    .logo-container-login {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 12px;
+    }
+    .logo-container-login img {
+        width: 110px !important;
+        height: auto !important;
+        object-fit: contain;
+    }
+
+    .logo-container-sidebar {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        margin-bottom: 8px;
+    }
+    .logo-container-sidebar img {
+        width: 85px !important;
+        height: auto !important;
+        object-fit: contain;
+    }
+
     /* Professional Top Banner */
     .app-header {
         background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 55%, #2563EB 100%);
@@ -171,13 +196,6 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
-
-# Helper untuk Meletakkan Logo Presisi di Tengah Secara Simetris
-def render_logo_center(lebar=85):
-    if os.path.exists("logo.png"):
-        c1, c2, c3 = st.columns([1, 2, 1])
-        with c2:
-            st.image("logo.png", width=lebar)
 
 
 # ==========================================
@@ -352,9 +370,12 @@ if not st.session_state.authenticated:
 
     with col_left:
         with st.container(border=True):
-            render_logo_center(85)
+            if os.path.exists("logo.png"):
+                st.markdown('<div class="logo-container-login">', unsafe_allow_html=True)
+                st.image("logo.png", width=110)
+                st.markdown('</div>', unsafe_allow_html=True)
             
-            st.markdown("<p style='text-align:center; font-size:11px; font-weight:700; color:#2563EB; letter-spacing:0.5px; margin-top:8px;'>🔵 STANDAR RESMI BSKAP & LPMP</p>", unsafe_allow_html=True)
+            st.markdown("<p style='text-align:center; font-size:11px; font-weight:700; color:#2563EB; letter-spacing:0.5px; margin-top:4px;'>🔵 STANDAR RESMI BSKAP & LPMP</p>", unsafe_allow_html=True)
             st.markdown("<h2 style='text-align:center; font-weight:800; margin:0;'>PERANGKAT GURU</h2>", unsafe_allow_html=True)
             st.markdown("<p style='text-align:center; font-size:14px; font-style:italic; color:#64748B; margin-top:4px;'>\"Guru Lengkap, Murid Hebat\"</p>", unsafe_allow_html=True)
             st.divider()
@@ -409,8 +430,12 @@ if not st.session_state.authenticated:
 # 6. SIDEBAR (NAVIGASI & STATUS PENDIDIK)
 # ==========================================
 with st.sidebar:
-    render_logo_center(75)
-    st.markdown("<h3 style='text-align: center; margin: 6px 0 0 0; font-size: 16px; font-weight: 700; color: #0F172A;'>PERANGKAT GURU</h3>", unsafe_allow_html=True)
+    if os.path.exists("logo.png"):
+        st.markdown('<div class="logo-container-sidebar">', unsafe_allow_html=True)
+        st.image("logo.png", width=85)
+        st.markdown('</div>', unsafe_allow_html=True)
+
+    st.markdown("<h3 style='text-align: center; margin: 4px 0 0 0; font-size: 16px; font-weight: 700; color: #0F172A;'>PERANGKAT GURU</h3>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; font-size: 11px; color: #64748B; margin-top: 2px;'>Standar Kurikulum Merdeka Kemendikbud</p>", unsafe_allow_html=True)
     
     st.divider()
@@ -689,7 +714,7 @@ if st.session_state.hasil_teks:
 # ==========================================
 st.markdown("""
 <div class="footer-box">
-    PERANGKAT GURU • Studio Administrasi Kurikulum Merdeka Kemendikbudristek RI<br>
+    PERANGKAT GURU • Oleh SAYA SENDIRI Untuk Referensi aja <br>
     © 2026 Engine AI Perangkat Pembelajaran
 </div>
 """, unsafe_allow_html=True)
