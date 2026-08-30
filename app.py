@@ -12,7 +12,7 @@ from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 
 # ==========================================
-# 1. KONFIGURASI HALAMAN & CSS RESPONSIF
+# 1. KONFIGURASI & DESIGN SYSTEM PROFESIONAL
 # ==========================================
 st.set_page_config(
     page_title="Studio Administrasi Kurikulum Merdeka",
@@ -26,7 +26,7 @@ st.markdown("""
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
     html, body, [class*="css"] {
-        font-family: 'Plus Jakarta Sans', sans-serif;
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     }
 
     .stApp {
@@ -34,49 +34,91 @@ st.markdown("""
     }
 
     .block-container {
-        padding-top: 1.5rem !important;
-        padding-bottom: 3rem !important;
+        padding-top: 1.8rem !important;
+        padding-bottom: 3.5rem !important;
         max-width: 1200px;
     }
 
-    /* Hero Banner Header */
-    .hero-card {
-        background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 60%, #2563EB 100%);
+    /* Enterprise Hero Banner */
+    .hero-banner {
+        background: linear-gradient(135deg, #0F172A 0%, #1E293B 40%, #1E40AF 100%);
         border-radius: 16px;
-        padding: 26px 30px;
-        color: white;
-        margin-bottom: 20px;
-        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+        padding: 30px 36px;
+        color: #FFFFFF;
+        margin-bottom: 24px;
+        border: 1px solid rgba(255, 255, 255, 0.08);
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12);
+        position: relative;
+        overflow: hidden;
     }
-    .hero-card h1 {
+    .hero-badge {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: rgba(255, 255, 255, 0.12);
+        backdrop-filter: blur(8px);
+        padding: 4px 12px;
+        border-radius: 20px;
+        font-size: 11px;
+        font-weight: 700;
+        letter-spacing: 0.6px;
+        text-transform: uppercase;
+        margin-bottom: 12px;
+        border: 1px solid rgba(255, 255, 255, 0.18);
+        color: #E2E8F0;
+    }
+    .hero-title {
         font-size: 26px;
         font-weight: 800;
         margin: 0 0 6px 0;
+        letter-spacing: -0.02em;
         color: #FFFFFF;
     }
-    .hero-card p {
-        font-size: 13.5px;
-        color: #CBD5E1;
+    .hero-subtitle {
+        font-size: 14px;
+        color: #94A3B8;
+        max-width: 760px;
         margin: 0;
-        line-height: 1.5;
+        line-height: 1.6;
     }
 
-    /* Card & Container */
+    /* Modern Card & Containers */
     [data-testid="stExpander"] {
         background: #FFFFFF !important;
         border-radius: 12px !important;
         border: 1px solid #E2E8F0 !important;
-        margin-bottom: 12px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        margin-bottom: 14px;
     }
     
     div[data-testid="stVerticalBlock"] > div[style*="border"] {
         background: #FFFFFF !important;
-        border-radius: 12px !important;
+        border-radius: 14px !important;
         border: 1px solid #E2E8F0 !important;
-        padding: 20px !important;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        padding: 22px !important;
     }
 
-    /* Tombol Utama */
+    /* Tab Navigasi Premium */
+    .stTabs [data-baseweb="tab-list"] {
+        gap: 8px;
+        background-color: transparent;
+        border-bottom: 1px solid #E2E8F0;
+    }
+    .stTabs [data-baseweb="tab"] {
+        border-radius: 8px 8px 0 0;
+        padding: 10px 18px;
+        font-weight: 600;
+        font-size: 14px;
+        color: #64748B;
+    }
+    .stTabs [aria-selected="true"] {
+        color: #2563EB !important;
+        border-bottom: 2px solid #2563EB !important;
+        background-color: #FFFFFF;
+    }
+
+    /* Buttons */
     .stButton > button {
         background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
         color: #FFFFFF !important;
@@ -85,16 +127,30 @@ st.markdown("""
         border: none !important;
         border-radius: 10px !important;
         padding: 12px 24px !important;
-        box-shadow: 0 4px 10px rgba(37, 99, 235, 0.25) !important;
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+        transition: all 0.2s ease-in-out !important;
+    }
+    .stButton > button:hover {
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35) !important;
     }
 
+    /* Download Action Buttons */
+    .stDownloadButton > button {
+        font-weight: 700 !important;
+        border-radius: 10px !important;
+        padding: 12px 20px !important;
+        font-size: 14px !important;
+    }
+
+    /* Footer */
     .footer-box {
         text-align: center;
-        padding: 20px 10px 10px 10px;
+        padding: 24px 10px 10px 10px;
         color: #64748B;
         font-size: 12px;
         border-top: 1px solid #E2E8F0;
-        margin-top: 36px;
+        margin-top: 40px;
     }
 
     section[data-testid="stSidebar"] {
@@ -104,10 +160,9 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Logo Tut Wuri Handayani Vektor Murni
 LOGO_TUT_WURI_HTML = """
-<div style="text-align: center; margin-bottom: 8px;">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="70" height="70" style="display: inline-block;">
+<div style="text-align: center; margin-bottom: 10px;">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="72" height="72" style="display: inline-block;">
         <polygon points="60,6 114,45 93,109 27,109 6,45" fill="#0284C7" stroke="#0369A1" stroke-width="2"/>
         <polygon points="60,14 105,47 88,101 32,101 15,47" fill="#0EA5E9"/>
         <path d="M60,24 L78,88 L60,74 L42,88 Z" fill="#FACC15"/>
@@ -118,7 +173,15 @@ LOGO_TUT_WURI_HTML = """
 </div>
 """
 
-# Inisialisasi Session State
+# ==========================================
+# 2. SESSION STATE
+# ==========================================
+if "authenticated" not in st.session_state:
+    st.session_state.authenticated = False
+if "user_name" not in st.session_state:
+    st.session_state.user_name = ""
+if "user_api_key" not in st.session_state:
+    st.session_state.user_api_key = ""
 if "hasil_teks" not in st.session_state:
     st.session_state.hasil_teks = ""
 if "nama_file_base" not in st.session_state:
@@ -126,11 +189,10 @@ if "nama_file_base" not in st.session_state:
 
 
 # ==========================================
-# 2. HELPER GENERATOR DOKUMEN WORD (.DOCX)
+# 3. HELPER EKSPOR KE DOCX
 # ==========================================
 def buat_file_docx(markdown_text: str) -> io.BytesIO:
     doc = Document()
-
     for s in doc.sections:
         s.top_margin = Inches(1)
         s.bottom_margin = Inches(1)
@@ -222,7 +284,7 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
 
 
 # ==========================================
-# 3. FUNGSI LOGIKA MASTER PROMPT
+# 4. PROMPT BUILDER
 # ==========================================
 def buat_instruksi_prompt(data: dict) -> str:
     p3_str = ", ".join(data['profil_pancasila']) if data['profil_pancasila'] else "Sesuai Karakteristik Materi"
@@ -276,7 +338,53 @@ Tugas Anda adalah menerbitkan dokumen resmi perangkat pembelajaran yang LENGKAP,
 
 
 # ==========================================
-# 4. SIDEBAR (NAVIGATOR PANDUAN BERSIH)
+# 5. GERBANG MASUK / ONBOARDING VIEW
+# ==========================================
+if not st.session_state.authenticated:
+    st.markdown(LOGO_TUT_WURI_HTML, unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #0F172A; font-weight: 800; margin-bottom: 2px;'>Studio Administrasi Guru</h2>", unsafe_allow_html=True)
+    st.markdown("<p style='text-align: center; color: #64748B; font-size: 13.5px;'>Portal Otomasi 22 Perangkat Kurikulum Merdeka Standar Kemendikbudristek</p>", unsafe_allow_html=True)
+    
+    col_c1, col_c2, col_c3 = st.columns([1, 1.8, 1])
+    with col_c2:
+        with st.container(border=True):
+            st.markdown("#### 🔐 Verifikasi & Akses Pendidik")
+            st.markdown("<p style='font-size: 13px; color: #64748B;'>Masukkan identitas dan API Key pribadi Anda untuk mengaktifkan seluruh fitur.</p>", unsafe_allow_html=True)
+            
+            nama_guru_input = st.text_input("Nama Lengkap & Gelar:", placeholder="Contoh: Budi Santoso, S.Pd., M.Pd.")
+            api_key_masuk = st.text_input("Gemini API Key Pribadi:", type="password", placeholder="AIzaSy...")
+            
+            with st.expander("📖 Panduan Singkat Dapatkan API Key (Gratis)"):
+                st.markdown("""
+                1. Kunjungi portal resmi **[Google AI Studio](https://aistudio.google.com/)**.
+                2. Masuk dengan akun Google / Gmail Anda.
+                3. Klik **Get API key** lalu pilih **Create API key**.
+                4. Salin kode (`AIzaSy...`) dan tempelkan pada kolom di atas.
+                """)
+            
+            st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
+            if st.button("Masuk ke Studio Administrasi ➔", use_container_width=True):
+                if not nama_guru_input.strip():
+                    st.warning("⚠️ Silakan isi Nama Lengkap & Gelar Anda.")
+                elif not api_key_masuk.strip():
+                    st.warning("⚠️ Silakan masukkan Gemini API Key pribadi Anda.")
+                else:
+                    st.session_state.user_name = nama_guru_input.strip()
+                    st.session_state.user_api_key = api_key_masuk.strip()
+                    st.session_state.authenticated = True
+                    st.rerun()
+
+    st.markdown("""
+    <div class="footer-box">
+        Studio Administrasi Kurikulum Merdeka Kemendikbudristek RI<br>
+        © 2026 Engine AI Perangkat Pembelajaran
+    </div>
+    """, unsafe_allow_html=True)
+    st.stop()
+
+
+# ==========================================
+# 6. SIDEBAR SETELAH AUTHENTIKASI
 # ==========================================
 with st.sidebar:
     st.markdown(LOGO_TUT_WURI_HTML, unsafe_allow_html=True)
@@ -285,54 +393,37 @@ with st.sidebar:
     
     st.divider()
 
-    st.markdown("#### 🔐 Kunci Akses AI (API Key)")
-    api_key_input = st.text_input(
-        "Tempelkan Gemini API Key Anda:",
-        type="password",
-        placeholder="AIzaSy...",
-        help="API Key adalah kunci digital gratis dari Google."
-    )
+    st.markdown("#### 👤 Pendidik Terhubung")
+    st.success(f"**{st.session_state.user_name}**\n\n🟢 Kunci AI Pribadi Aktif")
 
-    with st.expander("📖 Panduan Dapatkan API Key (Gratis)", expanded=False):
-        st.markdown("""
-        **4 Langkah Mudah Mendapatkan API Key:**
-        
-        1. **Buka Google AI Studio**  
-           Kunjungi: [aistudio.google.com](https://aistudio.google.com/)
-        
-        2. **Login Akun Google**  
-           Gunakan akun Gmail pribadi atau akun belajar.id Anda.
-        
-        3. **Buat Kunci API**  
-           Klik tombol **Get API key** (kiri atas) lalu pilih **Create API key**.
-        
-        4. **Salin Kode**  
-           Salin kode yang berawalan `AIzaSy...` lalu tempelkan pada kolom di atas.
-
-        ---
-        *💡 Layanan resmi gratis dari Google & kunci aman tersimpan di peramban Anda.*
-        """)
+    if st.button("🔄 Keluar / Ganti Akun", use_container_width=True):
+        st.session_state.authenticated = False
+        st.session_state.user_name = ""
+        st.session_state.user_api_key = ""
+        st.session_state.hasil_teks = ""
+        st.rerun()
 
     st.divider()
     st.markdown("""
     **⚙️ Info Sistem:**
-    * **Model AI:** Gemini 3.6 Flash
-    * **Format Ekspor:** Word (.docx) & Teks (.txt)
-    * **Standar:** Regulasi BSKAP Kemendikbud
+    * **Engine:** Gemini 3.6 Flash
+    * **Format:** Word (.docx) & Teks (.txt)
+    * **Regulasi:** Standar BSKAP
     """)
 
 
 # ==========================================
-# 5. HALAMAN UTAMA
+# 7. DASHBOARD UTAMA
 # ==========================================
-st.markdown("""
-<div class="hero-card">
-    <h1>Generator 22 Perangkat Pembelajaran</h1>
-    <p>Terbitkan berkas administrasi dan perangkat pembelajaran Kurikulum Merdeka baku, terstruktur, dan siap ekspor langsung ke Microsoft Word.</p>
+st.markdown(f"""
+<div class="hero-banner">
+    <div class="hero-badge">⚡ Professional Educator Suite</div>
+    <div class="hero-title">Studio Administrasi Guru</div>
+    <div class="hero-subtitle">Selamat datang, <strong>{st.session_state.user_name}</strong>. Terbitkan dokumen Kurikulum Merdeka terstruktur, baku, dan siap ekspor langsung ke Microsoft Word.</div>
 </div>
 """, unsafe_allow_html=True)
 
-tab1, tab2 = st.tabs(["🏛️ 1. Data Sekolah & Dinas", "✍️ 2. Data Penandatangan"])
+tab1, tab2 = st.tabs(["🏛️ 1. Identitas Instansi & Sekolah", "✍️ 2. Pejabat & Penandatangan"])
 
 with tab1:
     col_kop1, col_kop2 = st.columns(2)
@@ -340,15 +431,15 @@ with tab1:
         dinas_pendidikan = st.text_input("Dinas Pendidikan Pembina:", value="DINAS PENDIDIKAN PROVINSI KALIMANTAN BARAT")
         nama_sekolah = st.text_input("Nama Satuan Pendidikan:", value="SMAS NUSA HARAPAN")
     with col_kop2:
-        alamat_sekolah = st.text_input("Alamat Lengkap & Kontak:", value="Jl. Pancasila No. 10, Telp. (0561) 734567")
+        alamat_sekolah = st.text_input("Alamat & Kontak Satuan Pendidikan:", value="Jl. Pancasila No. 10, Telp. (0561) 734567")
         kota_sekolah = st.text_input("Kota / Kabupaten Domisili:", value="Pontianak")
 
 with tab2:
     col_staf1, col_staf2, col_staf3 = st.columns(3)
     with col_staf1:
         st.markdown("**Guru Mata Pelajaran**")
-        guru_nama = st.text_input("Nama Guru & Gelar:", value="Guru Mata Pelajaran, S.Pd.", key="g_nama")
-        guru_nip = st.text_input("NIP (Isi '-' jika Non-PNS):", value="-", key="g_nip")
+        guru_nama = st.text_input("Nama & Gelar Guru:", value=st.session_state.user_name, key="g_nama")
+        guru_nip = st.text_input("NIP Guru (Isi '-' jika Non-PNS):", value="-", key="g_nip")
     with col_staf2:
         st.markdown("**Kepala Sekolah**")
         ks_nama = st.text_input("Nama Kepala Sekolah:", value="ZULKIFLI, S.Pd.", key="ks_nama")
@@ -358,7 +449,7 @@ with tab2:
         pengawas_nama = st.text_input("Nama Pengawas Pembina:", value="NURHASANAH, M.Si.", key="p_nama")
         pengawas_nip = st.text_input("NIP Pengawas:", value="196811231993032003", key="p_nip")
 
-st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
+st.markdown("<div style='height: 6px;'></div>", unsafe_allow_html=True)
 
 with st.container(border=True):
     st.markdown("### 📋 3. Konfigurasi Kurikulum & Dokumen")
@@ -448,12 +539,10 @@ with st.container(border=True):
 
 
 # ==========================================
-# 6. LOGIKA GENERASI
+# 8. LOGIKA GENERASI
 # ==========================================
 if tombol_proses:
-    if not api_key_input.strip():
-        st.error("🔑 Harap masukkan Gemini API Key pada bilah samping (Sidebar) terlebih dahulu.")
-    elif not mapel.strip() or not dinas_pendidikan.strip() or not nama_sekolah.strip():
+    if not mapel.strip() or not dinas_pendidikan.strip() or not nama_sekolah.strip():
         st.warning("⚠️ Mohon pastikan data instansi dan mata pelajaran telah diisi dengan lengkap.")
     else:
         tanggal_sekarang = datetime.now().strftime("%d %B %Y")
@@ -480,11 +569,10 @@ if tombol_proses:
 
         prompt_final = buat_instruksi_prompt(data_input)
 
-        with st.spinner("⚡ AI sedang menyusun berkas baku sesuai standar Kurikulum Merdeka..."):
+        with st.spinner("⚡ AI sedang menyusun dokumen baku sesuai regulasi BSKAP..."):
             try:
-                client = genai.Client(api_key=api_key_input.strip())
+                client = genai.Client(api_key=st.session_state.user_api_key)
                 
-                # Menggunakan model gemini-3.6-flash
                 response = client.models.generate_content(
                     model='gemini-3.6-flash',
                     contents=prompt_final,
@@ -506,7 +594,7 @@ if tombol_proses:
 
 
 # ==========================================
-# 7. PREVIEW & OPSI UNDUH (WORD & TXT)
+# 9. PREVIEW & AKSI EKSPOR
 # ==========================================
 if st.session_state.hasil_teks:
     st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
@@ -522,7 +610,7 @@ if st.session_state.hasil_teks:
     with col_dl1:
         docx_file = buat_file_docx(st.session_state.hasil_teks)
         st.download_button(
-            label="📄 Unduh Dokumen Word (.DOCX)",
+            label="📄 Unduh Berkas Word (.DOCX)",
             data=docx_file,
             file_name=f"{st.session_state.nama_file_base}.docx",
             mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
@@ -539,11 +627,11 @@ if st.session_state.hasil_teks:
         )
 
 # ==========================================
-# 8. FOOTER UMUM
+# 10. FOOTER UMUM
 # ==========================================
 st.markdown("""
 <div class="footer-box">
-    ZULIANDAR <br>
+    Studio Administrasi Kurikulum Merdeka Kemendikbudristek RI<br>
     © 2026 Engine AI Perangkat Pembelajaran
 </div>
 """, unsafe_allow_html=True)
