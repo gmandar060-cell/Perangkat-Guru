@@ -8,17 +8,17 @@ from docx import Document
 from docx.shared import Pt, Inches, RGBColor
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_TABLE_ALIGNMENT
-from docx.oxml import OxmlElement, parse_xml
-from docx.oxml.ns import nsdecls, qn
+from docx.oxml import parse_xml
+from docx.oxml.ns import nsdecls
 
 # ==========================================
 # 1. KONFIGURASI HALAMAN & CSS RESPONSIF
 # ==========================================
 st.set_page_config(
-    page_title="Studio Administrasi Kurikulum Merdeka | by ZULIANDAR",
+    page_title="Studio Administrasi Kurikulum Merdeka",
     page_icon="🎓",
     layout="wide",
-    initial_sidebar_state="collapsed"
+    initial_sidebar_state="expanded"
 )
 
 # Injeksi CSS Responsif Lintas Perangkat (HP, Tablet, Desktop)
@@ -79,20 +79,8 @@ st.markdown("""
         font-size: 14px;
         color: #94A3B8;
         max-width: 720px;
-        margin: 0 0 12px 0;
+        margin: 0;
         line-height: 1.5;
-    }
-    .hero-creator {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        font-size: 12px;
-        font-weight: 600;
-        color: #FACC15;
-        background: rgba(15, 23, 42, 0.4);
-        padding: 4px 10px;
-        border-radius: 8px;
-        border: 1px solid rgba(250, 204, 21, 0.2);
     }
 
     /* Media Queries untuk Tablet & Ponsel */
@@ -168,9 +156,6 @@ st.markdown("""
         border-top: 1px solid #E2E8F0;
         margin-top: 40px;
     }
-    .footer-box strong {
-        color: #1E293B;
-    }
 
     /* Sidebar Background */
     section[data-testid="stSidebar"] {
@@ -180,13 +165,14 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-LOGO_TUT_WURI_SVG = """
-<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100" width="65" height="65" style="display: block; margin: 0 auto 8px auto;">
-  <polygon points="50,5 95,38 78,92 22,92 5,38" fill="#0284C7" stroke="#0369A1" stroke-width="2"/>
-  <path d="M50,15 L70,80 L50,65 L30,80 Z" fill="#FACC15"/>
-  <circle cx="50" cy="40" r="10" fill="#DC2626"/>
-  <path d="M25,50 Q50,70 75,50 Q50,90 25,50" fill="#FFFFFF" opacity="0.9"/>
-</svg>
+# Logo Tut Wuri Handayani Resmi Kemendikbud
+LOGO_TUT_WURI_HTML = """
+<div style="text-align: center; margin-bottom: 12px;">
+    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.png" 
+         alt="Logo Tut Wuri Handayani" 
+         width="78" 
+         style="display: inline-block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+</div>
 """
 
 # Inisialisasi Session State
@@ -250,16 +236,17 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
                                         r.font.size = Pt(9.5)
 
                 tblPr = table._tbl.tblPr
-                borders = parse_xml(r'''
-                    <w:tblBorders {} >
-                        <w:top w:val="single" w:sz="4" w:space="0" w:color="94A3B8"/>
-                        <w:bottom w:val="single" w:sz="4" w:space="0" w:color="94A3B8"/>
-                        <w:insideH w:val="single" w:sz="4" w:space="0" w:color="CBD5E1"/>
-                        <w:insideV w:val="single" w:sz="4" w:space="0" w:color="CBD5E1"/>
-                        <w:left w:val="none"/>
-                        <w:right w:val="none"/>
-                    </w:tblBorders>
-                '''.format(nsdecls('w')))
+                border_xml = (
+                    f'<w:tblBorders {nsdecls("w")}>'
+                    f'<w:top w:val="single" w:sz="4" w:space="0" w:color="94A3B8"/>'
+                    f'<w:bottom w:val="single" w:sz="4" w:space="0" w:color="94A3B8"/>'
+                    f'<w:insideH w:val="single" w:sz="4" w:space="0" w:color="CBD5E1"/>'
+                    f'<w:insideV w:val="single" w:sz="4" w:space="0" w:color="CBD5E1"/>'
+                    f'<w:left w:val="none"/>'
+                    f'<w:right w:val="none"/>'
+                    f'</w:tblBorders>'
+                )
+                borders = parse_xml(border_xml)
                 tblPr.append(borders)
 
                 doc.add_paragraph()
@@ -274,7 +261,7 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
             doc.add_heading(line[4:], level=3)
         elif line.startswith("---"):
             p = doc.add_paragraph()
-            p_border = parse_xml(r'<w:pBdr {}><w:bottom w:val="single" w:sz="12" w:space="1" w:color="000000"/></w:pBdr>'.format(nsdecls('w')))
+            p_border = parse_xml(f'<w:pBdr {nsdecls("w")}><w:bottom w:val="single" w:sz="12" w:space="1" w:color="000000"/></w:pBdr>')
             p._p.get_or_add_pPr().append(p_border)
         elif line:
             clean_text = line.replace("**", "")
@@ -345,21 +332,14 @@ Tugas Anda adalah menerbitkan dokumen resmi perangkat pembelajaran yang LENGKAP,
 """
     return prompt.strip()
 
+
 # ==========================================
-# 4. SIDEBAR (AUTENTIKASI & PANDUAN API KEY RAMAH GURU)
+# 4. SIDEBAR (AUTENTIKASI & PANDUAN RAMAH GURU)
 # ==========================================
 with st.sidebar:
-    st.markdown(LOGO_TUT_WURI_SVG, unsafe_allow_html=True)
+    st.markdown(LOGO_TUT_WURI_HTML, unsafe_allow_html=True)
     st.markdown("<h3 style='text-align: center; margin: 0; font-size: 16px; font-weight: 700; color: #0F172A;'>STUDIO ADMINISTRASI</h3>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; font-size: 11px; color: #64748B; margin-top: 2px;'>Standar Kurikulum Merdeka Kemendikbud</p>", unsafe_allow_html=True)
-    
-    st.markdown("""
-    <div style="text-align: center; margin: 8px 0 14px 0;">
-        <span style="background: #EFF6FF; color: #1D4ED8; font-size: 11px; font-weight: 700; padding: 4px 10px; border-radius: 12px; border: 1px solid #DBEAFE;">
-            👨‍💻 Developer: ZULIANDAR
-        </span>
-    </div>
-    """, unsafe_allow_html=True)
     
     st.divider()
 
@@ -371,33 +351,30 @@ with st.sidebar:
         help="API Key adalah kunci digital gratis dari Google agar aplikasi dapat menulis naskah untuk Anda."
     )
 
-    # Panduan Langkah Bergambar/Terstruktur Khusus Pendidik
-    with st.expander("📖 Panduan Praktis Dapatkan API Key (Gratis)", expanded=False):
+    with st.expander("📖 Panduan Dapatkan API Key (Gratis)", expanded=False):
         st.markdown("""
-        <div style="font-size: 13px; line-height: 1.6; color: #334155;">
-            <p>Ikuti <strong>4 langkah mudah</strong> berikut untuk mendapatkan kunci AI resmi & gratis dari Google:</p>
+        <div style="font-size: 12.5px; line-height: 1.6; color: #334155;">
+            <p style="margin-bottom: 8px;">Ikuti <strong>4 langkah mudah</strong> berikut untuk mendapatkan kunci resmi gratis dari Google:</p>
             
-            <div style="background: #F1F5F9; border-left: 3px solid #2563EB; padding: 8px 12px; border-radius: 4px; margin-bottom: 8px;">
-                <strong>Langkah 1:</strong> Buka situs resmi Google AI Studio melalui tautan ini:<br>
-                👉 <a href="https://aistudio.google.com/" target="_blank" style="font-weight: bold; color: #2563EB;">Klik di Sini: Google AI Studio</a>
+            <div style="background: #F1F5F9; border-left: 3px solid #2563EB; padding: 6px 10px; border-radius: 4px; margin-bottom: 6px;">
+                <strong>Langkah 1:</strong> Buka situs Google AI Studio:<br>
+                👉 <a href="https://aistudio.google.com/" target="_blank" style="font-weight: bold; color: #2563EB;">Buka Google AI Studio</a>
             </div>
 
-            <div style="background: #F1F5F9; border-left: 3px solid #2563EB; padding: 8px 12px; border-radius: 4px; margin-bottom: 8px;">
-                <strong>Langkah 2:</strong> Masuk (Login) menggunakan akun Google/Gmail pribadi atau akun <em>belajar.id</em> Anda.
+            <div style="background: #F1F5F9; border-left: 3px solid #2563EB; padding: 6px 10px; border-radius: 4px; margin-bottom: 6px;">
+                <strong>Langkah 2:</strong> Masuk (Login) dengan akun Google/Gmail Anda.
             </div>
 
-            <div style="background: #F1F5F9; border-left: 3px solid #2563EB; padding: 8px 12px; border-radius: 4px; margin-bottom: 8px;">
-                <strong>Langkah 3:</strong> Klik tombol biru bertuliskan <strong>"Get API key"</strong> di pojok kiri atas, lalu klik <strong>"Create API key"</strong>.
+            <div style="background: #F1F5F9; border-left: 3px solid #2563EB; padding: 6px 10px; border-radius: 4px; margin-bottom: 6px;">
+                <strong>Langkah 3:</strong> Klik tombol <strong>"Get API key"</strong> di kiri atas, lalu pilih <strong>"Create API key"</strong>.
             </div>
 
-            <div style="background: #F1F5F9; border-left: 3px solid #2563EB; padding: 8px 12px; border-radius: 4px; margin-bottom: 8px;">
-                <strong>Langkah 4:</strong> Klik tombol <strong>Copy (Salin)</strong> pada kode yang berawalan <code>AIzaSy...</code>, lalu tempelkan (Paste) ke kolom isian di atas.
+            <div style="background: #F1F5F9; border-left: 3px solid #2563EB; padding: 6px 10px; border-radius: 4px; margin-bottom: 6px;">
+                <strong>Langkah 4:</strong> Klik tombol <strong>Copy</strong> pada kode berawalan <code>AIzaSy...</code>, lalu tempelkan pada kolom di atas.
             </div>
 
-            <div style="background: #FEF3C7; border: 1px solid #FDE68A; padding: 8px 10px; border-radius: 6px; font-size: 11.5px; color: #92400E; margin-top: 10px;">
-                💡 <strong>Catatan untuk Guru:</strong><br>
-                • Layanan ini 100% <strong>Gratis</strong> dari Google.<br>
-                • API Key Anda bersifat privat dan hanya tersimpan di peramban (HP/Laptop) yang sedang Anda gunakan saat ini.
+            <div style="background: #FEF3C7; border: 1px solid #FDE68A; padding: 6px 8px; border-radius: 6px; font-size: 11px; color: #92400E; margin-top: 8px;">
+                💡 <strong>Catatan:</strong> Layanan ini 100% Gratis dari Google dan kunci Anda aman tersimpan di peramban Anda.
             </div>
         </div>
         """, unsafe_allow_html=True)
@@ -408,9 +385,10 @@ with st.sidebar:
         <strong>⚙️ Status Mesin AI:</strong><br>
         • Model: Gemini 2.5 Flash<br>
         • Kuota Harian: Tersedia (Gratis)<br>
-        • Format Hasil: Word (.docx) & Teks (.txt)
+        • Format Ekspor: .DOCX & .TXT
     </div>
     """, unsafe_allow_html=True)
+
 
 # ==========================================
 # 5. HALAMAN UTAMA (RESPONSIF)
@@ -420,9 +398,6 @@ st.markdown("""
     <div class="hero-badge">⚡ Professional AI Suite for Teachers</div>
     <div class="hero-title">Generator 22 Perangkat Pembelajaran</div>
     <div class="hero-subtitle">Terbitkan berkas administrasi dan perangkat pembelajaran Kurikulum Merdeka baku, otomatis, dan siap ekspor langsung ke Microsoft Word.</div>
-    <div class="hero-creator">
-        <span>👨‍💻 Dirancang & Dikembangkan oleh:</span> <strong>ZULIANDAR</strong>
-    </div>
 </div>
 """, unsafe_allow_html=True)
 
@@ -442,7 +417,7 @@ with tab2:
     col_staf1, col_staf2, col_staf3 = st.columns([1, 1, 1])
     with col_staf1:
         st.markdown("**Guru Mata Pelajaran**")
-        guru_nama = st.text_input("Nama Lengkap & Gelar:", value="MUHAMMAD NURZULIANDAR, S.Pd.", key="g_nama")
+        guru_nama = st.text_input("Nama Guru & Gelar:", value="Guru Mata Pelajaran, S.Pd.", key="g_nama")
         guru_nip = st.text_input("NIP (Isi '-' jika Non-PNS):", value="-", key="g_nip")
     with col_staf2:
         st.markdown("**Kepala Sekolah**")
@@ -632,11 +607,11 @@ if st.session_state.hasil_teks:
         )
 
 # ==========================================
-# 8. FOOTER IDENTITAS DEVELOPER
+# 8. FOOTER UMUM
 # ==========================================
 st.markdown("""
 <div class="footer-box">
-    Dikembangkan dengan dedikasi untuk Pendidik Indonesia oleh <strong>ZULIANDAR</strong><br>
-    © 2026 Studio Administrasi Kurikulum Merdeka • Berbasis Google Gemini 2.5 Flash
+    Studio Administrasi Kurikulum Merdeka Kemendikbudristek RI<br>
+    © 2026 Engine AI Perangkat Pembelajaran • Berbasis Google Gemini 2.5 Flash
 </div>
 """, unsafe_allow_html=True)
