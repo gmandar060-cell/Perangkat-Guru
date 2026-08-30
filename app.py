@@ -5,7 +5,7 @@ from datetime import datetime
 import re
 import io
 from docx import Document
-from docx.shared import Pt, Inches, RGBColor
+from docx.shared import Pt, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_TABLE_ALIGNMENT
 from docx.oxml import parse_xml
@@ -21,7 +21,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# Injeksi CSS Responsif Lintas Perangkat (HP, Tablet, Desktop)
+# Injeksi CSS Responsif
 st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
@@ -34,7 +34,6 @@ st.markdown("""
         background: linear-gradient(180deg, #F1F5F9 0%, #F8FAFC 100%);
     }
 
-    /* Container Blok Global */
     .block-container {
         padding-top: 2rem !important;
         padding-bottom: 3rem !important;
@@ -43,7 +42,6 @@ st.markdown("""
         max-width: 1200px;
     }
 
-    /* Hero Banner Header Responsif */
     .hero-container {
         background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 50%, #2563EB 100%);
         border-radius: 18px;
@@ -83,7 +81,6 @@ st.markdown("""
         line-height: 1.5;
     }
 
-    /* Media Queries untuk Tablet & Ponsel */
     @media (max-width: 768px) {
         .block-container {
             padding-top: 1.2rem !important;
@@ -107,7 +104,6 @@ st.markdown("""
         }
     }
 
-    /* Container Card UI */
     [data-testid="stExpander"] {
         background: #FFFFFF !important;
         border-radius: 14px !important;
@@ -124,7 +120,6 @@ st.markdown("""
         padding: 18px !important;
     }
 
-    /* Tombol Generator & Download */
     .stButton > button {
         background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
         color: #FFFFFF !important;
@@ -147,7 +142,6 @@ st.markdown("""
         padding: 12px 18px !important;
     }
 
-    /* Footer Responsif */
     .footer-box {
         text-align: center;
         padding: 24px 10px 12px 10px;
@@ -157,7 +151,6 @@ st.markdown("""
         margin-top: 40px;
     }
 
-    /* Sidebar Background */
     section[data-testid="stSidebar"] {
         background-color: #FFFFFF;
         border-right: 1px solid #E2E8F0;
@@ -165,13 +158,17 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# Logo Tut Wuri Handayani Resmi Kemendikbud
+# Logo Tut Wuri Handayani Vektor Murni (100% Muncul Tanpa Blokir CORS)
 LOGO_TUT_WURI_HTML = """
 <div style="text-align: center; margin-bottom: 12px;">
-    <img src="https://upload.wikimedia.org/wikipedia/commons/9/9c/Logo_of_Ministry_of_Education_and_Culture_of_Republic_of_Indonesia.png" 
-         alt="Logo Tut Wuri Handayani" 
-         width="78" 
-         style="display: inline-block; filter: drop-shadow(0 2px 4px rgba(0,0,0,0.1));">
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="76" height="76" style="display: inline-block;">
+        <polygon points="60,6 114,45 93,109 27,109 6,45" fill="#0284C7" stroke="#0369A1" stroke-width="2"/>
+        <polygon points="60,14 105,47 88,101 32,101 15,47" fill="#0EA5E9"/>
+        <path d="M60,24 L78,88 L60,74 L42,88 Z" fill="#FACC15"/>
+        <circle cx="60" cy="50" r="12" fill="#DC2626"/>
+        <circle cx="60" cy="50" r="8" fill="#FFFFFF"/>
+        <path d="M28,62 Q60,84 92,62 Q60,104 28,62" fill="#FFFFFF" opacity="0.95"/>
+    </svg>
 </div>
 """
 
@@ -199,7 +196,6 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
     while i < len(lines):
         line = lines[i].strip()
 
-        # Handle Tabel Markdown
         if line.startswith("|") and line.endswith("|"):
             table_lines = []
             while i < len(lines) and lines[i].strip().startswith("|") and lines[i].strip().endswith("|"):
@@ -383,7 +379,7 @@ with st.sidebar:
     st.markdown("""
     <div style="background-color: #F8FAFC; border-radius: 10px; padding: 10px; border: 1px solid #E2E8F0; font-size: 11.5px; color: #475569;">
         <strong>⚙️ Status Mesin AI:</strong><br>
-        • Model: Gemini 2.5 Flash<br>
+        • Model: Gemini 2.5 Flash / 1.5 Flash<br>
         • Kuota Harian: Tersedia (Gratis)<br>
         • Format Ekspor: .DOCX & .TXT
     </div>
@@ -401,7 +397,6 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
-# Tahap 1 & 2 dalam Tab
 tab1, tab2 = st.tabs(["🏛️ 1. Data Sekolah & Dinas", "✍️ 2. Data Penandatangan"])
 
 with tab1:
@@ -430,7 +425,6 @@ with tab2:
 
 st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
 
-# Tahap 3: Parameter Kurikulum & Input Baru
 with st.container(border=True):
     st.markdown("### 📋 3. Konfigurasi Kurikulum & Dokumen")
     
@@ -519,7 +513,7 @@ with st.container(border=True):
 
 
 # ==========================================
-# 6. LOGIKA GENERASI
+# 6. LOGIKA GENERASI (DENGAN FALLBACK MODEL)
 # ==========================================
 if tombol_proses:
     if not api_key_input.strip():
@@ -554,20 +548,34 @@ if tombol_proses:
         with st.spinner("⚡ AI sedang menyusun berkas baku sesuai standar Kurikulum Merdeka..."):
             try:
                 client = genai.Client(api_key=api_key_input.strip())
-                response = client.models.generate_content(
-                    model='gemini-2.5-flash',
-                    contents=prompt_final,
-                    config=types.GenerateContentConfig(
-                        temperature=0.2,
-                    )
-                )
+                
+                # Coba model terbaru, jika gagal fallback otomatis ke model flash stabil
+                daftar_model = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-pro']
+                response = None
+                error_terakhir = None
+                
+                for m in daftar_model:
+                    try:
+                        response = client.models.generate_content(
+                            model=m,
+                            contents=prompt_final,
+                            config=types.GenerateContentConfig(
+                                temperature=0.2,
+                            )
+                        )
+                        if response and response.text:
+                            break
+                    except Exception as err:
+                        error_terakhir = err
+                        continue
 
-                st.session_state.hasil_teks = response.text
-                
-                nama_file_clean = re.sub(r'[^a-zA-Z0-9_-]', '_', f"{jenis_perangkat[:2]}_{mapel}_{fase_kelas[:6]}")
-                st.session_state.nama_file_base = nama_file_clean
-                
-                st.toast("Dokumen resmi berhasil diterbitkan!", icon="✅")
+                if response and response.text:
+                    st.session_state.hasil_teks = response.text
+                    nama_file_clean = re.sub(r'[^a-zA-Z0-9_-]', '_', f"{jenis_perangkat[:2]}_{mapel}_{fase_kelas[:6]}")
+                    st.session_state.nama_file_base = nama_file_clean
+                    st.toast("Dokumen resmi berhasil diterbitkan!", icon="✅")
+                else:
+                    raise error_terakhir if error_terakhir else Exception("Gagal memproses respons AI.")
 
             except Exception as e:
                 st.error(f"❌ Terjadi kendala saat menerbitkan berkas: {str(e)}")
@@ -611,7 +619,7 @@ if st.session_state.hasil_teks:
 # ==========================================
 st.markdown("""
 <div class="footer-box">
-    Studio Administrasi Kurikulum Merdeka Kemendikbudristek RI<br>
-    © 2026 Engine AI Perangkat Pembelajaran • Berbasis Google Gemini 2.5 Flash
+    Di Buat Oleh Seorang Guru Yang Gabut<br>
+    © 2026 Engine AI Perangkat Pembelajaran
 </div>
 """, unsafe_allow_html=True)
