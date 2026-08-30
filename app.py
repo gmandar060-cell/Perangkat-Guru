@@ -743,7 +743,7 @@ if st.session_state.hasil_teks:
 # ==========================================
 st.markdown("""
 <div class="footer-box">
-    PERANGKAT GURU • Studio Administrasi Kurikulum Merdeka Kemendikbudristek RI<br>
+    PERANGKAT GURU • UNTUK REFERENSI SAJA <br>
     © 2026 Engine AI Perangkat Pembelajaran
 </div>
 """, unsafe_allow_html=True)
