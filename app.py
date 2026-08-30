@@ -345,9 +345,8 @@ Tugas Anda adalah menerbitkan dokumen resmi perangkat pembelajaran yang LENGKAP,
 """
     return prompt.strip()
 
-
 # ==========================================
-# 4. SIDEBAR (AUTENTIKASI & IDENTITAS)
+# 4. SIDEBAR (AUTENTIKASI & PANDUAN API KEY RAMAH GURU)
 # ==========================================
 with st.sidebar:
     st.markdown(LOGO_TUT_WURI_SVG, unsafe_allow_html=True)
@@ -364,32 +363,54 @@ with st.sidebar:
     
     st.divider()
 
-    st.markdown("#### 🔐 Kunci Akses AI")
+    st.markdown("#### 🔐 Kunci Akses AI (API Key)")
     api_key_input = st.text_input(
-        "Gemini API Key:",
+        "Tempelkan Gemini API Key Anda:",
         type="password",
         placeholder="AIzaSy...",
-        help="Kunci API tersimpan privat selama sesi peramban berjalan."
+        help="API Key adalah kunci digital gratis dari Google agar aplikasi dapat menulis naskah untuk Anda."
     )
 
-    with st.expander("❓ Panduan API Key"):
+    # Panduan Langkah Bergambar/Terstruktur Khusus Pendidik
+    with st.expander("📖 Panduan Praktis Dapatkan API Key (Gratis)", expanded=False):
         st.markdown("""
-        1. Buka [Google AI Studio](https://aistudio.google.com/).
-        2. Masuk menggunakan akun Google.
-        3. Klik **Get API Key** ➔ **Create API Key**.
-        4. Salin dan tempel ke kolom di atas.
-        """)
+        <div style="font-size: 13px; line-height: 1.6; color: #334155;">
+            <p>Ikuti <strong>4 langkah mudah</strong> berikut untuk mendapatkan kunci AI resmi & gratis dari Google:</p>
+            
+            <div style="background: #F1F5F9; border-left: 3px solid #2563EB; padding: 8px 12px; border-radius: 4px; margin-bottom: 8px;">
+                <strong>Langkah 1:</strong> Buka situs resmi Google AI Studio melalui tautan ini:<br>
+                👉 <a href="https://aistudio.google.com/" target="_blank" style="font-weight: bold; color: #2563EB;">Klik di Sini: Google AI Studio</a>
+            </div>
+
+            <div style="background: #F1F5F9; border-left: 3px solid #2563EB; padding: 8px 12px; border-radius: 4px; margin-bottom: 8px;">
+                <strong>Langkah 2:</strong> Masuk (Login) menggunakan akun Google/Gmail pribadi atau akun <em>belajar.id</em> Anda.
+            </div>
+
+            <div style="background: #F1F5F9; border-left: 3px solid #2563EB; padding: 8px 12px; border-radius: 4px; margin-bottom: 8px;">
+                <strong>Langkah 3:</strong> Klik tombol biru bertuliskan <strong>"Get API key"</strong> di pojok kiri atas, lalu klik <strong>"Create API key"</strong>.
+            </div>
+
+            <div style="background: #F1F5F9; border-left: 3px solid #2563EB; padding: 8px 12px; border-radius: 4px; margin-bottom: 8px;">
+                <strong>Langkah 4:</strong> Klik tombol <strong>Copy (Salin)</strong> pada kode yang berawalan <code>AIzaSy...</code>, lalu tempelkan (Paste) ke kolom isian di atas.
+            </div>
+
+            <div style="background: #FEF3C7; border: 1px solid #FDE68A; padding: 8px 10px; border-radius: 6px; font-size: 11.5px; color: #92400E; margin-top: 10px;">
+                💡 <strong>Catatan untuk Guru:</strong><br>
+                • Layanan ini 100% <strong>Gratis</strong> dari Google.<br>
+                • API Key Anda bersifat privat dan hanya tersimpan di peramban (HP/Laptop) yang sedang Anda gunakan saat ini.
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
 
     st.divider()
     st.markdown("""
     <div style="background-color: #F8FAFC; border-radius: 10px; padding: 10px; border: 1px solid #E2E8F0; font-size: 11.5px; color: #475569;">
-        <strong>⚙️ Status Mesin:</strong><br>
+        <strong>⚙️ Status Mesin AI:</strong><br>
         • Model: Gemini 2.5 Flash<br>
-        • Layout: Responsif Universal<br>
-        • Format: .DOCX & .TXT
+        • Kuota Harian: Tersedia (Gratis)<br>
+        • Format Hasil: Word (.docx) & Teks (.txt)
     </div>
     """, unsafe_allow_html=True)
-
 
 # ==========================================
 # 5. HALAMAN UTAMA (RESPONSIF)
