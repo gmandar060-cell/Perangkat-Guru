@@ -107,7 +107,7 @@ if tombol_generate:
                 genai.configure(api_key=api_key_input)
                 
                 # Menggunakan model Gemini 1.5 Flash yang sangat cepat dan mendukung teks panjang
-                model = genai.GenerativeModel('gemini-1.5-flash')
+                model = genai.GenerativeModel('gemini-2.5-flash')
                 
                 # Formula Rekayasa Perintah (Master Prompt Engineering) Otomatis
                 master_prompt = f"""
