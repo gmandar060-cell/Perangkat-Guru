@@ -506,13 +506,12 @@ with st.container(border=True):
         else:
             jabatan_guru_otomatis = "Guru Mata Pelajaran"
             label_mapel_hint = "Mata Pelajaran:"
-            default_mapel_val = "Fisika"
+            default_mapel_val = "value="placeholder="Contoh:Fisika"
 
         mapel = st.text_input(label_mapel_hint, value=default_mapel_val)
         
         materi_pokok = st.text_input(
-            "Fokus Topik / Materi Pokok:",
-            value="placeholder="Contoh: Perkalian Pecahan, Usaha dan Energi, dll."
+            "Fokus Topik / Materi Pokok:"value="placeholder="Contoh: Perkalian Pecahan, Usaha dan Energi, dll."
         )
 
     with col_p2:
@@ -592,12 +591,12 @@ with tab2:
         guru_nip = st.text_input("NIP Guru (Isi '-' jika Non-PNS):", value="-", key="g_nip")
     with col_staf2:
         st.markdown("**Kepala Sekolah**")
-        ks_nama = st.text_input("Nama Kepala Sekolah:", value="ZULKIFLI, S.Pd.", key="ks_nama")
-        ks_nip = st.text_input("NIP Kepala Sekolah:", value="197508122005011004", key="ks_nip")
+        ks_nama = st.text_input("Nama Kepala Sekolah:"value="placeholder="Contoh:ZULKIFLI, S.Pd.", key="ks_nama")
+        ks_nip = st.text_input("NIP Kepala Sekolah:"value="placeholder="197508122005011004", key="ks_nip")
     with col_staf3:
         st.markdown("**Pengawas Pembina**")
-        pengawas_nama = st.text_input("Nama Pengawas Pembina:", value="NURHASANAH, M.Si.", key="p_nama")
-        pengawas_nip = st.text_input("NIP Pengawas:", value="196811231993032003", key="p_nip")
+        pengawas_nama = st.text_input("Nama Pengawas Pembina:"value="placeholder="Contoh=Andar", key="p_nama")
+        pengawas_nip = st.text_input("NIP Pengawas:"value="placeholder="196811231993032003", key="p_nip")
 
 st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
 tombol_proses = st.button("✨ Terbitkan Dokumen Administrasi Resmi", use_container_width=True)
