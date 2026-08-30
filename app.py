@@ -4,6 +4,8 @@ from google.genai import types
 from datetime import datetime
 import re
 import io
+import os
+import time
 from docx import Document
 from docx.shared import Pt, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
@@ -12,10 +14,10 @@ from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 
 # ==========================================
-# 1. KONFIGURASI & DESIGN SYSTEM PROFESIONAL
+# 1. KONFIGURASI SISTEM & DESIGN SYSTEM CSS
 # ==========================================
 st.set_page_config(
-    page_title="Studio Administrasi Kurikulum Merdeka",
+    page_title="PERANGKAT GURU | Studio Administrasi Kurikulum Merdeka",
     page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -23,7 +25,7 @@ st.set_page_config(
 
 st.markdown("""
 <style>
-    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Lora:ital,wght@0,400;0,600;1,400&display=swap');
 
     html, body, [class*="css"] {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
@@ -34,93 +36,126 @@ st.markdown("""
     }
 
     .block-container {
-        padding-top: 1.8rem !important;
+        padding-top: 1.5rem !important;
         padding-bottom: 3.5rem !important;
         max-width: 1200px;
     }
 
-    /* Enterprise Hero Banner */
-    .hero-banner {
-        background: linear-gradient(135deg, #0F172A 0%, #1E293B 40%, #1E40AF 100%);
-        border-radius: 16px;
-        padding: 30px 36px;
-        color: #FFFFFF;
-        margin-bottom: 24px;
-        border: 1px solid rgba(255, 255, 255, 0.08);
-        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12);
-        position: relative;
-        overflow: hidden;
-    }
-    .hero-badge {
-        display: inline-flex;
-        align-items: center;
-        gap: 6px;
-        background: rgba(255, 255, 255, 0.12);
-        backdrop-filter: blur(8px);
-        padding: 4px 12px;
+    /* Landing / Split-Screen Left Showcase Card */
+    .landing-hero {
+        background: linear-gradient(145deg, #0F172A 0%, #1E293B 50%, #1E40AF 100%);
         border-radius: 20px;
-        font-size: 11px;
-        font-weight: 700;
-        letter-spacing: 0.6px;
-        text-transform: uppercase;
-        margin-bottom: 12px;
-        border: 1px solid rgba(255, 255, 255, 0.18);
-        color: #E2E8F0;
+        padding: 36px 32px;
+        color: #FFFFFF;
+        box-shadow: 0 20px 25px -5px rgba(15, 23, 42, 0.15);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
     }
-    .hero-title {
-        font-size: 26px;
+    .landing-hero h1 {
+        font-size: 30px;
         font-weight: 800;
-        margin: 0 0 6px 0;
         letter-spacing: -0.02em;
+        margin: 12px 0 6px 0;
         color: #FFFFFF;
     }
-    .hero-subtitle {
-        font-size: 14px;
-        color: #94A3B8;
-        max-width: 760px;
-        margin: 0;
-        line-height: 1.6;
-    }
-
-    /* Modern Card & Containers */
-    [data-testid="stExpander"] {
-        background: #FFFFFF !important;
-        border-radius: 12px !important;
-        border: 1px solid #E2E8F0 !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-        margin-bottom: 14px;
-    }
-    
-    div[data-testid="stVerticalBlock"] > div[style*="border"] {
-        background: #FFFFFF !important;
-        border-radius: 14px !important;
-        border: 1px solid #E2E8F0 !important;
-        box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
-        padding: 22px !important;
-    }
-
-    /* Tab Navigasi Premium */
-    .stTabs [data-baseweb="tab-list"] {
-        gap: 8px;
-        background-color: transparent;
-        border-bottom: 1px solid #E2E8F0;
-    }
-    .stTabs [data-baseweb="tab"] {
-        border-radius: 8px 8px 0 0;
-        padding: 10px 18px;
+    .landing-hero h2 {
+        font-size: 15px;
+        color: #93C5FD;
         font-weight: 600;
-        font-size: 14px;
-        color: #64748B;
+        margin-bottom: 20px;
     }
-    .stTabs [aria-selected="true"] {
-        color: #2563EB !important;
-        border-bottom: 2px solid #2563EB !important;
-        background-color: #FFFFFF;
+    .feature-pill {
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.12);
+        padding: 12px 16px;
+        border-radius: 12px;
+        margin-bottom: 12px;
+    }
+    .feature-pill strong {
+        color: #F8FAFC;
+        display: block;
+        font-size: 13.5px;
+        margin-bottom: 2px;
+    }
+    .feature-pill span {
+        font-size: 12px;
+        color: #94A3B8;
+        line-height: 1.4;
     }
 
-    /* Buttons */
+    /* Landing Login Card */
+    .login-box {
+        background: #FFFFFF;
+        border: 1px solid #E2E8F0;
+        border-radius: 20px;
+        padding: 36px 32px;
+        box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.08);
+    }
+
+    /* Dashboard Header Banner */
+    .dash-banner {
+        background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 60%, #2563EB 100%);
+        border-radius: 16px;
+        padding: 24px 30px;
+        color: white;
+        margin-bottom: 20px;
+        box-shadow: 0 10px 20px rgba(15, 23, 42, 0.12);
+    }
+    .dash-banner h2 {
+        font-size: 24px;
+        font-weight: 800;
+        margin: 0 0 4px 0;
+        color: #FFFFFF;
+    }
+    .dash-banner p {
+        font-size: 13.5px;
+        color: #CBD5E1;
+        margin: 0;
+    }
+
+    /* Paper A4 Canvas Simulation */
+    .paper-a4 {
+        background: #FFFFFF;
+        border: 1px solid #CBD5E1;
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+        padding: 48px 56px;
+        margin: 20px auto;
+        border-radius: 4px;
+        font-family: 'Times New Roman', Times, serif;
+        color: #0F172A;
+        line-height: 1.5;
+        max-width: 900px;
+    }
+    @media (max-width: 768px) {
+        .paper-a4 {
+            padding: 20px 16px;
+        }
+    }
+
+    /* Tabel Format Dinas */
+    .paper-a4 table {
+        width: 100% !important;
+        border-collapse: collapse !important;
+        margin: 14px 0 !important;
+        font-size: 13px !important;
+    }
+    .paper-a4 th {
+        background-color: #F1F5F9 !important;
+        border: 1px solid #475569 !important;
+        padding: 8px 10px !important;
+        text-align: left;
+        font-weight: bold;
+    }
+    .paper-a4 td {
+        border: 1px solid #64748B !important;
+        padding: 7px 10px !important;
+    }
+
+    /* Tombol Utama */
     .stButton > button {
-        background: linear-gradient(135deg, #2563EB 0%, #1D4ED8 100%) !important;
+        background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
         color: #FFFFFF !important;
         font-weight: 700 !important;
         font-size: 15px !important;
@@ -135,15 +170,12 @@ st.markdown("""
         box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35) !important;
     }
 
-    /* Download Action Buttons */
     .stDownloadButton > button {
         font-weight: 700 !important;
         border-radius: 10px !important;
         padding: 12px 20px !important;
-        font-size: 14px !important;
     }
 
-    /* Footer */
     .footer-box {
         text-align: center;
         padding: 24px 10px 10px 10px;
@@ -160,21 +192,28 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-LOGO_TUT_WURI_HTML = """
-<div style="text-align: center; margin-bottom: 10px;">
-    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="72" height="72" style="display: inline-block;">
-        <polygon points="60,6 114,45 93,109 27,109 6,45" fill="#0284C7" stroke="#0369A1" stroke-width="2"/>
-        <polygon points="60,14 105,47 88,101 32,101 15,47" fill="#0EA5E9"/>
-        <path d="M60,24 L78,88 L60,74 L42,88 Z" fill="#FACC15"/>
-        <circle cx="60" cy="50" r="12" fill="#DC2626"/>
-        <circle cx="60" cy="50" r="8" fill="#FFFFFF"/>
-        <path d="M28,62 Q60,84 92,62 Q60,104 28,62" fill="#FFFFFF" opacity="0.95"/>
-    </svg>
-</div>
-"""
+# Helper Render Logo (Utamakan file lokal logo.png, fallback SVG)
+def tampilkan_logo(lebar=80):
+    if os.path.exists("logo.png"):
+        st.image("logo.png", width=lebar)
+    else:
+        # Fallback SVG jika file belum diupload
+        st.markdown(f"""
+        <div style="text-align: center; margin-bottom: 8px;">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="{lebar}" height="{lebar}">
+                <polygon points="60,4 116,44 94,112 26,112 4,44" fill="#0284C7" stroke="#0369A1" stroke-width="2"/>
+                <polygon points="60,12 106,46 88,104 32,104 14,46" fill="#0EA5E9"/>
+                <path d="M60,22 L80,88 L60,72 L40,88 Z" fill="#FACC15"/>
+                <circle cx="60,50" cy="50" r="12" fill="#DC2626"/>
+                <circle cx="60,50" cy="50" r="8" fill="#FFFFFF"/>
+                <path d="M26,62 Q60,86 94,62 Q60,108 26,62" fill="#FFFFFF" opacity="0.95"/>
+            </svg>
+        </div>
+        """, unsafe_allow_html=True)
+
 
 # ==========================================
-# 2. SESSION STATE
+# 2. INISIALISASI SESSION STATE
 # ==========================================
 if "authenticated" not in st.session_state:
     st.session_state.authenticated = False
@@ -189,7 +228,7 @@ if "nama_file_base" not in st.session_state:
 
 
 # ==========================================
-# 3. HELPER EKSPOR KE DOCX
+# 3. HELPER EKSPOR KE WORD (.DOCX)
 # ==========================================
 def buat_file_docx(markdown_text: str) -> io.BytesIO:
     doc = Document()
@@ -284,7 +323,7 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
 
 
 # ==========================================
-# 4. PROMPT BUILDER
+# 4. MASTER PROMPT BUILDER
 # ==========================================
 def buat_instruksi_prompt(data: dict) -> str:
     p3_str = ", ".join(data['profil_pancasila']) if data['profil_pancasila'] else "Sesuai Karakteristik Materi"
@@ -338,45 +377,80 @@ Tugas Anda adalah menerbitkan dokumen resmi perangkat pembelajaran yang LENGKAP,
 
 
 # ==========================================
-# 5. GERBANG MASUK / ONBOARDING VIEW
+# 5. GERBANG MASUK (SPLIT-SCREEN LANDING & LOGIN)
 # ==========================================
 if not st.session_state.authenticated:
-    st.markdown(LOGO_TUT_WURI_HTML, unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center; color: #0F172A; font-weight: 800; margin-bottom: 2px;'>Studio Administrasi Guru</h2>", unsafe_allow_html=True)
-    st.markdown("<p style='text-align: center; color: #64748B; font-size: 13.5px;'>Portal Otomasi 22 Perangkat Kurikulum Merdeka Standar Kemendikbudristek</p>", unsafe_allow_html=True)
-    
-    col_c1, col_c2, col_c3 = st.columns([1, 1.8, 1])
-    with col_c2:
-        with st.container(border=True):
-            st.markdown("#### 🔐 Verifikasi & Akses Pendidik")
-            st.markdown("<p style='font-size: 13px; color: #64748B;'>Masukkan identitas dan API Key pribadi Anda untuk mengaktifkan seluruh fitur.</p>", unsafe_allow_html=True)
+    col_left, col_right = st.columns([1.1, 0.9], gap="large")
+
+    with col_left:
+        with st.container():
+            st.markdown('<div class="landing-hero"><div>', unsafe_allow_html=True)
+            tampilkan_logo(80)
+            st.markdown("""
+                <div style="text-align: center;">
+                    <span style="background: rgba(255,255,255,0.15); padding: 4px 12px; border-radius: 20px; font-size: 11px; font-weight: 700; letter-spacing: 0.5px; text-transform: uppercase;">🔵 STANDAR BAKU KURIKULUM MERDEKA</span>
+                    <h1>PERANGKAT GURU</h1>
+                    <h2>"Guru Lengkap, Murid Hebat"</h2>
+                </div>
+                
+                <div class="feature-pill">
+                    <strong>📋 22 Dokumen Lengkap Baku</strong>
+                    <span>Dari ATP, Modul Ajar, Prota, Promes, KKTP, hingga Rubrik & Kisi-kisi Evaluasi.</span>
+                </div>
+                
+                <div class="feature-pill">
+                    <strong>📄 Ekspor Microsoft Word (.docx)</strong>
+                    <span>Format tabel dinas dan lembar tanda tangan 3 kolom rapi siap cetak.</span>
+                </div>
+                
+                <div class="feature-pill">
+                    <strong>🔒 Akses Mandiri & Privat</strong>
+                    <span>Kunci AI tersimpan di perangkat lokal masing-masing pendidik dan API key Anda digunakan untuk Anda sendiri.</span>
+                </div>
+            </div>
             
-            nama_guru_input = st.text_input("Nama Lengkap & Gelar:", placeholder="Contoh: Budi Santoso, S.Pd., M.Pd.")
+            <div style="text-align: center; font-size: 11.5px; color: #94A3B8; margin-top: 15px;">
+                BSKAP & LPMP Aligned • Engine Google Gemini AI
+            </div>
+        </div>
+        """, unsafe_allow_html=True)
+
+    with col_right:
+        with st.container():
+            st.markdown("""
+            <div class="login-box">
+                <h3 style="margin-top: 0; color: #0F172A; font-weight: 800;">Akses Masuk Guru</h3>
+                <p style="font-size: 13px; color: #64748B; margin-bottom: 20px;">Lengkapi identitas untuk mengaktifkan sesi kerja mandiri Anda:</p>
+            """, unsafe_allow_html=True)
+            
+            nama_guru_input = st.text_input("Nama Lengkap & Gelar:", placeholder="Contoh: Muhammad Nurzuliandar, S.Pd.")
             api_key_masuk = st.text_input("Gemini API Key Pribadi:", type="password", placeholder="AIzaSy...")
             
-            with st.expander("📖 Panduan Singkat Dapatkan API Key (Gratis)"):
+            with st.expander("📖 Panduan Dapatkan API Key (Gratis)"):
                 st.markdown("""
-                1. Kunjungi portal resmi **[Google AI Studio](https://aistudio.google.com/)**.
-                2. Masuk dengan akun Google / Gmail Anda.
-                3. Klik **Get API key** lalu pilih **Create API key**.
-                4. Salin kode (`AIzaSy...`) dan tempelkan pada kolom di atas.
+                1. Buka portal resmi **[Google AI Studio](https://aistudio.google.com/)**.
+                2. Masuk menggunakan akun Google/Gmail pribadi Anda.
+                3. Klik **Get API key** lalu klik **Create API key**.
+                4. Salin kode (`AIzaSy...`) lalu tempelkan pada kolom di atas.
                 """)
             
-            st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
-            if st.button("Masuk ke Studio Administrasi ➔", use_container_width=True):
+            st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+            if st.button("MASUK", use_container_width=True):
                 if not nama_guru_input.strip():
-                    st.warning("⚠️ Silakan isi Nama Lengkap & Gelar Anda.")
+                    st.warning("⚠️ Mohon isi Nama Lengkap & Gelar Anda.")
                 elif not api_key_masuk.strip():
-                    st.warning("⚠️ Silakan masukkan Gemini API Key pribadi Anda.")
+                    st.warning("⚠️ Mohon masukkan Gemini API Key pribadi Anda.")
                 else:
                     st.session_state.user_name = nama_guru_input.strip()
                     st.session_state.user_api_key = api_key_masuk.strip()
                     st.session_state.authenticated = True
                     st.rerun()
 
+            st.markdown("</div>", unsafe_allow_html=True)
+
     st.markdown("""
     <div class="footer-box">
-        Studio Administrasi Kurikulum Merdeka Kemendikbudristek RI<br>
+        PERANGKAT GURU • Studio Administrasi Kurikulum Merdeka Kemendikbudristek RI<br>
         © 2026 Engine AI Perangkat Pembelajaran
     </div>
     """, unsafe_allow_html=True)
@@ -384,17 +458,17 @@ if not st.session_state.authenticated:
 
 
 # ==========================================
-# 6. SIDEBAR SETELAH AUTHENTIKASI
+# 6. SIDEBAR (DASHBOARD SETELAH LOGIN)
 # ==========================================
 with st.sidebar:
-    st.markdown(LOGO_TUT_WURI_HTML, unsafe_allow_html=True)
-    st.markdown("<h3 style='text-align: center; margin: 0; font-size: 16px; font-weight: 700; color: #0F172A;'>STUDIO ADMINISTRASI</h3>", unsafe_allow_html=True)
+    tampilkan_logo(75)
+    st.markdown("<h3 style='text-align: center; margin: 0; font-size: 16px; font-weight: 700; color: #0F172A;'>PERANGKAT GURU</h3>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; font-size: 11px; color: #64748B; margin-top: 2px;'>Standar Kurikulum Merdeka Kemendikbud</p>", unsafe_allow_html=True)
     
     st.divider()
 
-    st.markdown("#### 👤 Pendidik Terhubung")
-    st.success(f"**{st.session_state.user_name}**\n\n🟢 Kunci AI Pribadi Aktif")
+    st.markdown("#### 👤 Pendidik Aktif")
+    st.success(f"**{st.session_state.user_name}**\n\n🟢 Kunci AI Pribadi Terhubung")
 
     if st.button("🔄 Keluar / Ganti Akun", use_container_width=True):
         st.session_state.authenticated = False
@@ -406,7 +480,7 @@ with st.sidebar:
     st.divider()
     st.markdown("""
     **⚙️ Info Sistem:**
-    * **Engine:** Gemini 3.6 Flash
+    * **Engine:** Google Gemini Flash
     * **Format:** Word (.docx) & Teks (.txt)
     * **Regulasi:** Standar BSKAP
     """)
@@ -416,14 +490,13 @@ with st.sidebar:
 # 7. DASHBOARD UTAMA
 # ==========================================
 st.markdown(f"""
-<div class="hero-banner">
-    <div class="hero-badge">⚡ Professional Educator Suite</div>
-    <div class="hero-title">Studio Administrasi Guru</div>
-    <div class="hero-subtitle">Selamat datang, <strong>{st.session_state.user_name}</strong>. Terbitkan dokumen Kurikulum Merdeka terstruktur, baku, dan siap ekspor langsung ke Microsoft Word.</div>
+<div class="dash-banner">
+    <h2>Selamat Berkarya, {st.session_state.user_name}</h2>
+    <p>Terbitkan berkas administrasi dan perangkat pembelajaran Kurikulum Merdeka baku, terstruktur, dan siap ekspor langsung ke Microsoft Word.</p>
 </div>
 """, unsafe_allow_html=True)
 
-tab1, tab2 = st.tabs(["🏛️ 1. Identitas Instansi & Sekolah", "✍️ 2. Pejabat & Penandatangan"])
+tab1, tab2 = st.tabs(["🏛️ 1. Identitas Satuan Pendidikan", "✍️ 2. Pejabat & Penandatangan"])
 
 with tab1:
     col_kop1, col_kop2 = st.columns(2)
@@ -431,7 +504,7 @@ with tab1:
         dinas_pendidikan = st.text_input("Dinas Pendidikan Pembina:", value="DINAS PENDIDIKAN PROVINSI KALIMANTAN BARAT")
         nama_sekolah = st.text_input("Nama Satuan Pendidikan:", value="SMAS NUSA HARAPAN")
     with col_kop2:
-        alamat_sekolah = st.text_input("Alamat & Kontak Satuan Pendidikan:", value="Jl. Pancasila No. 10, Telp. (0561) 734567")
+        alamat_sekolah = st.text_input("Alamat & Kontak Sekolah:", value="Jl. Pancasila No. 10, Telp. (0561) 734567")
         kota_sekolah = st.text_input("Kota / Kabupaten Domisili:", value="Pontianak")
 
 with tab2:
@@ -539,7 +612,7 @@ with st.container(border=True):
 
 
 # ==========================================
-# 8. LOGIKA GENERASI
+# 8. LOGIKA GENERASI (FALLBACK OTOMATIS ANTI 503)
 # ==========================================
 if tombol_proses:
     if not mapel.strip() or not dinas_pendidikan.strip() or not nama_sekolah.strip():
@@ -569,41 +642,80 @@ if tombol_proses:
 
         prompt_final = buat_instruksi_prompt(data_input)
 
-        with st.spinner("⚡ AI sedang menyusun dokumen baku sesuai regulasi BSKAP..."):
-            try:
-                client = genai.Client(api_key=st.session_state.user_api_key)
-                
-                response = client.models.generate_content(
-                    model='gemini-3.6-flash',
-                    contents=prompt_final,
-                    config=types.GenerateContentConfig(
-                        temperature=0.2,
+        # Bar Animasi Progres
+        progress_slot = st.empty()
+        status_slot = st.empty()
+        progress_bar = progress_slot.progress(0)
+
+        try:
+            status_slot.markdown("<p style='text-align:center; font-size:13px; color:#64748B;'>⚡ Menginisialisasi koneksi AI...</p>", unsafe_allow_html=True)
+            progress_bar.progress(25)
+            
+            client = genai.Client(api_key=st.session_state.user_api_key)
+            
+            status_slot.markdown("<p style='text-align:center; font-size:13px; color:#64748B;'>📝 Menyusun struktur dan tabel Kurikulum Merdeka...</p>", unsafe_allow_html=True)
+            progress_bar.progress(50)
+
+            # Daftar Model Cadangan jika terjadi 503 (High Demand)
+            model_list = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-3.6-flash']
+            response = None
+            last_err = None
+
+            for m in model_list:
+                try:
+                    response = client.models.generate_content(
+                        model=m,
+                        contents=prompt_final,
+                        config=types.GenerateContentConfig(
+                            temperature=0.2,
+                        )
                     )
-                )
+                    if response and response.text:
+                        break
+                except Exception as err:
+                    last_err = err
+                    time.sleep(1)
+                    continue
 
-                if response and response.text:
-                    st.session_state.hasil_teks = response.text
-                    nama_file_clean = re.sub(r'[^a-zA-Z0-9_-]', '_', f"{jenis_perangkat[:2]}_{mapel}_{fase_kelas[:6]}")
-                    st.session_state.nama_file_base = nama_file_clean
-                    st.toast("Dokumen resmi berhasil diterbitkan!", icon="✅")
-                else:
-                    st.error("❌ Model tidak mengembalikan teks. Silakan coba kembali.")
+            progress_bar.progress(90)
+            status_slot.markdown("<p style='text-align:center; font-size:13px; color:#64748B;'>✨ Memformat lembar dokumen standar dinas...</p>", unsafe_allow_html=True)
+            time.sleep(0.3)
 
-            except Exception as e:
-                st.error(f"❌ Terjadi kendala saat menerbitkan berkas: {str(e)}")
+            progress_bar.progress(100)
+            time.sleep(0.2)
+            
+            progress_slot.empty()
+            status_slot.empty()
+
+            if response and response.text:
+                st.session_state.hasil_teks = response.text
+                nama_file_clean = re.sub(r'[^a-zA-Z0-9_-]', '_', f"{jenis_perangkat[:2]}_{mapel}_{fase_kelas[:6]}")
+                st.session_state.nama_file_base = nama_file_clean
+                st.toast("Dokumen resmi berhasil diterbitkan!", icon="✅")
+            else:
+                raise last_err if last_err else Exception("Gagal memproses data.")
+
+        except Exception as e:
+            progress_slot.empty()
+            status_slot.empty()
+            st.error(f"❌ Terjadi kendala saat menerbitkan berkas: {str(e)}")
 
 
 # ==========================================
-# 9. PREVIEW & AKSI EKSPOR
+# 9. SIMULASI LEMBAR KERTAS A4 & AKSI EKSPOR
 # ==========================================
 if st.session_state.hasil_teks:
-    st.markdown("<div style='height: 18px;'></div>", unsafe_allow_html=True)
-    st.markdown("### 📄 Lembar Preview Administrasi Resmi")
+    st.markdown("<div style='height: 20px;'></div>", unsafe_allow_html=True)
+    st.markdown("### 📄 Preview Lembar Kerja A4 Resmi")
     
-    with st.container(border=True):
-        st.markdown(st.session_state.hasil_teks)
+    # Rendering Lembar Kertas A4
+    st.markdown(f"""
+    <div class="paper-a4">
+        {st.session_state.hasil_teks}
+    </div>
+    """, unsafe_allow_html=True)
 
-    st.markdown("<div style='height: 10px;'></div>", unsafe_allow_html=True)
+    st.markdown("<div style='height: 12px;'></div>", unsafe_allow_html=True)
     
     col_dl1, col_dl2 = st.columns(2)
     
@@ -631,7 +743,7 @@ if st.session_state.hasil_teks:
 # ==========================================
 st.markdown("""
 <div class="footer-box">
-    Studio Administrasi Kurikulum Merdeka Kemendikbudristek RI<br>
+    PERANGKAT GURU • Studio Administrasi Kurikulum Merdeka Kemendikbudristek RI<br>
     © 2026 Engine AI Perangkat Pembelajaran
 </div>
 """, unsafe_allow_html=True)
