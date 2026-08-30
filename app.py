@@ -4,7 +4,6 @@ from google.genai import types
 from datetime import datetime
 import re
 import io
-import os
 import time
 from docx import Document
 from docx.shared import Pt, Inches
@@ -41,32 +40,15 @@ st.markdown("""
         max-width: 1140px;
     }
 
-    /* Container Logo Terpusat & Simetris */
-    .logo-container-login {
+    /* Container Logo Terpusat Simetris */
+    .brand-icon-box {
         display: flex;
         justify-content: center;
         align-items: center;
         margin-bottom: 12px;
     }
-    .logo-container-login img {
-        width: 110px !important;
-        height: auto !important;
-        object-fit: contain;
-    }
 
-    .logo-container-sidebar {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        margin-bottom: 8px;
-    }
-    .logo-container-sidebar img {
-        width: 85px !important;
-        height: auto !important;
-        object-fit: contain;
-    }
-
-    /* Professional Top Banner */
+    /* Top Banner Header */
     .app-header {
         background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 55%, #2563EB 100%);
         border-radius: 16px;
@@ -90,7 +72,7 @@ st.markdown("""
         line-height: 1.5;
     }
 
-    /* Container Card Customization */
+    /* Card Box Modern */
     div[data-testid="stVerticalBlock"] > div[style*="border"] {
         background: #FFFFFF !important;
         border-radius: 16px !important;
@@ -118,7 +100,7 @@ st.markdown("""
         border-bottom: 2px solid #2563EB !important;
     }
 
-    /* Primary CTA Button */
+    /* Primary Button */
     .stButton > button {
         background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
         color: #FFFFFF !important;
@@ -135,7 +117,6 @@ st.markdown("""
         box-shadow: 0 6px 16px rgba(37, 99, 235, 0.35) !important;
     }
 
-    /* Download Buttons */
     .stDownloadButton > button {
         font-weight: 700 !important;
         border-radius: 10px !important;
@@ -180,7 +161,6 @@ st.markdown("""
         padding: 7px 10px !important;
     }
 
-    /* Footer Branding */
     .footer-box {
         text-align: center;
         padding: 24px 10px 10px 10px;
@@ -196,6 +176,19 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+# URL Logo Edukasi HD Resmi & Simetris (Bebas Blokir)
+LOGO_URL = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f393.png"
+
+def render_logo(lebar=90):
+    st.markdown(
+        f"""
+        <div class="brand-icon-box">
+            <img src="{LOGO_URL}" width="{lebar}" height="{lebar}" alt="Logo Perangkat Guru" style="filter: drop-shadow(0 4px 6px rgba(0,0,0,0.1));">
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
 
 
 # ==========================================
@@ -363,19 +356,16 @@ Tugas Anda adalah menerbitkan dokumen resmi perangkat pembelajaran yang LENGKAP,
 
 
 # ==========================================
-# 5. GERBANG MASUK (SIMETRIS & ELEGAN)
+# 5. GERBANG MASUK (LOGIN RESMI & SIMETRIS)
 # ==========================================
 if not st.session_state.authenticated:
     col_left, col_right = st.columns([1.1, 0.9], gap="large")
 
     with col_left:
         with st.container(border=True):
-            if os.path.exists("logo.png"):
-                st.markdown('<div class="logo-container-login">', unsafe_allow_html=True)
-                st.image("logo.png", width=110)
-                st.markdown('</div>', unsafe_allow_html=True)
+            render_logo(95)
             
-            st.markdown("<p style='text-align:center; font-size:11px; font-weight:700; color:#2563EB; letter-spacing:0.5px; margin-top:4px;'>🔵 STANDAR RESMI BSKAP & LPMP</p>", unsafe_allow_html=True)
+            st.markdown("<p style='text-align:center; font-size:11px; font-weight:700; color:#2563EB; letter-spacing:0.5px; margin-top:2px;'>🔵 STANDAR RESMI BSKAP & LPMP</p>", unsafe_allow_html=True)
             st.markdown("<h2 style='text-align:center; font-weight:800; margin:0;'>PERANGKAT GURU</h2>", unsafe_allow_html=True)
             st.markdown("<p style='text-align:center; font-size:14px; font-style:italic; color:#64748B; margin-top:4px;'>\"Guru Lengkap, Murid Hebat\"</p>", unsafe_allow_html=True)
             st.divider()
@@ -430,12 +420,8 @@ if not st.session_state.authenticated:
 # 6. SIDEBAR (NAVIGASI & STATUS PENDIDIK)
 # ==========================================
 with st.sidebar:
-    if os.path.exists("logo.png"):
-        st.markdown('<div class="logo-container-sidebar">', unsafe_allow_html=True)
-        st.image("logo.png", width=85)
-        st.markdown('</div>', unsafe_allow_html=True)
-
-    st.markdown("<h3 style='text-align: center; margin: 4px 0 0 0; font-size: 16px; font-weight: 700; color: #0F172A;'>PERANGKAT GURU</h3>", unsafe_allow_html=True)
+    render_logo(70)
+    st.markdown("<h3 style='text-align: center; margin: 2px 0 0 0; font-size: 16px; font-weight: 700; color: #0F172A;'>PERANGKAT GURU</h3>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; font-size: 11px; color: #64748B; margin-top: 2px;'>Standar Kurikulum Merdeka Kemendikbud</p>", unsafe_allow_html=True)
     
     st.divider()
@@ -714,7 +700,7 @@ if st.session_state.hasil_teks:
 # ==========================================
 st.markdown("""
 <div class="footer-box">
-    PERANGKAT GURU • Oleh SAYA SENDIRI Untuk Referensi aja <br>
+    PERANGKAT GURU • Oleh Saye Sendiri RI<br>
     © 2026 Engine AI Perangkat Pembelajaran
 </div>
 """, unsafe_allow_html=True)
