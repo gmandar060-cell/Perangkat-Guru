@@ -36,9 +36,9 @@ st.markdown("""
     }
 
     .block-container {
-        padding-top: 1.8rem !important;
+        padding-top: 2rem !important;
         padding-bottom: 3.5rem !important;
-        max-width: 1180px;
+        max-width: 1140px;
     }
 
     /* Professional Top Banner */
@@ -68,14 +68,14 @@ st.markdown("""
     /* Container Card Customization */
     div[data-testid="stVerticalBlock"] > div[style*="border"] {
         background: #FFFFFF !important;
-        border-radius: 14px !important;
+        border-radius: 16px !important;
         border: 1px solid #E2E8F0 !important;
-        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
-        padding: 24px !important;
+        box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
+        padding: 28px 26px !important;
         margin-bottom: 12px;
     }
 
-    /* Tab Navigasi Minimalis Modern */
+    /* Tab Navigasi Minimalis */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
         border-bottom: 1px solid #E2E8F0;
@@ -171,6 +171,13 @@ st.markdown("""
     }
 </style>
 """, unsafe_allow_html=True)
+
+# Helper untuk Meletakkan Logo Presisi di Tengah Secara Simetris
+def render_logo_center(lebar=85):
+    if os.path.exists("logo.png"):
+        c1, c2, c3 = st.columns([1, 2, 1])
+        with c2:
+            st.image("logo.png", width=lebar)
 
 
 # ==========================================
@@ -338,19 +345,18 @@ Tugas Anda adalah menerbitkan dokumen resmi perangkat pembelajaran yang LENGKAP,
 
 
 # ==========================================
-# 5. GERBANG MASUK (SPLIT-SCREEN MODERN)
+# 5. GERBANG MASUK (SIMETRIS & ELEGAN)
 # ==========================================
 if not st.session_state.authenticated:
     col_left, col_right = st.columns([1.1, 0.9], gap="large")
 
     with col_left:
         with st.container(border=True):
-            if os.path.exists("logo.png"):
-                st.image("logo.png", width=75)
+            render_logo_center(85)
             
-            st.markdown("`🔵 STANDAR RESMI BSKAP & LPMP`")
-            st.markdown("## PERANGKAT GURU")
-            st.markdown("##### *\"Guru Lengkap, Murid Hebat\"*")
+            st.markdown("<p style='text-align:center; font-size:11px; font-weight:700; color:#2563EB; letter-spacing:0.5px; margin-top:8px;'>🔵 STANDAR RESMI BSKAP & LPMP</p>", unsafe_allow_html=True)
+            st.markdown("<h2 style='text-align:center; font-weight:800; margin:0;'>PERANGKAT GURU</h2>", unsafe_allow_html=True)
+            st.markdown("<p style='text-align:center; font-size:14px; font-style:italic; color:#64748B; margin-top:4px;'>\"Guru Lengkap, Murid Hebat\"</p>", unsafe_allow_html=True)
             st.divider()
             
             st.markdown("""
@@ -403,9 +409,8 @@ if not st.session_state.authenticated:
 # 6. SIDEBAR (NAVIGASI & STATUS PENDIDIK)
 # ==========================================
 with st.sidebar:
-    if os.path.exists("logo.png"):
-        st.image("logo.png", width=75)
-    st.markdown("<h3 style='text-align: center; margin: 0; font-size: 16px; font-weight: 700; color: #0F172A;'>PERANGKAT GURU</h3>", unsafe_allow_html=True)
+    render_logo_center(75)
+    st.markdown("<h3 style='text-align: center; margin: 6px 0 0 0; font-size: 16px; font-weight: 700; color: #0F172A;'>PERANGKAT GURU</h3>", unsafe_allow_html=True)
     st.markdown("<p style='text-align: center; font-size: 11px; color: #64748B; margin-top: 2px;'>Standar Kurikulum Merdeka Kemendikbud</p>", unsafe_allow_html=True)
     
     st.divider()
@@ -598,7 +603,7 @@ if tombol_proses:
             status_slot.markdown("<p style='text-align:center; font-size:13px; color:#64748B;'>📝 Menyusun naskah dan tabel baku Kurikulum Merdeka...</p>", unsafe_allow_html=True)
             progress_bar.progress(50)
 
-            # Daftar Model Cadangan Cerdas (Menghindari 503 & 404)
+            # Daftar Model Cadangan
             model_list = ['gemini-2.5-flash', 'gemini-1.5-flash', 'gemini-2.0-flash', 'gemini-3.6-flash']
             response = None
             last_err = None
