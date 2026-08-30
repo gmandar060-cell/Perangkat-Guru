@@ -9,7 +9,7 @@ st.set_page_config(
     initial_sidebar_state="expanded"
 )
 
-# KUSTOMISASI MODEREN LEWAT CSS (Menghilangkan margin berlebih & mempercantik teks)
+# KUSTOMISASI MODEREN LEWAT CSS
 st.markdown("""
     <style>
     .main .block-container {
@@ -23,18 +23,15 @@ st.markdown("""
     h3 {
         color: #4B5563;
     }
-    div[data-testid="stSidebarUserContent"] {
-        padding-top: 1rem;
-    }
     </style>
 """, unsafe_allow_html=True)
 
 
 # 2. STRUKTUR SIDEBAR (BILAH SAMPING YANG RAPI & BERSIH)
 with st.sidebar:
-    # Menggunakan URL Logo resmi Kemendikbud dengan format gambar stabil
-    st.markdown("<div style='text-align: center;'><img src='https://wikimedia.org' width='120'></div>", unsafe_allow_html=True)
-    st.markdown("<h2 style='text-align: center; color: #1E3A8A; margin-bottom: 20px;'>Administrasi Guru</h2>", unsafe_allow_html=True)
+    # PERBAIKAN LOGO: Menggunakan URL cadangan dari repositori aset publik yang stabil
+    st.markdown("<div style='text-align: center;'><img src='https://githubusercontent.com' width='120'></div>", unsafe_allow_html=True)
+    st.markdown("<h2 style='text-align: center; color: #1E3A8A; margin-top: 10px;'>Administrasi Guru</h2>", unsafe_allow_html=True)
     st.write("---")
     
     # Kolom API Key Keamanan Pengguna
@@ -44,7 +41,7 @@ with st.sidebar:
         help="Dapatkan kunci akses gratis dari Google AI Studio untuk menghidupkan kecerdasan buatan."
     )
     
-    # Memasukkan petunjuk ke dalam komponen lipat (Expander) agar tampilan sidebar tetap ringkas
+    # Memasukkan petunjuk ke dalam komponen lipat (Expander)
     with st.expander("💡 Cara Dapat API Key Gratis"):
         st.markdown("""
         1. Buka [Google AI Studio](https://google.com)
@@ -55,7 +52,7 @@ with st.sidebar:
         """)
         
     st.write("---")
-    st.caption("🤖 **Versi 1.2.0 (Edisi Nasional)**")
+    st.caption("🤖 **Versi 1.3.0 (Edisi Nasional)**")
     st.caption("Platform Otomasi Administrasi Kurikulum Merdeka © 2026")
 
 
@@ -64,7 +61,7 @@ st.title("🤖 Generator 22 Perangkat Pembelajaran")
 st.subheader("Kurikulum Merdeka — Otomatis & Standar Kemendikbudristek")
 st.write("Silakan isi komponen identitas sekolah dan pilih jenis administrasi yang ingin Anda buat di bawah ini secara teliti.")
 
-# Mengelompokkan input ke dalam Wadah Komponen (Container) agar terlihat menyatu dan mewah
+# Mengelompokkan input ke dalam Wadah Komponen (Container)
 with st.container(border=True):
     st.markdown("<h4 style='color: #1E3A8A; margin-top: 0;'>📋 Form Pengisian Identitas Pembelajaran</h4>", unsafe_allow_html=True)
     
@@ -116,29 +113,25 @@ with st.container(border=True):
             ]
         )
 
-st.write("") # Memberikan jarak spasi vertikal sedikit
+st.write("") # Jarak spasi
 
-# Tombol Eksekusi Besar yang Memenuhi Lebar Halaman
+# Tombol Eksekusi
 tombol_generate = st.button("🚀 Susun & Terbitkan Perangkat Pembelajaran Sekarang", use_container_width=True)
 
 
-# 4. PROSES LOGIKA MESIN AI GEMINI TERBARU
+# 4. PROSES LOGIKA MESIN AI & FITUR UNDUH
 if tombol_generate:
     if not api_key_input:
         st.warning("⚠️ **Akses Ditolak:** Silakan masukkan **Gemini API Key** Anda pada kolom di bilah samping (*sidebar*) kiri untuk mengaktifkan fitur kecerdasan buatan.")
     elif not nama_mapel:
-        st.error("❌ **Kesalahan Input:** Kolom Nama Mata Pelajaran tidak boleh kosong. Harap isi terlebih dahulu!")
+        st.error("❌ **Kesalahan Input:** Kolom Nama Mata Pelajaran tidak boleh kosong!")
     else:
-        # Tampilan proses memuat dokumen dengan indikator visual yang rapi
-        with st.spinner(f"⏳ Kecerdasan Buatan sedang memproses dokumen '{perangkat_pilihan}'... Mohon tunggu 10-30 detik."):
+        with st.spinner(f"⏳ AI sedang memproses dokumen '{perangkat_pilihan}'... Mohon tunggu 10-30 detik."):
             try:
-                # Konfigurasi token API pengguna
+                # Konfigurasi token API
                 genai.configure(api_key=api_key_input)
-                
-                # Menggunakan model Gemini paling mutakhir tahun 2026 sesuai instruksi sistem Google AI
                 model = genai.GenerativeModel('gemini-3.5-flash')
                 
-                # Rekayasa prompt tingkat tinggi agar AI mengeluarkan hasil dokumen yang sangat terstruktur
                 master_prompt = f"""
                 Bertindaklah sebagai Ahli Kurikulum Merdeka, Pengawas Sekolah Senior, dan AI Administrasi Guru Kemendikbudristek RI.
                 
@@ -150,25 +143,36 @@ if tombol_generate:
                 - Estimasi Waktu/JP: {alokasi_waktu if alokasi_waktu else "Disesuaikan standar regulasi nasional"}
                 
                 Ketentuan Penulisan Dokumen:
-                1. Buatlah isi dokumen ini secara LENGKAP, UTUH, dan DETAIL. Jangan gunakan singkatan seperti "...dan seterusnya" atau "dst". Guru membutuhkan dokumen yang siap pakai.
-                2. Gunakan format tabel Markdown yang rapi jika dokumen tersebut melibatkan data terstruktur (seperti ATP, Prota, Promes, Kisi-kisi, Rubrik, Nilai, atau Pemetaan).
+                1. Buatlah isi dokumen ini secara LENGKAP, UTUH, dan DETAIL. Jangan gunakan singkatan seperti "...dan seterusnya" atau "dst".
+                2. Gunakan format tabel Markdown yang rapi jika dokumen tersebut melibatkan data terstruktur.
                 3. Gunakan bahasa Indonesia baku, profesional, serta menggunakan kata kerja operasional berdasarkan Taksonomi Bloom yang direvisi.
-                4. Pastikan struktur dokumen mengikuti regulasi standar Kurikulum Merdeka terbaru (mengandung elemen profil pelajar pancasila, asesmen formatif/sumatif, dan langkah pembelajaran yang berpusat pada murid jika relevan).
+                4. Pastikan struktur dokumen mengikuti regulasi standar Kurikulum Merdeka terbaru.
                 
-                Langsung berikan isi dokumen dari judul teratas tanpa ada kalimat pembuka basa-basi seperti "Berikut adalah dokumen yang Anda minta...".
+                Langsung berikan isi dokumen dari judul teratas tanpa ada kalimat pembuka basa-basi.
                 """
                 
                 response = model.generate_content(master_prompt)
+                hasil_teks = response.text
                 
-                # Menampilkan lembar hasil dokumen di dalam blok sukses terpisah yang bersih
+                # Menampilkan lembar hasil dokumen di layar aplikasi
                 st.success(f"✨ Dokumen '{perangkat_pilihan}' Berhasil Disusun!")
                 
-                # Lembar Kerja Hasil Keluaran AI
                 with st.container(border=True):
-                    st.markdown(response.text)
+                    st.markdown(hasil_teks)
                 
                 st.write("---")
-                st.info("💡 **Petunjuk Penggunaan Berkas:** Anda dapat langsung memblok seluruh isi dokumen di atas, lalu lakukan salin (*Copy*) dan tempel (*Paste*) ke dalam aplikasi Microsoft Word atau Google Docs Anda untuk proses penyuntingan akhir dan pencetakan.")
+                
+                # PERBAIKAN TOMBOL DOWNLOAD: Menyediakan file teks mentah (.txt) yang otomatis bisa dibuka rapi di Microsoft Word
+                nama_file_unduh = f"{perangkat_pilihan.replace(' ', '_')}_{nama_mapel}_{fase_kelas.replace(' ', '')}.txt"
+                
+                st.download_button(
+                    label="📥 Unduh Dokumen ke Laptop (Format Word/Text)",
+                    data=hasil_teks,
+                    file_name=nama_file_unduh,
+                    mime="text/plain",
+                    use_container_width=True,
+                    help="Klik untuk langsung mengunduh hasil dokumen ini. File .txt ini dapat langsung dibuka atau di-copy dengan rapi ke Microsoft Word."
+                )
                 
             except Exception as e:
                 st.error(f"❌ Terjadi gangguan komunikasi dengan server Google AI. Pastikan API Key Anda aktif dan benar. Detail Eror: {str(e)}")
