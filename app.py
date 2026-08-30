@@ -16,7 +16,7 @@ from docx.oxml.ns import nsdecls
 # 1. KONFIGURASI SISTEM & CSS ANTI-DARK MODE HP
 # ==========================================
 st.set_page_config(
-    page_title="PERANGKAT GURU | Portal Administrasi Kurikulum Merdeka",
+    page_title="PERANGKAT GURU | BERBASI KURMER",
     page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -426,7 +426,7 @@ if not st.session_state.authenticated:
 
     st.markdown("""
     <div class="footer-box">
-        PERANGKAT GURU • Studio Administrasi Kurikulum Merdeka Kemendikbudristek RI<br>
+        PERANGKAT GURU • Creator : Andar <br>
         © 2026 Engine AI Perangkat Pembelajaran
     </div>
     """, unsafe_allow_html=True)
@@ -477,11 +477,11 @@ tab1, tab2 = st.tabs(["🏛️ 1. Identitas Satuan Pendidikan", "✍️ 2. Pejab
 with tab1:
     col_kop1, col_kop2 = st.columns(2)
     with col_kop1:
-        dinas_pendidikan = st.text_input("Dinas Pendidikan Pembina:", value="DINAS PENDIDIKAN PROVINSI KALIMANTAN BARAT")
-        nama_sekolah = st.text_input("Nama Satuan Pendidikan:", value="SMAS NUSA HARAPAN")
+        dinas_pendidikan = st.text_input("Dinas Pendidikan Pembina:", value="")
+        nama_sekolah = st.text_input("Nama Satuan Pendidikan:", value="")
     with col_kop2:
-        alamat_sekolah = st.text_input("Alamat & Kontak Sekolah:", value="Jl. Pancasila No. 10, Telp. (0561) 734567")
-        kota_sekolah = st.text_input("Kota / Kabupaten Domisili:", value="Pontianak")
+        alamat_sekolah = st.text_input("Alamat & Kontak Sekolah:", value="")
+        kota_sekolah = st.text_input("Kota / Kabupaten Domisili:", value="k")
 
 with tab2:
     col_staf1, col_staf2, col_staf3 = st.columns(3)
@@ -491,12 +491,12 @@ with tab2:
         guru_nip = st.text_input("NIP Guru (Isi '-' jika Non-PNS):", value="-", key="g_nip")
     with col_staf2:
         st.markdown("**Kepala Sekolah**")
-        ks_nama = st.text_input("Nama Kepala Sekolah:", value="ZULKIFLI, S.Pd.", key="ks_nama")
-        ks_nip = st.text_input("NIP Kepala Sekolah:", value="197508122005011004", key="ks_nip")
+        ks_nama = st.text_input("Nama Kepala Sekolah:", value= key="ks_nama")
+        ks_nip = st.text_input("NIP Kepala Sekolah:", value= key="ks_nip")
     with col_staf3:
         st.markdown("**Pengawas Pembina**")
-        pengawas_nama = st.text_input("Nama Pengawas Pembina:", value="NURHASANAH, M.Si.", key="p_nama")
-        pengawas_nip = st.text_input("NIP Pengawas:", value="196811231993032003", key="p_nip")
+        pengawas_nama = st.text_input("Nama Pengawas Pembina:", value= key="p_nama")
+        pengawas_nip = st.text_input("NIP Pengawas:", value= key="p_nip")
 
 st.markdown("<div style='height: 6px;'></div>", unsafe_allow_html=True)
 
@@ -505,11 +505,10 @@ with st.container(border=True):
     
     col_p1, col_p2 = st.columns(2)
     with col_p1:
-        mapel = st.text_input("Mata Pelajaran:", value="Fisika", placeholder="Contoh: Fisika, Matematika, Biologi")
+        mapel = st.text_input("Mata Pelajaran:", value="placeholder="Contoh: Fisika, Matematika, Biologi")
         materi_pokok = st.text_input(
             "Fokus Topik / Materi Pokok:",
-            value="Pengukuran, Besaran, Satuan, dan Penggunaan Alat Ukur Presisi",
-            placeholder="Contoh: Kinematika Gerak Lurus, Usaha dan Energi"
+            value="Pplaceholder="Contoh: Kinematika Gerak Lurus, Usaha dan Energi"
         )
         fase_kelas = st.selectbox(
             "Tingkatan Kelas / Fase:",
