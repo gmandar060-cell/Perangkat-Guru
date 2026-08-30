@@ -13,7 +13,7 @@ from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 
 # ==========================================
-# 1. KONFIGURASI SISTEM & ENTERPRISE CSS
+# 1. KONFIGURASI SISTEM & CSS ANTI-DARK MODE HP
 # ==========================================
 st.set_page_config(
     page_title="PERANGKAT GURU | Portal Administrasi Kurikulum Merdeka",
@@ -26,12 +26,14 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-    html, body, [class*="css"] {
-        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+    /* Kunci Warna Teks Global (PC & HP) */
+    html, body, [class*="css"], .stMarkdown, p, span, label, h1, h2, h3, h4, h5, h6 {
+        font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
+        color: #0F172A !important;
     }
 
     .stApp {
-        background-color: #F8FAFC;
+        background-color: #F8FAFC !important;
     }
 
     .block-container {
@@ -40,6 +42,19 @@ st.markdown("""
         max-width: 1140px;
     }
 
+    /* Kunci Warna Input Text & Placeholder di HP */
+    input, textarea, select {
+        color: #0F172A !important;
+        background-color: #FFFFFF !important;
+        -webkit-text-fill-color: #0F172A !important;
+    }
+
+    .stTextInput label, .stSelectbox label, .stMultiSelect label, .stRadio label {
+        color: #1E293B !important;
+        font-weight: 600 !important;
+    }
+
+    /* Container Logo Terpusat Simetris */
     .brand-icon-box {
         display: flex;
         justify-content: center;
@@ -47,11 +62,11 @@ st.markdown("""
         margin-bottom: 12px;
     }
 
+    /* Top Banner Header */
     .app-header {
-        background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 55%, #2563EB 100%);
+        background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 55%, #2563EB 100%) !important;
         border-radius: 16px;
         padding: 28px 32px;
-        color: #FFFFFF;
         margin-bottom: 24px;
         box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12);
         border: 1px solid rgba(255, 255, 255, 0.1);
@@ -61,15 +76,16 @@ st.markdown("""
         font-weight: 800;
         margin: 0 0 6px 0;
         letter-spacing: -0.02em;
-        color: #FFFFFF;
+        color: #FFFFFF !important;
     }
     .app-header p {
         font-size: 14px;
-        color: #CBD5E1;
+        color: #CBD5E1 !important;
         margin: 0;
         line-height: 1.5;
     }
 
+    /* Card Box Modern */
     div[data-testid="stVerticalBlock"] > div[style*="border"] {
         background: #FFFFFF !important;
         border-radius: 16px !important;
@@ -79,6 +95,7 @@ st.markdown("""
         margin-bottom: 12px;
     }
 
+    /* Tab Navigasi Minimalis */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
         border-bottom: 1px solid #E2E8F0;
@@ -88,7 +105,7 @@ st.markdown("""
         padding: 10px 18px;
         font-weight: 600;
         font-size: 14px;
-        color: #64748B;
+        color: #64748B !important;
         border-radius: 8px 8px 0 0;
     }
     .stTabs [aria-selected="true"] {
@@ -96,16 +113,19 @@ st.markdown("""
         border-bottom: 2px solid #2563EB !important;
     }
 
+    /* Primary Button */
     .stButton > button {
         background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
-        color: #FFFFFF !important;
-        font-weight: 700 !important;
-        font-size: 15px !important;
         border: none !important;
         border-radius: 10px !important;
         padding: 12px 24px !important;
         box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
         transition: all 0.2s ease-in-out !important;
+    }
+    .stButton > button, .stButton > button * {
+        color: #FFFFFF !important;
+        font-weight: 700 !important;
+        font-size: 15px !important;
     }
     .stButton > button:hover {
         transform: translateY(-1px);
@@ -119,15 +139,16 @@ st.markdown("""
         font-size: 14px !important;
     }
 
+    /* Paper A4 Canvas Simulation */
     .paper-a4 {
-        background: #FFFFFF;
+        background: #FFFFFF !important;
         border: 1px solid #CBD5E1;
         box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
         padding: 44px 50px;
         margin: 16px auto;
         border-radius: 4px;
         font-family: 'Times New Roman', Times, serif;
-        color: #0F172A;
+        color: #0F172A !important;
         line-height: 1.5;
         max-width: 900px;
     }
@@ -149,28 +170,31 @@ st.markdown("""
         padding: 8px 10px !important;
         text-align: left;
         font-weight: bold;
+        color: #0F172A !important;
     }
     .paper-a4 td {
         border: 1px solid #64748B !important;
         padding: 7px 10px !important;
+        color: #0F172A !important;
     }
 
     .footer-box {
         text-align: center;
         padding: 24px 10px 10px 10px;
-        color: #64748B;
+        color: #64748B !important;
         font-size: 12px;
         border-top: 1px solid #E2E8F0;
         margin-top: 40px;
     }
 
     section[data-testid="stSidebar"] {
-        background-color: #FFFFFF;
+        background-color: #FFFFFF !important;
         border-right: 1px solid #E2E8F0;
     }
 </style>
 """, unsafe_allow_html=True)
 
+# URL Logo Edukasi HD Resmi & Simetris[cite: 1]
 LOGO_URL = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f393.png"
 
 def render_logo(lebar=90):
@@ -693,7 +717,7 @@ if st.session_state.hasil_teks:
 # ==========================================
 st.markdown("""
 <div class="footer-box">
-    PERANGKAT GURU • Semoge Mamberi Manfaat <br>
-    © 2026 Perangkat Guru
+    PERANGKAT GURU • Creator : Andar <br>
+    © 2026 Engine AI Perangkat Pembelajaran
 </div>
 """, unsafe_allow_html=True)
