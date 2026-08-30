@@ -316,7 +316,7 @@ with st.sidebar:
     st.divider()
     st.markdown("""
     **⚙️ Info Sistem:**
-    * **Model AI:** Gemini 2.5 Flash
+    * **Model AI:** Gemini 3.6 Flash
     * **Format Ekspor:** Word (.docx) & Teks (.txt)
     * **Standar:** Regulasi BSKAP Kemendikbud
     """)
@@ -482,10 +482,11 @@ if tombol_proses:
 
         with st.spinner("⚡ AI sedang menyusun berkas baku sesuai standar Kurikulum Merdeka..."):
             try:
-                # Client GenAI Resmi
                 client = genai.Client(api_key=api_key_input.strip())
+                
+                # Menggunakan model gemini-3.6-flash
                 response = client.models.generate_content(
-                    model='gemini-2.5-flash',
+                    model='gemini-3.6-flash',
                     contents=prompt_final,
                     config=types.GenerateContentConfig(
                         temperature=0.2,
@@ -542,7 +543,7 @@ if st.session_state.hasil_teks:
 # ==========================================
 st.markdown("""
 <div class="footer-box">
-    Studio Administrasi Kurikulum Merdeka Kemendikbudristek RI<br>
+    ZULIANDAR <br>
     © 2026 Engine AI Perangkat Pembelajaran
 </div>
 """, unsafe_allow_html=True)
