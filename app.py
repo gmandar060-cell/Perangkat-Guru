@@ -16,7 +16,7 @@ from docx.oxml.ns import nsdecls
 # 1. KONFIGURASI SISTEM & CSS ANTI-DARK MODE HP
 # ==========================================
 st.set_page_config(
-    page_title="PERANGKAT GURU | BERBASI KURMER",
+    page_title="PERANGKAT GURU | Portal Administrasi Kurikulum Merdeka",
     page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded"
@@ -26,7 +26,6 @@ st.markdown("""
 <style>
     @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
-    /* Kunci Warna Teks Global (PC & HP) */
     html, body, [class*="css"], .stMarkdown, p, span, label, h1, h2, h3, h4, h5, h6 {
         font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
         color: #0F172A !important;
@@ -42,7 +41,6 @@ st.markdown("""
         max-width: 1140px;
     }
 
-    /* Kunci Warna Input Text & Placeholder di HP */
     input, textarea, select {
         color: #0F172A !important;
         background-color: #FFFFFF !important;
@@ -54,7 +52,6 @@ st.markdown("""
         font-weight: 600 !important;
     }
 
-    /* Container Logo Terpusat Simetris */
     .brand-icon-box {
         display: flex;
         justify-content: center;
@@ -62,7 +59,6 @@ st.markdown("""
         margin-bottom: 12px;
     }
 
-    /* Top Banner Header */
     .app-header {
         background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 55%, #2563EB 100%) !important;
         border-radius: 16px;
@@ -85,7 +81,6 @@ st.markdown("""
         line-height: 1.5;
     }
 
-    /* Card Box Modern */
     div[data-testid="stVerticalBlock"] > div[style*="border"] {
         background: #FFFFFF !important;
         border-radius: 16px !important;
@@ -95,7 +90,6 @@ st.markdown("""
         margin-bottom: 12px;
     }
 
-    /* Tab Navigasi Minimalis */
     .stTabs [data-baseweb="tab-list"] {
         gap: 8px;
         border-bottom: 1px solid #E2E8F0;
@@ -113,7 +107,6 @@ st.markdown("""
         border-bottom: 2px solid #2563EB !important;
     }
 
-    /* Primary Button */
     .stButton > button {
         background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
         border: none !important;
@@ -139,7 +132,6 @@ st.markdown("""
         font-size: 14px !important;
     }
 
-    /* Paper A4 Canvas Simulation */
     .paper-a4 {
         background: #FFFFFF !important;
         border: 1px solid #CBD5E1;
@@ -194,7 +186,6 @@ st.markdown("""
 </style>
 """, unsafe_allow_html=True)
 
-# URL Logo Edukasi HD Resmi & Simetris[cite: 1]
 LOGO_URL = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f393.png"
 
 def render_logo(lebar=90):
@@ -335,7 +326,7 @@ Tugas Anda adalah menerbitkan dokumen resmi perangkat pembelajaran yang LENGKAP,
 - Alamat & Kontak  : {data['alamat']}
 
 === IDENTITAS STAF & STRUKTURAL ===
-- Guru Mata Pelajaran : {data['guru_nama']} (NIP: {data['guru_nip']})
+- {data['jabatan_guru']} : {data['guru_nama']} (NIP: {data['guru_nip']})
 - Kepala Sekolah      : {data['ks_nama']} (NIP: {data['ks_nip']})
 - Pengawas Sekolah    : {data['pengawas_nama']} (NIP: {data['pengawas_nip']})
 
@@ -360,7 +351,7 @@ Tugas Anda adalah menerbitkan dokumen resmi perangkat pembelajaran yang LENGKAP,
    - Sajikan komponen data terstruktur menggunakan format TABEL MARKDOWN yang rapi, padat, dan jelas.
 4. BAGIAN PALING BAWAH (LEMBAR PENGESAHAN):
    Buat lembar tanda tangan 3 kolom horizontal berdampingan dengan format markdown table yang rapi:
-   | Mengetahui,<br>Pengawas Pembina | Mengetahui,<br>Kepala Sekolah | {data['kota_sekolah']}, {data['tanggal_hari_ini']}<br>Guru Mata Pelajaran |
+   | Mengetahui,<br>Pengawas Pembina | Mengetahui,<br>Kepala Sekolah | {data['kota_sekolah']}, {data['tanggal_hari_ini']}<br>{data['jabatan_guru']} |
    | :---: | :---: | :---: |
    | <br><br><br><br> | <br><br><br><br> | <br><br><br><br> |
    | **{data['pengawas_nama']}**<br>NIP. {data['pengawas_nip']} | **{data['ks_nama']}**<br>NIP. {data['ks_nip']} | **{data['guru_nama']}**<br>NIP. {data['guru_nip']} |
@@ -373,7 +364,7 @@ Tugas Anda adalah menerbitkan dokumen resmi perangkat pembelajaran yang LENGKAP,
 
 
 # ==========================================
-# 5. GERBANG MASUK (LOGIN RESMI & SIMETRIS)
+# 5. GERBANG MASUK (PLACEHOLDER HILANG SAAT DIISI)
 # ==========================================
 if not st.session_state.authenticated:
     col_left, col_right = st.columns([1.1, 0.9], gap="large")
@@ -401,8 +392,17 @@ if not st.session_state.authenticated:
             st.markdown("<span style='font-size: 13px; color: #64748B;'>Lengkapi identitas untuk mengaktifkan sesi kerja mandiri Anda:</span>", unsafe_allow_html=True)
             st.write("")
             
-            nama_guru_input = st.text_input("Nama Lengkap & Gelar:", placeholder="Contoh: Muhammad Nurzuliandar, S.Pd.")
-            api_key_masuk = st.text_input("Gemini API Key Pribadi:", type="password", placeholder="AIzaSy...")
+            # Placeholder murni: Tampil sebagai contoh abu-abu dan hilang saat diketik
+            nama_guru_input = st.text_input(
+                "Nama Lengkap & Gelar:",
+                value="",
+                placeholder="Contoh: Muhammad Nurzuliandar, S.Pd."
+            )
+            api_key_masuk = st.text_input(
+                "Gemini API Key Pribadi:",
+                type="password",
+                placeholder="Contoh: AIzaSy..."
+            )
             
             with st.expander("📖 Panduan Dapatkan API Key (Gratis 100%)"):
                 st.markdown("""
@@ -426,7 +426,7 @@ if not st.session_state.authenticated:
 
     st.markdown("""
     <div class="footer-box">
-        PERANGKAT GURU • Creator : Andar <br>
+        PERANGKAT GURU • Creater : Andar<br>
         © 2026 Engine AI Perangkat Pembelajaran
     </div>
     """, unsafe_allow_html=True)
@@ -472,44 +472,11 @@ st.markdown(f"""
 </div>
 """, unsafe_allow_html=True)
 
-tab1, tab2 = st.tabs(["🏛️ 1. Identitas Satuan Pendidikan", "✍️ 2. Pejabat & Penandatangan"])
-
-with tab1:
-    col_kop1, col_kop2 = st.columns(2)
-    with col_kop1:
-        dinas_pendidikan = st.text_input("Dinas Pendidikan Pembina:", value="")
-        nama_sekolah = st.text_input("Nama Satuan Pendidikan:", value="")
-    with col_kop2:
-        alamat_sekolah = st.text_input("Alamat & Kontak Sekolah:", value="")
-        kota_sekolah = st.text_input("Kota / Kabupaten Domisili:", value="k")
-
-with tab2:
-    col_staf1, col_staf2, col_staf3 = st.columns(3)
-    with col_staf1:
-        st.markdown("**Guru Mata Pelajaran**")
-        guru_nama = st.text_input("Nama & Gelar Guru:", value=st.session_state.user_name, key="g_nama")
-        guru_nip = st.text_input("NIP Guru (Isi '-' jika Non-PNS):", value="-", key="g_nip")
-    with col_staf2:
-        st.markdown("**Kepala Sekolah**")
-        ks_nama = st.text_input("Nama Kepala Sekolah:", value= key="ks_nama")
-        ks_nip = st.text_input("NIP Kepala Sekolah:", value= key="ks_nip")
-    with col_staf3:
-        st.markdown("**Pengawas Pembina**")
-        pengawas_nama = st.text_input("Nama Pengawas Pembina:", value= key="p_nama")
-        pengawas_nip = st.text_input("NIP Pengawas:", value= key="p_nip")
-
-st.markdown("<div style='height: 6px;'></div>", unsafe_allow_html=True)
-
 with st.container(border=True):
-    st.markdown("### 📋 3. Konfigurasi Kurikulum & Dokumen")
+    st.markdown("### 📋 1. Konfigurasi Kurikulum & Jenjang")
     
     col_p1, col_p2 = st.columns(2)
     with col_p1:
-        mapel = st.text_input("Mata Pelajaran:", value="placeholder="Contoh: Fisika, Matematika, Biologi")
-        materi_pokok = st.text_input(
-            "Fokus Topik / Materi Pokok:",
-            value="Pplaceholder="Contoh: Kinematika Gerak Lurus, Usaha dan Energi"
-        )
         fase_kelas = st.selectbox(
             "Tingkatan Kelas / Fase:",
             options=[
@@ -526,11 +493,33 @@ with st.container(border=True):
                 "Fase F - Kelas 11 SMA/MA/SMK",
                 "Fase F - Kelas 12 SMA/MA/SMK"
             ],
-            index=9
+            index=3
+        )
+
+        is_sd = any(k in fase_kelas for k in ["Kelas 1", "Kelas 2", "Kelas 3", "Kelas 4", "Kelas 5", "Kelas 6", "SD", "MI"])
+        if is_sd:
+            nomor_kelas = re.search(r'Kelas (\d+)', fase_kelas)
+            angka_kelas = nomor_kelas.group(1) if nomor_kelas else ""
+            jabatan_guru_otomatis = f"Guru Kelas {angka_kelas}" if angka_kelas else "Guru Kelas"
+            label_mapel_hint = "Mata Pelajaran / Muatan Pelajaran:"
+            default_mapel_val = "IPAS"
+        else:
+            jabatan_guru_otomatis = "Guru Mata Pelajaran"
+            label_mapel_hint = "Mata Pelajaran:"
+            default_mapel_val = "Fisika"
+
+        mapel = st.text_input(label_mapel_hint, value=default_mapel_val)
+        
+        materi_pokok = st.text_input(
+            "Fokus Topik / Materi Pokok:",
+            value="placeholder="Contoh: Perkalian Pecahan, Usaha dan Energi, dll."
         )
 
     with col_p2:
-        alokasi_waktu = st.text_input("Alokasi Waktu / Target JP:", value="3 JP / Minggu (Total 54 JP per Semester)")
+        alokasi_waktu = st.text_input(
+            "Alokasi Waktu / Target JP:",
+            value="4 JP / Minggu" if is_sd else "3 JP / Minggu (Total 54 JP per Semester)"
+        )
         
         profil_pancasila = st.multiselect(
             "Dimensi Profil Pelajar Pancasila (P3):",
@@ -582,8 +571,36 @@ with st.container(border=True):
         horizontal=True
     )
 
-    st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
-    tombol_proses = st.button("✨ Terbitkan Dokumen Administrasi Resmi", use_container_width=True)
+st.markdown("<div style='height: 4px;'></div>", unsafe_allow_html=True)
+
+tab1, tab2 = st.tabs(["🏛️ 2. Identitas Satuan Pendidikan", "✍️ 3. Pejabat & Penandatangan"])
+
+with tab1:
+    col_kop1, col_kop2 = st.columns(2)
+    with col_kop1:
+        dinas_pendidikan = st.text_input("Dinas Pendidikan Pembina:", value="DINAS PENDIDIKAN KOTA PONTIANAK" if is_sd else "DINAS PENDIDIKAN PROVINSI KALIMANTAN BARAT")
+        nama_sekolah = st.text_input("Nama Satuan Pendidikan:", value="SDN 01 PONTIANAK" if is_sd else "SMAS NUSA HARAPAN")
+    with col_kop2:
+        alamat_sekolah = st.text_input("Alamat & Kontak Sekolah:", value="Jl. Pancasila No. 10, Telp. (0561) 734567")
+        kota_sekolah = st.text_input("Kota / Kabupaten Domisili:", value="Pontianak")
+
+with tab2:
+    col_staf1, col_staf2, col_staf3 = st.columns(3)
+    with col_staf1:
+        st.markdown(f"**{jabatan_guru_otomatis}**")
+        guru_nama = st.text_input(f"Nama & Gelar ({jabatan_guru_otomatis}):", value=st.session_state.user_name, key="g_nama")
+        guru_nip = st.text_input("NIP Guru (Isi '-' jika Non-PNS):", value="-", key="g_nip")
+    with col_staf2:
+        st.markdown("**Kepala Sekolah**")
+        ks_nama = st.text_input("Nama Kepala Sekolah:", value="ZULKIFLI, S.Pd.", key="ks_nama")
+        ks_nip = st.text_input("NIP Kepala Sekolah:", value="197508122005011004", key="ks_nip")
+    with col_staf3:
+        st.markdown("**Pengawas Pembina**")
+        pengawas_nama = st.text_input("Nama Pengawas Pembina:", value="NURHASANAH, M.Si.", key="p_nama")
+        pengawas_nip = st.text_input("NIP Pengawas:", value="196811231993032003", key="p_nip")
+
+st.markdown("<div style='height: 8px;'></div>", unsafe_allow_html=True)
+tombol_proses = st.button("✨ Terbitkan Dokumen Administrasi Resmi", use_container_width=True)
 
 
 # ==========================================
@@ -599,6 +616,7 @@ if tombol_proses:
             "sekolah": nama_sekolah,
             "alamat": alamat_sekolah,
             "kota_sekolah": kota_sekolah,
+            "jabatan_guru": jabatan_guru_otomatis,
             "guru_nama": guru_nama,
             "guru_nip": guru_nip,
             "ks_nama": ks_nama,
@@ -716,7 +734,7 @@ if st.session_state.hasil_teks:
 # ==========================================
 st.markdown("""
 <div class="footer-box">
-    PERANGKAT GURU • Creator : Andar <br>
+    PERANGKAT GURU • Creater : Andar<br>
     © 2026 Engine AI Perangkat Pembelajaran
 </div>
 """, unsafe_allow_html=True)
