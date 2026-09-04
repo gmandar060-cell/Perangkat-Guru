@@ -721,7 +721,7 @@ Pengawas Pembina,
 
     return prompt
 
-
+```python
 # =========================================================
 # HALAMAN LOGIN
 # =========================================================
@@ -733,7 +733,8 @@ if not st.session_state.authenticated:
         unsafe_allow_html=True
     )
 
-    # HERO LOGIN
+    # ================= HERO =================
+
     st.markdown(
         """
         <div class="login-hero">
@@ -774,10 +775,12 @@ if not st.session_state.authenticated:
 
         </div>
         """,
-        unsafe_allow_html=True,
+        unsafe_allow_html=True
     )
 
-    # STATISTIK
+
+    # ================= STATISTIK =================
+
     st.markdown(
         """
         <div class="stats-row">
@@ -807,10 +810,12 @@ if not st.session_state.authenticated:
 
         </div>
         """,
-        unsafe_allow_html=True,
+        unsafe_allow_html=True
     )
 
-    # FORM LOGIN
+
+    # ================= FORM LOGIN =================
+
     st.markdown(
         '<div class="login-card">',
         unsafe_allow_html=True
@@ -832,20 +837,20 @@ if not st.session_state.authenticated:
                 Isi data berikut untuk memulai
             </div>
             """,
-            unsafe_allow_html=True,
+            unsafe_allow_html=True
         )
 
         nama_guru_input = st.text_input(
             "Nama Lengkap & Gelar",
             placeholder="Contoh: Andar Prasetyo, S.Pd.",
-            key="login_nama",
+            key="login_nama"
         )
 
         api_key_masuk = st.text_input(
             "Gemini API Key",
             type="password",
             placeholder="AIza...",
-            key="login_api_key",
+            key="login_api_key"
         )
 
         st.markdown(
@@ -862,7 +867,7 @@ if not st.session_state.authenticated:
 
             </div>
             """,
-            unsafe_allow_html=True,
+            unsafe_allow_html=True
         )
 
         masuk = st.form_submit_button(
@@ -871,9 +876,12 @@ if not st.session_state.authenticated:
         )
 
     st.markdown(
-        "</div>",
+        '</div>',
         unsafe_allow_html=True
     )
+
+
+    # ================= VALIDASI LOGIN =================
 
     if masuk:
 
@@ -903,18 +911,24 @@ if not st.session_state.authenticated:
 
             st.rerun()
 
+
+    # ================= CREATOR =================
+
     st.markdown(
         """
         <div class="creator-box">
+
             Creator: <strong>Andar</strong><br>
+
             SIAP AJAR 22 • Portal Administrasi Pembelajaran
+
         </div>
         """,
-        unsafe_allow_html=True,
+        unsafe_allow_html=True
     )
 
     st.stop()
-
+```
 
 # =========================================================
 # SIDEBAR DASHBOARD
