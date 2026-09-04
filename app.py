@@ -62,7 +62,7 @@ input, textarea, select {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 12px;
+    margin-bottom: 8px;
 }
 
 .app-header {
@@ -87,6 +87,16 @@ input, textarea, select {
     line-height: 1.5;
 }
 
+/* Membuat card login simetris dan sejajar tinggi */
+div[data-testid="stHorizontalBlock"] > div {
+    display: flex;
+    flex-direction: column;
+}
+
+div[data-testid="stHorizontalBlock"] > div > div[data-testid="stVerticalBlock"] {
+    height: 100%;
+}
+
 div[data-testid="stVerticalBlock"] > div[style*="border"] {
     background: #FFFFFF !important;
     border-radius: 16px !important;
@@ -94,6 +104,10 @@ div[data-testid="stVerticalBlock"] > div[style*="border"] {
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
     padding: 28px 26px !important;
     margin-bottom: 12px;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
 }
 
 .stButton > button {
@@ -474,7 +488,7 @@ def buat_instruksi_prompt(data: dict) -> str:
 # =========================================================
 
 if not st.session_state.authenticated:
-    col_left, col_right = st.columns([1.1, 0.9], gap="large")
+    col_left, col_right = st.columns(2, gap="large")
 
     with col_left:
         with st.container(border=True):
