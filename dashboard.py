@@ -712,34 +712,50 @@ if st.button("✨ Terbitkan Dokumen Administrasi Resmi", use_container_width=Tru
     "gemini-3.6-flash",
     "gemini-3.5-flash",
     "gemini-3.7-flash",
+    "gemini-2.5-flash",
 ]
-        response = None
-        errors = []
 
-        for model_name in model_list:
-            try:
-                status.info(f"📝 Menghasilkan dokumen dengan model: {model_name}")
-                response = client.models.generate_content(
-                    model=model_name, contents=prompt_final, config=types.GenerateContentConfig(temperature=0.2)
-                )
-                if response and getattr(response, "text", None):
-                    break
-            except Exception as exc:
-                errors.append(f"{model_name}: {exc}")
-                time.sleep(0.5)
+response = None
+errors = []
 
-        progress.progress(90)
-        if not response or not getattr(response, "text", None):
-            raise RuntimeError("Semua model Gemini gagal memproses permintaan.\n" + "\n".join(errors[-3:]))
+for model_name in model_list:
+    for percobaan in range(3):
+        try:
+            status.info(
+                f"📝 Menghasilkan dokumen dengan {model_name} "
+                f"(percobaan {percobaan + 1}/3)"
+            )
 
-        st.session_state.hasil_teks = response.text
-        safe_name = re.sub(r"[^a-zA-Z0-9_-]+", "_", f"{jenis_perangkat[:2]}_{mapel}_{fase_kelas[:6]}")
-        st.session_state.nama_file_base = safe_name
+            response = client.models.generate_content(
+                model=model_name,
+                contents=prompt_final
+            )
 
-        progress.progress(100)
-        status.success("✅ Dokumen berhasil diterbitkan.")
-        time.sleep(0.5)
-        status.empty()
+            if response and getattr(response, "text", None):
+                break
+
+        except Exception as exc:
+            error_text = str(exc)
+            errors.append(f"{model_name} percobaan {percobaan + 1}: {error_text}")
+
+            # 503 = server sedang sibuk, coba lagi setelah jeda
+            if "503" in error_text or "UNAVAILABLE" in error_text:
+                time.sleep(2 ** percobaan)
+                continue
+
+            # Error selain 503 langsung pindah ke model berikutnya
+            break
+
+    if response and getattr(response, "text", None):
+        break
+
+progress.progress(90)
+
+if not response or not getattr(response, "text", None):
+    raise RuntimeError(
+        "Semua model Gemini gagal memproses permintaan.\n\n"
+        + "\n".join(errors[-5:])
+    )        status.empty()
         progress.empty()
     except Exception as exc:
         progress.empty()
