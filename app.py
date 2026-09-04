@@ -641,24 +641,6 @@ if not st.session_state.authenticated:
         """
         <div class="login-hero">
 
-          </div>
-
-            <div class="login-badge">
-                ✦ &nbsp; KURIKULUM MERDEKA
-            </div>
-
-            <h1 class="login-title">
-                SIAP AJAR <span>22</span>
-            </h1>
-
-            <div class="login-subtitle">
-                Satu Portal, Solusi Lengkap
-                <strong>22 Perangkat Pembelajaran</strong>
-            </div>
-
-        </div>
-        """,
-        unsafe_allow_html=True
     )
 
     st.markdown(
