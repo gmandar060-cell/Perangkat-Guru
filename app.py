@@ -932,11 +932,17 @@ if not st.session_state.authenticated:
                 align-items:center;
                 gap:0;
             ">
-                <div class="login-icon">🎓</div>
-                <div class="login-badge">
-                    ✦ &nbsp; KURIKULUM MERDEKA
-                </div>
-            </div>
+                <div class="login-icon">
+    <img
+        src="https://raw.githubusercontent.com/gmandar060-cell/Perangkat-Guru/main/logo.png"
+        alt="Tut Wuri Handayani"
+        style="
+            width:58px;
+            height:58px;
+            object-fit:contain;
+        "
+    >
+</div>
 
             <h1 class="login-title">
                 SIAP AJAR <span>22</span>
