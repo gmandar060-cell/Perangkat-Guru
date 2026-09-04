@@ -5,7 +5,7 @@ import streamlit as st
 # =========================================================
 
 st.set_page_config(
-    page_title="SIAP AJAR 22",
+    page_title="SIAP AJAR 22 | Portal Administrasi Kurikulum",
     page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -159,7 +159,7 @@ if not st.session_state.authenticated:
             st.markdown(
                 "<p style='text-align:center;font-size:11px;font-weight:700;"
                 "color:#2563EB;letter-spacing:.5px;margin-bottom:6px;'>"
-                " SISTEM INFORMASI ASISTEN PERANGKAT AJAR</p>",
+                "✨ SISTEM INFORMASI ASISTEN PERANGKAT AJAR</p>",
                 unsafe_allow_html=True,
             )
             st.markdown(
@@ -193,13 +193,13 @@ if not st.session_state.authenticated:
 
             nama_guru_input = st.text_input(
                 "Nama Lengkap & Gelar",
-                placeholder="Contoh: Masukan Nama Lengkap Anda, S.Pd.",
+                placeholder="Contoh: Muhammad Nurzuliandar, S.Pd.",
             )
 
             api_key_masuk = st.text_input(
                 "Gemini API Key Pribadi",
                 type="password",
-                placeholder="Masukan Gemini Api Key Anda",
+                placeholder="AIza...",
             )
 
             with st.expander("📖 Cara mendapatkan Gemini API Key"):
