@@ -51,13 +51,9 @@ st.markdown(
        LOGIN
        ===================================================== */
 
-    .login-wrapper {
+    .login-hero {
         max-width: 820px;
         margin: 0 auto;
-        padding: 10px 10px 30px 10px;
-    }
-
-    .login-hero {
         text-align: center;
         padding: 25px 10px 10px 10px;
     }
@@ -143,16 +139,6 @@ st.markdown(
         color: #64748b;
     }
 
-    .login-card {
-        max-width: 560px;
-        margin: 0 auto;
-        background: white;
-        border: 1px solid #e2e8f0;
-        border-radius: 22px;
-        padding: 28px;
-        box-shadow: 0 18px 50px rgba(15,23,42,.08);
-    }
-
     .login-form-title {
         text-align: center;
         color: #0f172a;
@@ -170,7 +156,7 @@ st.markdown(
 
     .api-help {
         text-align: right;
-        margin-top: -5px;
+        margin-top: 5px;
         margin-bottom: 12px;
         font-size: 12px;
     }
@@ -290,10 +276,6 @@ st.markdown(
             flex-direction: column;
         }
 
-        .login-card {
-            padding: 20px;
-        }
-
         .paper-a4 {
             padding: 25px;
         }
@@ -341,9 +323,11 @@ if "nama_file_base" not in st.session_state:
 # =========================================================
 
 def buat_file_docx(text):
+
     document = Document()
 
     section = document.sections[0]
+
     section.top_margin = Inches(0.7)
     section.bottom_margin = Inches(0.7)
     section.left_margin = Inches(0.8)
@@ -358,47 +342,63 @@ def buat_file_docx(text):
             continue
 
         if line.startswith("### "):
+
             p = document.add_paragraph()
+
             run = p.add_run(line[4:])
             run.bold = True
             run.font.size = Pt(13)
+
             continue
 
         if line.startswith("## "):
+
             p = document.add_paragraph()
+
             run = p.add_run(line[3:])
             run.bold = True
             run.font.size = Pt(15)
+
             continue
 
         if line.startswith("# "):
+
             p = document.add_paragraph()
+
             run = p.add_run(line[2:])
             run.bold = True
             run.font.size = Pt(17)
+
             continue
 
         if line in ["---", "***", "___"]:
+
             document.add_paragraph("_" * 80)
+
             continue
 
         if line.startswith("- "):
+
             document.add_paragraph(
                 line[2:],
                 style="List Bullet"
             )
+
             continue
 
         if re.match(r"^\d+\.\s", line):
+
             clean = re.sub(
                 r"^\d+\.\s",
                 "",
                 line
             )
+
             document.add_paragraph(
                 clean,
                 style="List Number"
             )
+
             continue
 
         if "|" in line:
@@ -422,6 +422,7 @@ def buat_file_docx(text):
             table.alignment = WD_TABLE_ALIGNMENT.CENTER
 
             for i, value in enumerate(parts):
+
                 table.rows[0].cells[i].text = value
 
             continue
@@ -432,7 +433,9 @@ def buat_file_docx(text):
             run.font.size = Pt(11)
 
     output = io.BytesIO()
+
     document.save(output)
+
     output.seek(0)
 
     return output
@@ -445,6 +448,7 @@ def buat_file_docx(text):
 def markdown_to_html(text):
 
     html = []
+
     in_table = False
 
     for line in text.splitlines():
@@ -454,33 +458,43 @@ def markdown_to_html(text):
         if not line:
 
             if in_table:
+
                 html.append("</table>")
+
                 in_table = False
 
             continue
 
         if line.startswith("### "):
+
             html.append(
                 f"<h3>{line[4:]}</h3>"
             )
+
             continue
 
         if line.startswith("## "):
+
             html.append(
                 f"<h2>{line[3:]}</h2>"
             )
+
             continue
 
         if line.startswith("# "):
+
             html.append(
                 f"<h1>{line[2:]}</h1>"
             )
+
             continue
 
         if line.startswith("- "):
+
             html.append(
                 f"<li>{line[2:]}</li>"
             )
+
             continue
 
         if "|" in line:
@@ -497,17 +511,21 @@ def markdown_to_html(text):
                 continue
 
             if not in_table:
+
                 html.append("<table>")
+
                 in_table = True
 
             html.append("<tr>")
 
             for value in parts:
+
                 html.append(
                     f"<td>{value}</td>"
                 )
 
             html.append("</tr>")
+
             continue
 
         html.append(
@@ -515,6 +533,7 @@ def markdown_to_html(text):
         )
 
     if in_table:
+
         html.append("</table>")
 
     return "\n".join(html)
@@ -632,42 +651,32 @@ Pengawas Pembina,
 
 if not st.session_state.authenticated:
 
-    st.markdown(
-        '<div class="login-wrapper">',
-        unsafe_allow_html=True
-    )
+    # -----------------------------------------------------
+    # HERO
+    # -----------------------------------------------------
 
     st.markdown(
-        """
+        f"""
         <div class="login-hero">
 
-    )
-
-    st.markdown(
-        """
-        <div class="stats-row">
-
-            <div class="stat-card">
-                <div class="stat-number">4</div>
-                <div class="stat-label">
-                    Kategori Terorganisir
-                </div>
+            <div class="login-logo">
+                <img
+                    src="{LOGO_URL}"
+                    alt="Logo Tut Wuri Handayani"
+                >
             </div>
 
-            <div class="stat-card">
-                <div class="stat-number">22</div>
-                <div class="stat-label">
-                    Dokumen AI Generated
-                </div>
+            <div class="login-badge">
+                ✦ KURIKULUM MERDEKA
             </div>
 
-            <div class="stat-card">
-                <div class="stat-number">
-                    Gemini AI
-                </div>
-                <div class="stat-label">
-                    Flash Model
-                </div>
+            <div class="login-title">
+                SIAP <span>AJAR 22</span>
+            </div>
+
+            <div class="login-subtitle">
+                Satu Portal, Solusi Lengkap
+                <strong>22 Perangkat Pembelajaran</strong>
             </div>
 
         </div>
@@ -675,29 +684,79 @@ if not st.session_state.authenticated:
         unsafe_allow_html=True
     )
 
+
+    # -----------------------------------------------------
+    # STATISTIK
+    # -----------------------------------------------------
+
     st.markdown(
-        '<div class="login-card">',
+        """
+        <div class="stats-row">
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+                    4
+                </div>
+
+                <div class="stat-label">
+                    Kategori Terorganisir
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+                    22
+                </div>
+
+                <div class="stat-label">
+                    Dokumen AI Generated
+                </div>
+
+            </div>
+
+            <div class="stat-card">
+
+                <div class="stat-number">
+                    Gemini AI
+                </div>
+
+                <div class="stat-label">
+                    Flash Model
+                </div>
+
+            </div>
+
+        </div>
+        """,
         unsafe_allow_html=True
     )
 
+
+    # -----------------------------------------------------
+    # FORM LOGIN
+    # -----------------------------------------------------
+
+    st.markdown(
+        """
+        <div class="login-form-title">
+            Masuk ke Portal
+        </div>
+
+        <div class="login-form-desc">
+            Isi data berikut untuk memulai
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+
     with st.form(
         "login_form",
-        clear_on_submit=False,
-        border=False
+        clear_on_submit=False
     ):
-
-        st.markdown(
-            """
-            <div class="login-form-title">
-                Masuk ke Portal
-            </div>
-
-            <div class="login-form-desc">
-                Isi data berikut untuk memulai
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
 
         nama = st.text_input(
             "Nama Lengkap & Gelar",
@@ -719,10 +778,7 @@ if not st.session_state.authenticated:
                     href="https://aistudio.google.com/apikey"
                     target="_blank"
                 >
-             st.markdown(
-    "ⓘ Cara mendapatkan API Key gratis",
-    unsafe_allow_html=True
-)
+                    ⓘ Cara mendapatkan API Key gratis
                 </a>
             </div>
             """,
@@ -735,10 +791,10 @@ if not st.session_state.authenticated:
             use_container_width=True
         )
 
-    st.markdown(
-        '</div>',
-        unsafe_allow_html=True
-    )
+
+    # -----------------------------------------------------
+    # PROSES LOGIN
+    # -----------------------------------------------------
 
     if masuk:
 
@@ -757,23 +813,31 @@ if not st.session_state.authenticated:
         else:
 
             st.session_state.user_name = nama.strip()
+
             st.session_state.user_api_key = api_key.strip()
+
             st.session_state.authenticated = True
 
             st.rerun()
 
+
+    # -----------------------------------------------------
+    # CREATOR
+    # -----------------------------------------------------
+
     st.markdown(
         """
         <div class="creator-box">
-            Creator: <strong>Andar</strong><br>
-            SIAP AJAR 22 • Portal Administrasi Pembelajaran
+
+            Creator:
+            <strong>Andar</strong>
+            <br>
+
+            SIAP AJAR 22 •
+            Portal Administrasi Pembelajaran
+
         </div>
         """,
-        unsafe_allow_html=True
-    )
-
-    st.markdown(
-        '</div>',
         unsafe_allow_html=True
     )
 
@@ -887,7 +951,9 @@ st.markdown(
 # =========================================================
 
 st.markdown(
-    '<div class="section-title">📚 Konfigurasi Pembelajaran</div>',
+    '<div class="section-title">'
+    '📚 Konfigurasi Pembelajaran'
+    '</div>',
     unsafe_allow_html=True
 )
 
@@ -897,6 +963,7 @@ st.markdown(
     '</div>',
     unsafe_allow_html=True
 )
+
 
 col1, col2 = st.columns(2)
 
@@ -942,16 +1009,21 @@ angka_kelas = (
     else "1"
 )
 
+
 if is_sd:
 
     jabatan = f"Guru Kelas {angka_kelas}"
+
     label_mapel = "Mata Pelajaran / Muatan Pelajaran"
+
     default_mapel = "IPAS"
 
 else:
 
     jabatan = "Guru Mata Pelajaran"
+
     label_mapel = "Mata Pelajaran"
+
     default_mapel = "Fisika"
 
 
@@ -1005,27 +1077,49 @@ with col2:
 # =========================================================
 
 daftar_perangkat = [
+
     "Analisis CP & Pemetaan Elemen",
+
     "ATP Lengkap",
+
     "PROTA",
+
     "PROMES",
+
     "KKTP",
+
     "Modul Ajar Lengkap",
+
     "LKPD Berdiferensiasi",
+
     "Modul/Panduan P5",
+
     "Jurnal Mengajar Harian & Agenda Guru",
+
     "Asesmen Diagnostik",
+
     "Asesmen Formatif",
+
     "Asesmen Sumatif",
+
     "Rubrik Penilaian Kinerja/Portofolio/Proyek",
+
     "Rekap Daftar Nilai",
+
     "Presensi",
+
     "Remedial & Pengayaan",
+
     "Sumber Belajar & Buku Teks",
+
     "Analisis Alokasi Waktu Efektif",
+
     "Analisis Kuantitatif Butir Soal",
+
     "Jurnal Sikap & Catatan P5",
+
     "Bimbingan & Konsultasi Akademik",
+
     "Evaluasi Diri Guru & RTL",
 ]
 
@@ -1043,6 +1137,7 @@ st.markdown(
     '</div>',
     unsafe_allow_html=True
 )
+
 
 perangkat = st.multiselect(
     "22 Perangkat",
@@ -1062,6 +1157,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
 tab1, tab2, tab3, tab4 = st.tabs(
     [
         "Dinas Pendidikan",
@@ -1071,9 +1167,11 @@ tab1, tab2, tab3, tab4 = st.tabs(
     ]
 )
 
+
 if is_sd:
 
     default_dinas = "DINAS PENDIDIKAN KOTA PONTIANAK"
+
     default_sekolah = "SDN 01 PONTIANAK"
 
 else:
@@ -1092,6 +1190,7 @@ with tab1:
         value=default_dinas
     )
 
+
 with tab2:
 
     sekolah = st.text_input(
@@ -1099,12 +1198,14 @@ with tab2:
         value=default_sekolah
     )
 
+
 with tab3:
 
     alamat = st.text_input(
         "Alamat & Kontak",
         value="Jl. Pancasila No. 10, Telp. (0561) 734567"
     )
+
 
 with tab4:
 
@@ -1125,6 +1226,7 @@ st.markdown(
     unsafe_allow_html=True
 )
 
+
 col1, col2 = st.columns(2)
 
 with col1:
@@ -1138,6 +1240,7 @@ with col1:
         "NIP Guru",
         placeholder="Masukkan NIP jika ada"
     )
+
 
 with col2:
 
@@ -1161,6 +1264,7 @@ with col1:
         placeholder="Nama Pengawas"
     )
 
+
 with col2:
 
     pengawas_nip = st.text_input(
@@ -1175,6 +1279,7 @@ with col2:
 
 st.divider()
 
+
 generate = st.button(
     "🚀 GENERATE PERANGKAT PEMBELAJARAN",
     type="primary",
@@ -1186,56 +1291,97 @@ if generate:
 
     if not mapel.strip():
 
-        st.error("❌ Mata pelajaran belum diisi.")
+        st.error(
+            "❌ Mata pelajaran belum diisi."
+        )
+
         st.stop()
+
 
     if not materi.strip():
 
-        st.error("❌ Materi pokok belum diisi.")
+        st.error(
+            "❌ Materi pokok belum diisi."
+        )
+
         st.stop()
+
 
     if not sekolah.strip():
 
-        st.error("❌ Nama satuan pendidikan belum diisi.")
+        st.error(
+            "❌ Nama satuan pendidikan belum diisi."
+        )
+
         st.stop()
+
 
     if not perangkat:
 
-        st.error("❌ Pilih minimal satu perangkat.")
+        st.error(
+            "❌ Pilih minimal satu perangkat."
+        )
+
         st.stop()
+
 
     if not st.session_state.user_api_key.strip():
 
-        st.error("❌ Gemini API Key belum tersedia.")
+        st.error(
+            "❌ Gemini API Key belum tersedia."
+        )
+
         st.stop()
 
 
     data = {
+
         "guru_nama": guru_nama,
+
         "guru_nip": guru_nip,
+
         "jabatan": jabatan,
+
         "kepala_sekolah": kepala_sekolah,
+
         "kepala_sekolah_nip": kepala_sekolah_nip,
+
         "pengawas": pengawas,
+
         "pengawas_nip": pengawas_nip,
+
         "dinas": dinas,
+
         "sekolah": sekolah,
+
         "alamat": alamat,
+
         "kota": kota,
+
         "fase_kelas": fase_kelas,
+
         "mapel": mapel,
+
         "materi": materi,
+
         "alokasi": alokasi,
+
         "semester": semester,
+
         "profil_pancasila": profil,
+
         "perangkat": perangkat,
+
     }
 
 
     prompt = buat_prompt(data)
 
+
     progress = st.progress(0)
+
     status = st.empty()
+
 
     status.info(
         "⏳ Menghubungkan ke Google Gemini..."
@@ -1248,23 +1394,35 @@ if generate:
             api_key=st.session_state.user_api_key
         )
 
-        # Model utama + cadangan
+
+        # =================================================
+        # MODEL GEMINI
+        # =================================================
+
         model_list = [
+
             "gemini-2.5-flash",
+
             "gemini-2.0-flash",
+
         ]
 
+
         response = None
+
         errors = []
+
 
         for model in model_list:
 
             if response is not None:
                 break
 
+
             status.info(
                 f"🤖 Menggunakan {model}..."
             )
+
 
             for attempt in range(3):
 
@@ -1277,13 +1435,19 @@ if generate:
                         )
                     )
 
-                    response = client.models.generate_content(
-                        model=model,
-                        contents=prompt
+
+                    response = (
+                        client.models.generate_content(
+                            model=model,
+                            contents=prompt
+                        )
                     )
 
+
                     if response and response.text:
+
                         break
+
 
                 except Exception as e:
 
@@ -1294,7 +1458,9 @@ if generate:
                         f"{attempt + 1} | {error_text}"
                     )
 
+
                     upper_error = error_text.upper()
+
 
                     if (
                         "503" in error_text
@@ -1314,6 +1480,10 @@ if generate:
         progress.progress(100)
 
 
+        # =================================================
+        # GAGAL
+        # =================================================
+
         if response is None or not response.text:
 
             status.empty()
@@ -1322,10 +1492,19 @@ if generate:
                 "❌ Gagal menghasilkan perangkat."
             )
 
-            with st.expander("Detail error"):
+
+            with st.expander(
+                "Detail error"
+            ):
 
                 for error in errors:
+
                     st.write(error)
+
+
+        # =================================================
+        # BERHASIL
+        # =================================================
 
         else:
 
@@ -1333,7 +1512,11 @@ if generate:
                 "✅ Perangkat berhasil dibuat."
             )
 
-            st.session_state.hasil_teks = response.text
+
+            st.session_state.hasil_teks = (
+                response.text
+            )
+
 
             safe_name = re.sub(
                 r"[^A-Za-z0-9_-]+",
@@ -1341,9 +1524,11 @@ if generate:
                 materi.strip()
             )
 
+
             st.session_state.nama_file_base = (
                 f"SIAP_AJAR_22_{safe_name}"
             )
+
 
             st.success(
                 "🎉 Dokumen siap dipreview dan diunduh."
@@ -1353,13 +1538,19 @@ if generate:
     except Exception as e:
 
         progress.progress(100)
+
         status.empty()
+
 
         st.error(
             "❌ Terjadi kesalahan saat menjalankan AI."
         )
 
-        with st.expander("Detail error"):
+
+        with st.expander(
+            "Detail error"
+        ):
+
             st.code(str(e))
 
 
@@ -1371,6 +1562,7 @@ if st.session_state.hasil_teks:
 
     st.divider()
 
+
     st.markdown(
         '<div class="section-title">'
         '📄 Preview Dokumen'
@@ -1378,21 +1570,28 @@ if st.session_state.hasil_teks:
         unsafe_allow_html=True
     )
 
+
     html_preview = markdown_to_html(
         st.session_state.hasil_teks
     )
 
+
     st.markdown(
         f"""
         <div class="paper-a4">
+
             {html_preview}
+
         </div>
         """,
         unsafe_allow_html=True
     )
 
 
-    st.markdown("### 📥 Download Dokumen")
+    st.markdown(
+        "### 📥 Download Dokumen"
+    )
+
 
     col1, col2 = st.columns(2)
 
@@ -1403,17 +1602,22 @@ if st.session_state.hasil_teks:
             st.session_state.hasil_teks
         )
 
+
         st.download_button(
             "📘 Download DOCX",
+
             data=docx_file,
+
             file_name=(
                 st.session_state.nama_file_base
                 + ".docx"
             ),
+
             mime=(
                 "application/vnd.openxmlformats-"
                 "officedocument.wordprocessingml.document"
             ),
+
             use_container_width=True
         )
 
@@ -1425,14 +1629,19 @@ if st.session_state.hasil_teks:
             .encode("utf-8")
         )
 
+
         st.download_button(
             "📝 Download TXT",
+
             data=txt_file,
+
             file_name=(
                 st.session_state.nama_file_base
                 + ".txt"
             ),
+
             mime="text/plain",
+
             use_container_width=True
         )
 
@@ -1444,8 +1653,12 @@ if st.session_state.hasil_teks:
 st.markdown(
     """
     <div class="footer-box">
-        SIAP AJAR 22 • Creator: Andar<br>
+
+        SIAP AJAR 22 • Creator: Andar
+        <br>
+
         © 2026 SIAP AJAR 22 • Engine AI Pembelajaran
+
     </div>
     """,
     unsafe_allow_html=True
