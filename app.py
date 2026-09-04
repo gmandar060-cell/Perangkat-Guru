@@ -24,7 +24,7 @@ st.set_page_config(
 )
 
 # =========================================================
-# CSS
+# CSS MODERN & SIMETRIS
 # =========================================================
 
 st.markdown(
@@ -94,7 +94,7 @@ input::placeholder, textarea::placeholder {
     line-height: 1.5;
 }
 
-/* Perbaikan tata letak expander */
+/* Perbaikan total teks expander agar bersih */
 details[data-testid="stExpander"] {
     border: 1px solid #E2E8F0 !important;
     border-radius: 10px !important;
@@ -110,7 +110,11 @@ details[data-testid="stExpander"] summary span div p {
     display: inline-block !important;
 }
 
-/* Kartu login simetris dan sejajar tinggi */
+/* KUNCI UTAMA: Membuat kedua kotak card login sejajar tinggi dan simetris */
+div[data-testid="stHorizontalBlock"] {
+    align-items: stretch !important;
+}
+
 div[data-testid="stHorizontalBlock"] > div {
     display: flex;
     flex-direction: column;
@@ -126,8 +130,8 @@ div[data-testid="stVerticalBlock"] > div[style*="border"] {
     border: 1px solid #E2E8F0 !important;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
     padding: 32px 28px !important;
-    margin-bottom: 12px;
-    height: 100%;
+    margin-bottom: 0px !important;
+    height: 100% !important;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
