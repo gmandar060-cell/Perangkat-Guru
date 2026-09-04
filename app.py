@@ -426,9 +426,7 @@ section[data-testid="stSidebar"] {
 # LOGO
 # =========================================================
 
-LOGO_URL = (
-    "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/"
-    "assets/72x72/1f393.png"
+LOGO_URL = "https://raw.githubusercontent.com/gmandar060-cell/Perangkat-Guru/main/logo.png"
 )
 
 
