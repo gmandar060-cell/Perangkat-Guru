@@ -652,18 +652,17 @@ with st.sidebar:
         "🟢 Sesi AI aktif"
     )
 
-    if st.button(
-        "🚪 Keluar / Ganti Akun",
-        use_container_width=True,
-    ):
+if st.button(
+    "🚪 Keluar / Ganti Akun",
+    use_container_width=True,
+):
 
-        st.session_state.authenticated = False
-        st.session_state.user_name = ""
-        st.session_state.user_api_key = ""
-        st.session_state.hasil_teks = ""
+    st.session_state.authenticated = False
+    st.session_state.user_name = ""
+    st.session_state.user_api_key = ""
+    st.session_state.hasil_teks = ""
 
-        st.switch_page("login.py")
-
+    st.rerun()
     st.divider()
 
     st.markdown("### ⚙️ Status Sistem")
