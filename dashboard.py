@@ -1159,13 +1159,11 @@ if st.button(
             "⚡ Menghubungkan ke Google Gemini..."
         )
 
-        client = genai.Client(
+              client = genai.Client(
             api_key=st.session_state.user_api_key
         )
 
         progress.progress(15)
-
-          progress.progress(15)
 
         model_list = [
             "gemini-3.6-flash",
@@ -1174,13 +1172,9 @@ if st.button(
         response = None
         model_berhasil = ""
 
-        errors = []      response = None
-        model_berhasil = ""
-
         errors = []
 
         for model_name in model_list:
-
             for percobaan in range(3):
 
                 try:
