@@ -678,91 +678,270 @@ with tab2:
         pengawas_nama = st.text_input("Nama Pengawas Pembina", placeholder="Contoh: Andar", key="p_nama")
         pengawas_nip = st.text_input("NIP Pengawas", placeholder="Contoh: 196811231993032003", key="p_nip")
 
+# =========================================================
+# TERBITKAN DOKUMEN
+# =========================================================
+
 if st.button("✨ Terbitkan Dokumen Administrasi Resmi", use_container_width=True):
+
     if not mapel.strip():
         st.warning("⚠️ Mata pelajaran wajib diisi.")
         st.stop()
+
     if not dinas_pendidikan.strip() or not nama_sekolah.strip():
         st.warning("⚠️ Data instansi belum lengkap.")
         st.stop()
+
     if not materi_pokok.strip():
         st.warning("⚠️ Fokus topik/materi pokok wajib diisi.")
         st.stop()
 
     data_input = {
-        "dinas": dinas_pendidikan, "sekolah": nama_sekolah, "alamat": alamat_sekolah, "kota_sekolah": kota_sekolah,
-        "jabatan_guru": jabatan_guru_otomatis, "guru_nama": guru_nama, "guru_nip": guru_nip,
-        "ks_nama": ks_nama or "-", "ks_nip": ks_nip or "-", "pengawas_nama": pengawas_nama or "-", "pengawas_nip": pengawas_nip or "-",
-        "mapel": mapel, "materi_pokok": materi_pokok, "profil_pancasila": profil_pancasila,
-        "fase_kelas": fase_kelas, "semester": semester, "alokasi_waktu": alokasi_waktu,
-        "jenis_perangkat": jenis_perangkat, "tanggal_hari_ini": datetime.now().strftime("%d-%m-%Y"),
+        "dinas": dinas_pendidikan,
+        "sekolah": nama_sekolah,
+        "alamat": alamat_sekolah,
+        "kota_sekolah": kota_sekolah,
+        "jabatan_guru": jabatan_guru_otomatis,
+        "guru_nama": guru_nama,
+        "guru_nip": guru_nip,
+        "ks_nama": ks_nama or "-",
+        "ks_nip": ks_nip or "-",
+        "pengawas_nama": pengawas_nama or "-",
+        "pengawas_nip": pengawas_nip or "-",
+        "mapel": mapel,
+        "materi_pokok": materi_pokok,
+        "profil_pancasila": profil_pancasila,
+        "fase_kelas": fase_kelas,
+        "semester": semester,
+        "alokasi_waktu": alokasi_waktu,
+        "jenis_perangkat": jenis_perangkat,
+        "tanggal_hari_ini": datetime.now().strftime("%d-%m-%Y"),
     }
 
     prompt_final = buat_instruksi_prompt(data_input)
+
     progress = st.progress(0)
     status = st.empty()
 
     try:
+
+        # -----------------------------------------------------
+        # HUBUNGKAN KE GEMINI
+        # -----------------------------------------------------
+
         status.info("⚡ Menginisialisasi Google Gemini...")
-        client = genai.Client(api_key=st.session_state.user_api_key)
+
+        client = genai.Client(
+            api_key=st.session_state.user_api_key
+        )
+
         progress.progress(20)
 
+        # -----------------------------------------------------
+        # MODEL UTAMA + CADANGAN
+        # -----------------------------------------------------
+
         model_list = [
-    "gemini-3.8-flash",
-    "gemini-3.6-flash",
-    "gemini-3.5-flash",
-    "gemini-3.7-flash",
-    "gemini-2.5-flash",
-]
+            "gemini-3.8-flash",
+            "gemini-2.5-flash",
+        ]
 
-response = None
-errors = []
+        response = None
+        errors = []
 
-for model_name in model_list:
-    for percobaan in range(3):
-        try:
-            status.info(
-                f"📝 Menghasilkan dokumen dengan {model_name} "
-                f"(percobaan {percobaan + 1}/3)"
-            )
+        # -----------------------------------------------------
+        # COBA MODEL SATU PER SATU
+        # -----------------------------------------------------
 
-            response = client.models.generate_content(
-                model=model_name,
-                contents=prompt_final
-            )
+        for model_name in model_list:
 
+            for percobaan in range(3):
+
+                try:
+
+                    status.info(
+                        f"📝 Menghasilkan dokumen dengan "
+                        f"{model_name} "
+                        f"(percobaan {percobaan + 1}/3)"
+                    )
+
+                    response = client.models.generate_content(
+                        model=model_name,
+                        contents=prompt_final
+                    )
+
+                    # Berhasil mendapatkan teks
+                    if response and getattr(response, "text", None):
+                        break
+
+                except Exception as exc:
+
+                    error_text = str(exc)
+
+                    errors.append(
+                        f"{model_name} | "
+                        f"percobaan {percobaan + 1} | "
+                        f"{error_text}"
+                    )
+
+                    # -------------------------------------------------
+                    # ERROR 503 = SERVER GEMINI SEDANG SIBUK
+                    # -------------------------------------------------
+
+                    if (
+                        "503" in error_text
+                        or "UNAVAILABLE" in error_text
+                    ):
+
+                        waktu_tunggu = 2 ** percobaan
+
+                        status.warning(
+                            f"⏳ Gemini sedang sibuk. "
+                            f"Mencoba kembali dalam "
+                            f"{waktu_tunggu} detik..."
+                        )
+
+                        time.sleep(waktu_tunggu)
+
+                        continue
+
+                    # Error lain → langsung pindah model
+                    break
+
+            # Jika berhasil, hentikan seluruh loop
             if response and getattr(response, "text", None):
                 break
 
-        except Exception as exc:
-            error_text = str(exc)
-            errors.append(f"{model_name} percobaan {percobaan + 1}: {error_text}")
+        # -----------------------------------------------------
+        # SELESAI GENERATE
+        # -----------------------------------------------------
 
-            # 503 = server sedang sibuk, coba lagi setelah jeda
-            if "503" in error_text or "UNAVAILABLE" in error_text:
-                time.sleep(2 ** percobaan)
-                continue
+        progress.progress(90)
 
-            # Error selain 503 langsung pindah ke model berikutnya
-            break
+        # Jika semua model gagal
+        if not response or not getattr(response, "text", None):
 
-    if response and getattr(response, "text", None):
-        break
+            raise RuntimeError(
+                "Semua model Gemini gagal memproses permintaan.\n\n"
+                + "\n".join(errors[-6:])
+            )
 
-progress.progress(90)
+        # -----------------------------------------------------
+        # SIMPAN HASIL
+        # -----------------------------------------------------
 
-if not response or not getattr(response, "text", None):
-    raise RuntimeError(
-        "Semua model Gemini gagal memproses permintaan.\n\n"
-        + "\n".join(errors[-5:])
-    )        status.empty()
+        st.session_state.hasil_teks = response.text
+
+        # -----------------------------------------------------
+        # NAMA FILE
+        # -----------------------------------------------------
+
+        nama_perangkat_bersih = re.sub(
+            r"^\d+\.\s*",
+            "",
+            jenis_perangkat
+        )
+
+        st.session_state.nama_file_base = re.sub(
+            r"[^A-Za-z0-9_-]+",
+            "_",
+            nama_perangkat_bersih
+        )
+
+        # -----------------------------------------------------
+        # BERHASIL
+        # -----------------------------------------------------
+
+        status.success(
+            f"✅ Dokumen berhasil dibuat menggunakan "
+            f"{model_name}"
+        )
+
+        progress.progress(100)
+
+        time.sleep(0.8)
+
+        status.empty()
         progress.empty()
+
     except Exception as exc:
+
         progress.empty()
         status.empty()
-        st.error("❌ Gagal menerbitkan dokumen.")
-        st.code(str(exc))
 
+        st.error(
+            "❌ Gagal menerbitkan dokumen."
+        )
+
+        st.code(
+            str(exc),
+            language="text"
+        )
+
+
+# =========================================================
+# PREVIEW DAN DOWNLOAD
+# =========================================================
+
+if st.session_state.hasil_teks:
+
+    st.markdown(
+        "### 📄 Preview Lembar Kerja A4"
+    )
+
+    preview_html = markdown_to_html(
+        st.session_state.hasil_teks
+    )
+
+    st.markdown(
+        f"""
+        <div class="paper-a4">
+            {preview_html}
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+    c1, c2 = st.columns(2)
+
+    with c1:
+
+        docx_file = buat_file_docx(
+            st.session_state.hasil_teks
+        )
+
+        st.download_button(
+            "📄 Unduh Berkas Word (.DOCX)",
+            data=docx_file,
+            file_name=f"{st.session_state.nama_file_base}.docx",
+            mime="application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+            use_container_width=True,
+        )
+
+    with c2:
+
+        st.download_button(
+            "📝 Unduh Teks Mentah (.TXT)",
+            data=st.session_state.hasil_teks,
+            file_name=f"{st.session_state.nama_file_base}.txt",
+            mime="text/plain",
+            use_container_width=True,
+        )
+
+
+# =========================================================
+# FOOTER
+# =========================================================
+
+st.markdown(
+    """
+    <div class="footer-box">
+        SIAP AJAR 22 • Creator: Andar<br>
+        © 2026 SIAP AJAR 22 • Engine AI Pembelajaran
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 if st.session_state.hasil_teks:
     st.markdown("### 📄 Preview Lembar Kerja A4")
     preview_html = markdown_to_html(st.session_state.hasil_teks)
