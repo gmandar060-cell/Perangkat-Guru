@@ -1,4 +1,3 @@
-```python
 import streamlit as st
 from google import genai
 from datetime import datetime
@@ -1677,4 +1676,3 @@ st.markdown(
     """,
     unsafe_allow_html=True,
 )
-```
