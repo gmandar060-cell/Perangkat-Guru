@@ -499,19 +499,33 @@ def markdown_to_html(text: str) -> str:
                 f"<h2>{escaped[3:]}</h2>"
             )
 
-        elif escaped.startswith("# "):
-            html.append(
-                f"<h1>{escaped[2:]}</h1>"
-            )
+st.markdown(
+    f"""
+    <div style="
+        margin-bottom: 8px;
+    ">
+        <div style="
+            color:#0f172a;
+            font-size:32px;
+            font-weight:800;
+            line-height:1.2;
+        ">
+            Selamat Berkarya, {st.session_state.user_name}
+        </div>
 
-        elif escaped.startswith("---"):
-            html.append("<hr>")
-
-        else:
-            html.append(
-                f"<p>{escaped}</p>"
-            )
-
+        <div style="
+            color:#64748b;
+            font-size:15px;
+            margin-top:8px;
+            line-height:1.6;
+        ">
+            Susun perangkat pembelajaran secara otomatis,
+            lengkap, sistematis, dan siap digunakan.
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
     if in_table:
         flush_table()
 
