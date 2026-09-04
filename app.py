@@ -25,6 +25,13 @@ st.set_page_config(
 # =========================================================
 
 st.markdown(
+
+    st.markdown(
+    f"""
+    ...HTML DI SINI...
+    """,
+    unsafe_allow_html=True
+)
     """
     <style>
 
