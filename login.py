@@ -1,7 +1,7 @@
 import streamlit as st
 
 # =========================================================
-# KONFIGURASI HALAMAN
+# KONFIGURASI
 # =========================================================
 
 st.set_page_config(
@@ -20,27 +20,35 @@ st.markdown("""
 
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
-* {
+html, body, [class*="css"] {
     font-family: 'Inter', sans-serif;
 }
 
 .stApp {
     background:
-        radial-gradient(circle at top left, rgba(37, 99, 235, 0.10), transparent 35%),
-        radial-gradient(circle at bottom right, rgba(14, 165, 233, 0.08), transparent 35%),
+        radial-gradient(
+            circle at top left,
+            rgba(37, 99, 235, 0.10),
+            transparent 35%
+        ),
+        radial-gradient(
+            circle at bottom right,
+            rgba(14, 165, 233, 0.08),
+            transparent 35%
+        ),
         #f8fafc;
 }
 
-/* Hilangkan menu bawaan */
+/* Hilangkan menu Streamlit */
 #MainMenu {
     visibility: hidden;
 }
 
-footer {
+header {
     visibility: hidden;
 }
 
-header {
+footer {
     visibility: hidden;
 }
 
@@ -51,7 +59,10 @@ header {
     padding-bottom: 30px;
 }
 
-/* Header */
+/* =========================================================
+   HEADER
+   ========================================================= */
+
 .kurikulum {
     text-align: center;
     color: #2563eb;
@@ -63,9 +74,9 @@ header {
 
 .login-title {
     text-align: center;
+    color: #0f172a;
     font-size: 42px;
     font-weight: 800;
-    color: #0f172a;
     line-height: 1.1;
     margin-bottom: 8px;
 }
@@ -74,10 +85,13 @@ header {
     text-align: center;
     color: #64748b;
     font-size: 15px;
-    margin-bottom: 32px;
+    margin-bottom: 30px;
 }
 
-/* Statistik */
+/* =========================================================
+   STATISTIK
+   ========================================================= */
+
 .stats-container {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
@@ -86,12 +100,12 @@ header {
 }
 
 .stat-card {
-    background: rgba(255,255,255,0.90);
+    background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 16px;
     padding: 20px 12px;
     text-align: center;
-    box-shadow: 0 8px 25px rgba(15,23,42,0.05);
+    box-shadow: 0 8px 25px rgba(15, 23, 42, 0.05);
 }
 
 .stat-number {
@@ -107,13 +121,16 @@ header {
     font-weight: 600;
 }
 
-/* Login Card */
+/* =========================================================
+   LOGIN CARD
+   ========================================================= */
+
 .login-card {
-    background: white;
+    background: #ffffff;
     border: 1px solid #e2e8f0;
     border-radius: 22px;
     padding: 30px;
-    box-shadow: 0 15px 40px rgba(15,23,42,0.08);
+    box-shadow: 0 15px 40px rgba(15, 23, 42, 0.08);
     margin-bottom: 20px;
 }
 
@@ -128,13 +145,19 @@ header {
     color: #64748b;
     font-size: 13px;
     line-height: 1.6;
-    margin-bottom: 20px;
 }
 
-/* Input */
+/* =========================================================
+   INPUT
+   ========================================================= */
+
+.stTextInput {
+    margin-bottom: 5px;
+}
+
 .stTextInput label {
-    font-weight: 600 !important;
     color: #334155 !important;
+    font-weight: 600 !important;
 }
 
 .stTextInput input {
@@ -145,33 +168,39 @@ header {
 
 .stTextInput input:focus {
     border-color: #2563eb !important;
+    box-shadow: 0 0 0 1px #2563eb !important;
 }
 
-/* Button */
+/* =========================================================
+   BUTTON
+   ========================================================= */
+
 .stButton > button {
     width: 100%;
+    min-height: 48px;
     border-radius: 12px;
     background: #2563eb;
     color: white;
     border: none;
-    padding: 12px 20px;
     font-size: 15px;
     font-weight: 700;
-    transition: all 0.2s ease;
 }
 
 .stButton > button:hover {
     background: #1d4ed8;
-    transform: translateY(-1px);
+    color: white;
 }
 
-/* API info */
+/* =========================================================
+   API INFO
+   ========================================================= */
+
 .api-info {
     background: #eff6ff;
     border: 1px solid #bfdbfe;
     border-radius: 12px;
-    padding: 12px 15px;
-    margin-top: 15px;
+    padding: 13px 15px;
+    margin-top: 10px;
     color: #1e40af;
     font-size: 12px;
     line-height: 1.5;
@@ -183,16 +212,22 @@ header {
     text-decoration: none;
 }
 
-/* Footer */
+/* =========================================================
+   FOOTER
+   ========================================================= */
+
 .creator {
     text-align: center;
     color: #94a3b8;
     font-size: 11px;
-    margin-top: 20px;
+    margin-top: 22px;
     line-height: 1.6;
 }
 
-/* Mobile */
+/* =========================================================
+   MOBILE
+   ========================================================= */
+
 @media (max-width: 650px) {
 
     .block-container {
@@ -215,7 +250,7 @@ header {
     }
 
     .stat-card {
-        padding: 15px;
+        padding: 16px;
     }
 
     .login-card {
@@ -225,6 +260,7 @@ header {
 
 </style>
 """, unsafe_allow_html=True)
+
 
 # =========================================================
 # HEADER
@@ -244,8 +280,10 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+
 # =========================================================
 # STATISTIK
+# SATU BLOK HTML UTUH
 # =========================================================
 
 st.markdown("""
@@ -253,24 +291,32 @@ st.markdown("""
 
     <div class="stat-card">
         <div class="stat-number">22</div>
-        <div class="stat-label">Perangkat Pembelajaran</div>
+        <div class="stat-label">
+            Perangkat Pembelajaran
+        </div>
     </div>
 
     <div class="stat-card">
         <div class="stat-number">AI</div>
-        <div class="stat-label">Google Gemini</div>
+        <div class="stat-label">
+            Google Gemini
+        </div>
     </div>
 
     <div class="stat-card">
         <div class="stat-number">DOCX</div>
-        <div class="stat-label">Siap Diunduh</div>
+        <div class="stat-label">
+            Siap Diunduh
+        </div>
     </div>
 
 </div>
 """, unsafe_allow_html=True)
 
+
 # =========================================================
 # LOGIN CARD
+# SATU BLOK HTML UTUH
 # =========================================================
 
 st.markdown("""
@@ -288,6 +334,7 @@ st.markdown("""
 </div>
 """, unsafe_allow_html=True)
 
+
 # =========================================================
 # FORM LOGIN
 # =========================================================
@@ -303,14 +350,18 @@ api_key = st.text_input(
     placeholder="Masukkan Gemini API Key Anda"
 )
 
+
 # =========================================================
-# INFO API KEY
+# INFORMASI API KEY
 # =========================================================
 
 st.markdown("""
 <div class="api-info">
     🔑 Belum memiliki Gemini API Key?
-    <a href="https://aistudio.google.com/app/apikey" target="_blank">
+    <a
+        href="https://aistudio.google.com/app/apikey"
+        target="_blank"
+    >
         Buat API Key di Google AI Studio
     </a>
 </div>
@@ -318,27 +369,32 @@ st.markdown("""
 
 st.write("")
 
+
 # =========================================================
-# LOGIN
+# TOMBOL LOGIN
 # =========================================================
 
-if st.button("🚀 MASUK KE PORTAL", use_container_width=True):
+if st.button(
+    "🚀 MASUK KE PORTAL",
+    use_container_width=True
+):
 
     if not nama.strip():
         st.error("❌ Silakan masukkan Nama Lengkap & Gelar.")
-        st.stop()
 
-    if not api_key.strip():
+    elif not api_key.strip():
         st.error("❌ Silakan masukkan Gemini API Key.")
-        st.stop()
 
-    # Simpan sesi login
-    st.session_state.authenticated = True
-    st.session_state.user_name = nama.strip()
-    st.session_state.user_api_key = api_key.strip()
+    else:
 
-    # Masuk ke dashboard
-    st.switch_page("dashboard.py")
+        # Simpan informasi login
+        st.session_state.authenticated = True
+        st.session_state.user_name = nama.strip()
+        st.session_state.user_api_key = api_key.strip()
+
+        # Masuk ke dashboard
+        st.switch_page("dashboard.py")
+
 
 # =========================================================
 # FOOTER
