@@ -369,7 +369,6 @@ def markdown_to_html(text: str) -> str:
         line = raw.strip()
 
         if line.startswith("|") and line.endswith("|"):
-            # separator row
             if re.match(r"^\|[\s\-:|]+\|$", line):
                 continue
 
@@ -452,7 +451,7 @@ ATURAN OUTPUT
 4. Susun isi secara lengkap dan operasional.
 5. Gunakan tabel Markdown jika struktur data lebih jelas dalam tabel.
 6. Jangan menggunakan "...", "[lanjutkan]", "[sesuaikan]", "dst.",
-   atau "dan seterusnya".
+    atau "dan seterusnya".
 7. Jangan mengarang nomor regulasi spesifik jika tidak yakin.
 8. Gunakan bahasa Indonesia formal dan mudah diedit oleh guru.
 9. Akhiri dengan lembar pengesahan tiga kolom:
@@ -880,11 +879,10 @@ if st.button(
 
         progress.progress(20)
 
-        # Model yang umum digunakan. Jika satu gagal, lanjut ke berikutnya.
+        # Daftar model terbaru yang aktif saat ini
         model_list = [
-            "gemini-2.5-flash",
-            "gemini-2.0-flash",
-            "gemini-1.5-flash",
+            "gemini-3.7-flash",
+            "gemini-3.5-flash",
         ]
 
         response = None
