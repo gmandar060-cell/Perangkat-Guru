@@ -170,6 +170,7 @@ h1, h2, h3, h4, h5, h6, button, input, textarea {
     margin-top: 24px;
     box-shadow: 0 18px 45px rgba(11, 31, 88, .20);
     border: 1px solid rgba(255,255,255,.7);
+    box-sizing: border-box;
 }
 
 .login-form-title {
@@ -185,34 +186,43 @@ h1, h2, h3, h4, h5, h6, button, input, textarea {
     margin: 0 0 18px 0;
 }
 
-/* Streamlit input styling */
-.login-form-wrap label {
+/* ===== LOGIN WIDGETS — applies to real Streamlit DOM ===== */
+.stApp:has(.login-page) .stTextInput {
+    margin-bottom: 4px !important;
+}
+
+.stApp:has(.login-page) .stTextInput label {
     color: #334155 !important;
     font-size: 13px !important;
     font-weight: 700 !important;
 }
 
-.login-form-wrap input {
+.stApp:has(.login-page) .stTextInput input {
     background: #fff !important;
     color: #1e293b !important;
     border: 1px solid #dbe3ef !important;
     border-radius: 11px !important;
     min-height: 48px !important;
     font-size: 14px !important;
+    box-sizing: border-box !important;
 }
 
-.login-form-wrap input:focus {
+.stApp:has(.login-page) .stTextInput input:focus {
     border-color: #4d83f5 !important;
     box-shadow: 0 0 0 3px rgba(59,130,246,.10) !important;
 }
 
-.login-form-wrap input::placeholder {
+.stApp:has(.login-page) .stTextInput input::placeholder {
     color: #c2ccda !important;
     -webkit-text-fill-color: #c2ccda !important;
 }
 
-.login-form-wrap .stButton > button {
-    margin-top: 10px;
+.stApp:has(.login-page) .stTextInput [data-testid="stTextInputRootElement"] {
+    background: #fff !important;
+}
+
+.stApp:has(.login-page) .stButton > button {
+    margin-top: 10px !important;
     min-height: 52px !important;
     border: none !important;
     border-radius: 11px !important;
@@ -221,13 +231,13 @@ h1, h2, h3, h4, h5, h6, button, input, textarea {
     transition: transform .15s ease, box-shadow .15s ease !important;
 }
 
-.login-form-wrap .stButton > button:hover {
+.stApp:has(.login-page) .stButton > button:hover {
     transform: translateY(-1px);
     box-shadow: 0 11px 22px rgba(37,99,235,.30) !important;
 }
 
-.login-form-wrap .stButton > button,
-.login-form-wrap .stButton > button * {
+.stApp:has(.login-page) .stButton > button,
+.stApp:has(.login-page) .stButton > button * {
     color: white !important;
     font-weight: 800 !important;
     font-size: 15px !important;
