@@ -265,13 +265,13 @@ api_key = st.text_input(
     placeholder="Masukkan Gemini API Key Anda"
 )
     # -----------------------------------------------------
-    # STATISTIK
-    # -----------------------------------------------------
+# STATISTIK
+# -----------------------------------------------------
 
-    col1, col2, col3 = st.columns(3)
+col1, col2, col3 = st.columns(3)
 
-    with col1:
-        st.markdown(
+with col1:
+    st.markdown(
             """
             <div class="stat-box">
                 <div class="stat-number">22</div>
