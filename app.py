@@ -5,14 +5,14 @@ import streamlit as st
 # =========================================================
 
 st.set_page_config(
-    page_title="SIAP AJAR 22 | Portal Administrasi Kurikulum",
+    page_title="SIAP AJAR 22",
     page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded",
 )
 
 # =========================================================
-# CSS LOGIN
+# CSS LOGIN (Dibersihkan dari bug teks expander)
 # =========================================================
 
 st.markdown(
@@ -53,7 +53,7 @@ input, textarea, select {
     margin-bottom: 12px;
 }
 
-/* Memperbaiki bug teks arrow berlebih pada expander */
+/* Memperbaiki total bug teks arrow berlebih pada expander Streamlit */
 details[data-testid="stExpander"] {
     border: 1px solid #E2E8F0 !important;
     border-radius: 10px !important;
@@ -61,7 +61,12 @@ details[data-testid="stExpander"] {
     margin-bottom: 12px;
 }
 
-details[data-testid="stExpander"] summary p {
+details[data-testid="stExpander"] summary {
+    font-weight: 600 !important;
+}
+
+/* Menyembunyikan artefak teks ikon bawaan versi streamlit tertentu */
+details[data-testid="stExpander"] summary span div p {
     display: inline-block !important;
 }
 
@@ -115,6 +120,21 @@ div[data-testid="stVerticalBlock"] > div[style*="border"] {
 """,
     unsafe_allow_html=True,
 )
+
+LOGO_URL = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f393.png"
+
+def render_logo(width=90):
+    st.markdown(
+        f"""
+        <div class="brand-icon-box">
+            <img src="{LOGO_URL}" width="{width}" height="{width}"
+                 alt="Logo SIAP AJAR 22"
+                 style="filter:drop-shadow(0 4px 6px rgba(0,0,0,.1));">
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
 # =========================================================
 # SESSION STATE INISIALISASI
 # =========================================================
@@ -127,7 +147,7 @@ if "user_api_key" not in st.session_state:
     st.session_state.user_api_key = ""
 
 # =========================================================
-# ROUTING LOGIC
+# ROUTING LOGIC (HALAMAN LOGIN VS DASHBOARD)
 # =========================================================
 
 if not st.session_state.authenticated:
@@ -139,7 +159,7 @@ if not st.session_state.authenticated:
             st.markdown(
                 "<p style='text-align:center;font-size:11px;font-weight:700;"
                 "color:#2563EB;letter-spacing:.5px;margin-bottom:6px;'>"
-                "✨ SISTEM INFORMASI ASISTEN PERANGKAT AJAR</p>",
+                " SISTEM INFORMASI ASISTEN PERANGKAT AJAR</p>",
                 unsafe_allow_html=True,
             )
             st.markdown(
@@ -173,13 +193,13 @@ if not st.session_state.authenticated:
 
             nama_guru_input = st.text_input(
                 "Nama Lengkap & Gelar",
-                placeholder="Contoh: Muhammad Nurzuliandar, S.Pd.",
+                placeholder="Contoh: Masukan Nama Lengkap Anda, S.Pd.",
             )
 
             api_key_masuk = st.text_input(
                 "Gemini API Key Pribadi",
                 type="password",
-                placeholder="AIza...",
+                placeholder="Masukan Gemini Api Key Anda",
             )
 
             with st.expander("📖 Cara mendapatkan Gemini API Key"):
@@ -216,6 +236,6 @@ SIAP AJAR 22 • Creator: Andar<br>
         unsafe_allow_html=True,
     )
 else:
-    # Jika sudah login, muat file isi dashboard utama
+    # Jika sudah berhasil masuk, panggil file dashboard.py
     import dashboard
     dashboard.run()
