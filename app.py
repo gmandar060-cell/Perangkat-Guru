@@ -928,7 +928,6 @@ if not st.session_state.authenticated:
     )
 
     st.stop()
-```
 
 # =========================================================
 # SIDEBAR DASHBOARD
