@@ -87,6 +87,19 @@ input, textarea, select {
     line-height: 1.5;
 }
 
+/* Perbaikan tata letak expander agar teks dan ikon tidak bertumpuk */
+details[data-testid="stExpander"] {
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 10px !important;
+    background-color: #FFFFFF !important;
+    margin-bottom: 12px;
+}
+
+details[data-testid="stExpander"] summary {
+    font-weight: 600 !important;
+    color: #1E293B !important;
+}
+
 /* Kartu login simetris dan sejajar tinggi */
 div[data-testid="stHorizontalBlock"] > div {
     display: flex;
