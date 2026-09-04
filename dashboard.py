@@ -4,30 +4,23 @@ from datetime import datetime
 import re
 import io
 import time
+
 from docx import Document
 from docx.shared import Pt, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_TABLE_ALIGNMENT
-from docx.oxml import parse_xml
-from docx.oxml.ns import nsdecls
+
 
 # =========================================================
 # SIAP AJAR 22 - DASHBOARD
 # =========================================================
 
-st.set_page_config(
-    page_title="SIAP AJAR 22 | Dashboard",
-    page_icon="🎓",
-    layout="wide",
-    initial_sidebar_state="expanded",
-)
-
-# =========================================================
-# CEK LOGIN
-# =========================================================
+# Login.py adalah entrypoint utama.
+# Jadi dashboard tidak menggunakan st.set_page_config() lagi.
 
 if not st.session_state.get("authenticated", False):
     st.stop()
+
 
 # =========================================================
 # SESSION STATE
@@ -44,6 +37,7 @@ for key, value in defaults.items():
     if key not in st.session_state:
         st.session_state[key] = value
 
+
 # =========================================================
 # LOGO
 # =========================================================
@@ -53,6 +47,7 @@ LOGO_URL = (
     "gmandar060-cell/Perangkat-Guru/main/logo.png"
 )
 
+
 # =========================================================
 # CSS
 # =========================================================
@@ -60,6 +55,7 @@ LOGO_URL = (
 st.markdown(
     """
     <style>
+
     @import url(
         'https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:'
         'wght@400;500;600;700;800&display=swap'
@@ -79,7 +75,8 @@ st.markdown(
         padding-bottom: 3rem;
     }
 
-    input, textarea {
+    input,
+    textarea {
         color: #0F172A !important;
         background: #FFFFFF !important;
         -webkit-text-fill-color: #0F172A !important;
@@ -115,9 +112,11 @@ st.markdown(
                 #1E3A8A 55%,
                 #2563EB 100%
             );
+
         border-radius: 18px;
         padding: 28px 32px;
         margin-bottom: 22px;
+
         box-shadow:
             0 10px 25px rgba(15, 23, 42, 0.12);
     }
@@ -227,6 +226,7 @@ st.markdown(
     }
 
     @media (max-width: 768px) {
+
         .dashboard-header {
             padding: 22px 18px;
         }
@@ -238,17 +238,21 @@ st.markdown(
         .paper-a4 {
             padding: 22px 16px;
         }
+
     }
+
     </style>
     """,
     unsafe_allow_html=True,
 )
 
+
 # =========================================================
-# FUNGSI DOCX
+# FUNGSI MEMBUAT DOCX
 # =========================================================
 
 def buat_file_docx(markdown_text: str) -> io.BytesIO:
+
     doc = Document()
 
     for section in doc.sections:
@@ -261,6 +265,7 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
     i = 0
 
     while i < len(lines):
+
         line = lines[i].strip()
 
         if line.startswith("```"):
@@ -272,6 +277,7 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
         # -------------------------
 
         if line.startswith("|") and line.endswith("|"):
+
             table_lines = []
 
             while (
@@ -279,30 +285,46 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
                 and lines[i].strip().startswith("|")
                 and lines[i].strip().endswith("|")
             ):
+
                 raw = lines[i].strip()
 
-                if not re.match(r"^\|[\s\-:|]+\|$", raw):
+                if not re.match(
+                    r"^\|[\s\-:|]+\|$",
+                    raw
+                ):
+
                     cells = [
                         c.strip()
                         for c in raw[1:-1].split("|")
                     ]
+
                     table_lines.append(cells)
 
                 i += 1
 
             if table_lines:
+
                 rows = len(table_lines)
-                cols = max(len(row) for row in table_lines)
+                cols = max(
+                    len(row)
+                    for row in table_lines
+                )
 
                 table = doc.add_table(
                     rows=rows,
                     cols=cols
                 )
 
-                table.alignment = WD_TABLE_ALIGNMENT.CENTER
+                table.alignment = (
+                    WD_TABLE_ALIGNMENT.CENTER
+                )
 
-                for r_idx, row_data in enumerate(table_lines):
+                for r_idx, row_data in enumerate(
+                    table_lines
+                ):
+
                     for c_idx in range(cols):
+
                         value = (
                             row_data[c_idx]
                             if c_idx < len(row_data)
@@ -324,7 +346,9 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
                         cell.text = value
 
                         for paragraph in cell.paragraphs:
+
                             for run in paragraph.runs:
+
                                 run.font.name = "Calibri"
                                 run.font.size = Pt(9.5)
 
@@ -340,28 +364,36 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
         # -------------------------
 
         if line.startswith("# "):
+
             p = doc.add_heading(
                 line[2:],
                 level=1
             )
-            p.alignment = WD_ALIGN_PARAGRAPH.CENTER
+
+            p.alignment = (
+                WD_ALIGN_PARAGRAPH.CENTER
+            )
 
         elif line.startswith("## "):
+
             doc.add_heading(
                 line[3:],
                 level=2
             )
 
         elif line.startswith("### "):
+
             doc.add_heading(
                 line[4:],
                 level=3
             )
 
         elif line.startswith("---"):
+
             doc.add_paragraph()
 
         elif line:
+
             clean = re.sub(
                 r"<.*?>",
                 "",
@@ -380,20 +412,23 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
             p.paragraph_format.space_after = Pt(4)
 
             for run in p.runs:
+
                 run.font.name = "Calibri"
                 run.font.size = Pt(11)
 
         i += 1
 
     stream = io.BytesIO()
+
     doc.save(stream)
+
     stream.seek(0)
 
     return stream
 
 
 # =========================================================
-# MARKDOWN -> HTML
+# MARKDOWN → HTML
 # =========================================================
 
 def markdown_to_html(text: str) -> str:
@@ -425,8 +460,15 @@ def markdown_to_html(text: str) -> str:
 
                 cell_html = (
                     cell
-                    .replace("<br>", "<br>")
-                    .replace("<br/>", "<br>")
+                    .replace("&", "&amp;")
+                    .replace("<", "&lt;")
+                    .replace(">", "&gt;")
+                )
+
+                cell_html = re.sub(
+                    r"\*\*(.*?)\*\*",
+                    r"<strong>\1</strong>",
+                    cell_html
                 )
 
                 html.append(
@@ -447,10 +489,7 @@ def markdown_to_html(text: str) -> str:
         if line.startswith("```"):
             continue
 
-        if (
-            line.startswith("|")
-            and line.endswith("|")
-        ):
+        if line.startswith("|") and line.endswith("|"):
 
             if re.match(
                 r"^\|[\s\-:|]+\|$",
@@ -473,7 +512,9 @@ def markdown_to_html(text: str) -> str:
             flush_table()
 
         if not line:
+
             html.append("<p>&nbsp;</p>")
+
             continue
 
         escaped = (
@@ -490,42 +531,33 @@ def markdown_to_html(text: str) -> str:
         )
 
         if escaped.startswith("### "):
+
             html.append(
                 f"<h3>{escaped[4:]}</h3>"
             )
 
         elif escaped.startswith("## "):
+
             html.append(
                 f"<h2>{escaped[3:]}</h2>"
             )
 
-st.markdown(
-    f"""
-    <div style="
-        margin-bottom: 8px;
-    ">
-        <div style="
-            color:#0f172a;
-            font-size:32px;
-            font-weight:800;
-            line-height:1.2;
-        ">
-            Selamat Berkarya, {st.session_state.user_name}
-        </div>
+        elif escaped.startswith("# "):
 
-        <div style="
-            color:#64748b;
-            font-size:15px;
-            margin-top:8px;
-            line-height:1.6;
-        ">
-            Susun perangkat pembelajaran secara otomatis,
-            lengkap, sistematis, dan siap digunakan.
-        </div>
-    </div>
-    """,
-    unsafe_allow_html=True
-)
+            html.append(
+                f"<h1>{escaped[2:]}</h1>"
+            )
+
+        elif escaped.startswith("---"):
+
+            html.append("<hr>")
+
+        else:
+
+            html.append(
+                f"<p>{escaped}</p>"
+            )
+
     if in_table:
         flush_table()
 
@@ -616,8 +648,8 @@ ATURAN DOKUMEN
 
 1. Gunakan bahasa Indonesia formal dan baku.
 2. Dokumen harus lengkap dan operasional.
-3. Jangan menggunakan placeholder seperti "[isi]", "[sesuaikan]",
-   "...", "dst.", atau "dan seterusnya".
+3. Jangan menggunakan placeholder seperti "[isi]",
+   "[sesuaikan]", "...", "dst.", atau "dan seterusnya".
 4. Gunakan heading Markdown.
 5. Gunakan tabel Markdown jika diperlukan.
 6. Jangan mengarang nomor regulasi apabila tidak yakin.
@@ -666,17 +698,18 @@ with st.sidebar:
         "🟢 Sesi AI aktif"
     )
 
-if st.button(
-    "🚪 Keluar / Ganti Akun",
-    use_container_width=True,
-):
+    if st.button(
+        "🚪 Keluar / Ganti Akun",
+        use_container_width=True,
+    ):
 
-    st.session_state.authenticated = False
-    st.session_state.user_name = ""
-    st.session_state.user_api_key = ""
-    st.session_state.hasil_teks = ""
+        st.session_state.authenticated = False
+        st.session_state.user_name = ""
+        st.session_state.user_api_key = ""
+        st.session_state.hasil_teks = ""
 
-    st.rerun()
+        st.rerun()
+
     st.divider()
 
     st.markdown("### ⚙️ Status Sistem")
@@ -693,7 +726,7 @@ if st.button(
 
 
 # =========================================================
-# HEADER
+# HEADER DASHBOARD
 # =========================================================
 
 st.markdown(
@@ -701,8 +734,7 @@ st.markdown(
     <div class="dashboard-header">
 
         <h1>
-            Selamat Berkarya,
-            {st.session_state.user_name}
+            Selamat Berkarya, {st.session_state.user_name}
         </h1>
 
         <p>
@@ -715,6 +747,7 @@ st.markdown(
     unsafe_allow_html=True,
 )
 
+
 # =========================================================
 # STATISTIK
 # =========================================================
@@ -722,6 +755,7 @@ st.markdown(
 c1, c2, c3 = st.columns(3)
 
 with c1:
+
     st.markdown(
         """
         <div class="info-card">
@@ -735,6 +769,7 @@ with c1:
     )
 
 with c2:
+
     st.markdown(
         """
         <div class="info-card">
@@ -748,6 +783,7 @@ with c2:
     )
 
 with c3:
+
     st.markdown(
         """
         <div class="info-card">
@@ -762,7 +798,7 @@ with c3:
 
 
 # =========================================================
-# 1. KONFIGURASI
+# KONFIGURASI PEMBELAJARAN
 # =========================================================
 
 with st.container(border=True):
@@ -856,7 +892,7 @@ with st.container(border=True):
         profil_pancasila = st.multiselect(
             "Dimensi Profil Pelajar Pancasila",
             [
-                "Beriman, Bertakwa kepada Tuhan YME, "
+                "Beriman, Bertakwa kepada Tuhan YME "
                 "& Berakhlak Mulia",
                 "Berkebinekaan Global",
                 "Gotong Royong",
@@ -929,6 +965,10 @@ jenis_perangkat = st.selectbox(
 )
 
 
+# =========================================================
+# SEMESTER
+# =========================================================
+
 semester = st.radio(
     "Semester Berjalan",
     [
@@ -941,7 +981,7 @@ semester = st.radio(
 
 
 # =========================================================
-# 2. IDENTITAS SEKOLAH
+# IDENTITAS SEKOLAH
 # =========================================================
 
 tab1, tab2 = st.tabs(
@@ -950,6 +990,7 @@ tab1, tab2 = st.tabs(
         "✍️ Pejabat & Penandatangan",
     ]
 )
+
 
 with tab1:
 
@@ -995,7 +1036,7 @@ with tab1:
 
 
 # =========================================================
-# 3. PENANDATANGAN
+# PENANDATANGAN
 # =========================================================
 
 with tab2:
@@ -1022,7 +1063,9 @@ with tab2:
 
     with c2:
 
-        st.markdown("**Kepala Sekolah**")
+        st.markdown(
+            "**Kepala Sekolah**"
+        )
 
         ks_nama = st.text_input(
             "Nama Kepala Sekolah",
@@ -1038,7 +1081,9 @@ with tab2:
 
     with c3:
 
-        st.markdown("**Pengawas Pembina**")
+        st.markdown(
+            "**Pengawas Pembina**"
+        )
 
         pengawas_nama = st.text_input(
             "Nama Pengawas Pembina",
@@ -1070,6 +1115,7 @@ if st.button(
         st.warning(
             "⚠️ Mata pelajaran wajib diisi."
         )
+
         st.stop()
 
     if not sekolah.strip():
@@ -1077,6 +1123,7 @@ if st.button(
         st.warning(
             "⚠️ Nama sekolah wajib diisi."
         )
+
         st.stop()
 
     if not materi_pokok.strip():
@@ -1084,6 +1131,7 @@ if st.button(
         st.warning(
             "⚠️ Fokus topik/materi pokok wajib diisi."
         )
+
         st.stop()
 
     data = {
@@ -1150,9 +1198,11 @@ if st.button(
                         f"({percobaan + 1}/3)"
                     )
 
-                    response = client.models.generate_content(
-                        model=model_name,
-                        contents=prompt,
+                    response = (
+                        client.models.generate_content(
+                            model=model_name,
+                            contents=prompt,
+                        )
                     )
 
                     if (
@@ -1165,6 +1215,7 @@ if st.button(
                     ):
 
                         model_berhasil = model_name
+
                         break
 
                 except Exception as exc:
@@ -1204,14 +1255,18 @@ if st.button(
                     None
                 )
             ):
+
                 break
 
         progress.progress(90)
 
-        if not response or not getattr(
-            response,
-            "text",
-            None
+        if (
+            not response
+            or not getattr(
+                response,
+                "text",
+                None
+            )
         ):
 
             raise RuntimeError(
