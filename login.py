@@ -25,6 +25,26 @@ if "user_api_key" not in st.session_state:
     st.session_state.user_api_key = ""
 
 # =========================================================
+# JIKA SUDAH LOGIN → DASHBOARD
+# =========================================================
+
+if st.session_state.authenticated:
+
+    halaman = st.navigation(
+        [
+            st.Page(
+                "dashboard.py",
+                title="Dashboard",
+                icon="🎓"
+            )
+        ],
+        position="hidden"
+    )
+
+    halaman.run()
+    st.stop()
+
+# =========================================================
 # CSS
 # =========================================================
 
@@ -64,8 +84,6 @@ footer {
     padding-bottom: 30px;
 }
 
-/* HEADER */
-
 .kurikulum {
     text-align: center;
     color: #2563eb;
@@ -91,8 +109,6 @@ footer {
     margin-bottom: 30px;
 }
 
-/* STATISTIK */
-
 .stat-box {
     background: #ffffff;
     border: 1px solid #e2e8f0;
@@ -113,8 +129,6 @@ footer {
     font-size: 12px;
     font-weight: 600;
 }
-
-/* LOGIN */
 
 .login-box {
     background: #ffffff;
@@ -202,50 +216,90 @@ footer {
     .login-box {
         padding: 22px;
     }
+
 }
 
 </style>
 """, unsafe_allow_html=True)
 
+# =========================================================
+# HEADER
+# =========================================================
+
+st.markdown(
+    '<div class="kurikulum">✦ KURIKULUM MERDEKA</div>',
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    '<div class="judul">SIAP AJAR 22</div>',
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    '<div class="subjudul">'
+    'Satu Portal, Solusi Lengkap 22 Perangkat Pembelajaran'
+    '</div>',
+    unsafe_allow_html=True
+)
 
 # =========================================================
-# TAMPILAN LOGIN
+# STATISTIK
 # =========================================================
 
-if not st.session_state.authenticated:
+col1, col2, col3 = st.columns(3)
 
-    # -----------------------------------------------------
-    # HEADER
-    # -----------------------------------------------------
-
+with col1:
     st.markdown(
-        '<div class="kurikulum">✦ KURIKULUM MERDEKA</div>',
+        """
+        <div class="stat-box">
+            <div class="stat-number">22</div>
+            <div class="stat-text">
+                Perangkat Pembelajaran
+            </div>
+        </div>
+        """,
         unsafe_allow_html=True
     )
+
+with col2:
+    st.markdown(
+        """
+        <div class="stat-box">
+            <div class="stat-number">AI</div>
+            <div class="stat-text">
+                Google Gemini
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+with col3:
+    st.markdown(
+        """
+        <div class="stat-box">
+            <div class="stat-number">DOCX</div>
+            <div class="stat-text">
+                Siap Diunduh
+            </div>
+        </div>
+        """,
+        unsafe_allow_html=True
+    )
+
+# =========================================================
+# LOGIN CARD
+# =========================================================
+
 st.markdown(
     """
-    <div style="
-        background:#ffffff;
-        border:1px solid #e2e8f0;
-        border-radius:20px;
-        padding:28px;
-        margin-top:25px;
-        margin-bottom:20px;
-        box-shadow:0 8px 25px rgba(15,23,42,0.06);
-    ">
-        <div style="
-            color:#0f172a;
-            font-size:22px;
-            font-weight:800;
-            margin-bottom:8px;
-        ">
+    <div class="login-box">
+        <div class="login-title">
             🔐 Masuk ke Portal
         </div>
-        <div style="
-            color:#64748b;
-            font-size:13px;
-            line-height:1.6;
-        ">
+
+        <div class="login-text">
             Masukkan nama Anda dan Gemini API Key untuk
             menggunakan SIAP AJAR 22.
         </div>
@@ -253,6 +307,10 @@ st.markdown(
     """,
     unsafe_allow_html=True
 )
+
+# =========================================================
+# FORM
+# =========================================================
 
 nama = st.text_input(
     "Nama Lengkap & Gelar",
@@ -264,167 +322,65 @@ api_key = st.text_input(
     type="password",
     placeholder="Masukkan Gemini API Key Anda"
 )
-    # -----------------------------------------------------
-# STATISTIK
-# -----------------------------------------------------
-
-col1, col2, col3 = st.columns(3)
-
-with col1:
-    st.markdown(
-            """
-            <div class="stat-box">
-                <div class="stat-number">22</div>
-                <div class="stat-text">
-                    Perangkat Pembelajaran
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    with col2:
-        st.markdown(
-            """
-            <div class="stat-box">
-                <div class="stat-number">AI</div>
-                <div class="stat-text">
-                    Google Gemini
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    with col3:
-        st.markdown(
-            """
-            <div class="stat-box">
-                <div class="stat-number">DOCX</div>
-                <div class="stat-text">
-                    Siap Diunduh
-                </div>
-            </div>
-            """,
-            unsafe_allow_html=True
-        )
-
-    # -----------------------------------------------------
-    # LOGIN CARD
-    # -----------------------------------------------------
-
-    st.markdown(
-        """
-        <div class="login-box">
-            <div class="login-title">
-                🔐 Masuk ke Portal
-            </div>
-
-            <div class="login-text">
-                Masukkan nama Anda dan Gemini API Key untuk
-                menggunakan SIAP AJAR 22.
-            </div>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    # -----------------------------------------------------
-    # FORM
-    # -----------------------------------------------------
-
-    nama = st.text_input(
-        "Nama Lengkap & Gelar",
-        placeholder="Contoh: Andar, S.Pd."
-    )
-
-    api_key = st.text_input(
-        "Gemini API Key",
-        type="password",
-        placeholder="Masukkan Gemini API Key Anda"
-    )
-
-    # -----------------------------------------------------
-    # LINK API
-    # -----------------------------------------------------
-
-    st.markdown(
-        """
-        <div class="api-box">
-            🔑 Belum memiliki Gemini API Key?
-            <a
-                href="https://aistudio.google.com/app/apikey"
-                target="_blank"
-            >
-                Buat API Key di Google AI Studio
-            </a>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
-    st.write("")
-
-    # -----------------------------------------------------
-    # TOMBOL LOGIN
-    # -----------------------------------------------------
-
-    if st.button(
-        "🚀 MASUK KE PORTAL",
-        use_container_width=True
-    ):
-
-        if not nama.strip():
-
-            st.error(
-                "❌ Silakan masukkan Nama Lengkap & Gelar."
-            )
-
-        elif not api_key.strip():
-
-            st.error(
-                "❌ Silakan masukkan Gemini API Key."
-            )
-
-        else:
-
-            st.session_state.authenticated = True
-            st.session_state.user_name = nama.strip()
-            st.session_state.user_api_key = api_key.strip()
-
-            st.rerun()
-
-    # -----------------------------------------------------
-    # FOOTER
-    # -----------------------------------------------------
-
-    st.markdown(
-        """
-        <div class="creator">
-            SIAP AJAR 22<br>
-            Portal Administrasi Pembelajaran Guru<br>
-            <b>© 2026 Pak Andar</b>
-        </div>
-        """,
-        unsafe_allow_html=True
-    )
-
 
 # =========================================================
-# NAVIGASI KE DASHBOARD
+# LINK API
 # =========================================================
 
-else:
+st.markdown(
+    """
+    <div class="api-box">
+        🔑 Belum memiliki Gemini API Key?
+        <a
+            href="https://aistudio.google.com/app/apikey"
+            target="_blank"
+        >
+            Buat API Key di Google AI Studio
+        </a>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
-    halaman = st.navigation(
-        [
-            st.Page(
-                "dashboard.py",
-                title="Dashboard",
-                icon="🎓"
-            )
-        ],
-        position="hidden"
-    )
+st.write("")
 
-    halaman.run()
+# =========================================================
+# LOGIN
+# =========================================================
+
+if st.button(
+    "🚀 MASUK KE PORTAL",
+    use_container_width=True
+):
+
+    if not nama.strip():
+        st.error(
+            "❌ Silakan masukkan Nama Lengkap & Gelar."
+        )
+
+    elif not api_key.strip():
+        st.error(
+            "❌ Silakan masukkan Gemini API Key."
+        )
+
+    else:
+        st.session_state.authenticated = True
+        st.session_state.user_name = nama.strip()
+        st.session_state.user_api_key = api_key.strip()
+
+        st.rerun()
+
+# =========================================================
+# FOOTER
+# =========================================================
+
+st.markdown(
+    """
+    <div class="creator">
+        SIAP AJAR 22<br>
+        Portal Administrasi Pembelajaran Guru<br>
+        <b>© 2026 Pak Andar</b>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
