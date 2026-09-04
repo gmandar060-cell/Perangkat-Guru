@@ -24,7 +24,7 @@ st.set_page_config(
 )
 
 # =========================================================
-# CSS MODERN & SIMETRIS
+# CSS — TAMPILAN SIAP AJAR 22 MODERN / LANDING PAGE
 # =========================================================
 
 st.markdown(
@@ -33,72 +33,275 @@ st.markdown(
 @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
 
 html, body, [class*="css"], .stMarkdown, p, span, label,
-h1, h2, h3, h4, h5, h6 {
+h1, h2, h3, h4, h5, h6, button, input, textarea {
     font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
-    color: #0F172A !important;
 }
 
-.stApp { background-color: #F8FAFC !important; }
+/* ===== GLOBAL ===== */
+.stApp {
+    background: #f8fafc !important;
+}
 
 .block-container {
-    padding-top: 2rem !important;
-    padding-bottom: 3.5rem !important;
-    max-width: 1140px;
+    padding-top: 1.5rem !important;
+    padding-bottom: 3rem !important;
+    max-width: 1120px !important;
 }
 
-input, textarea, select {
-    color: #0F172A !important;
-    background-color: #FFFFFF !important;
-    -webkit-text-fill-color: #0F172A !important;
+/* ===== LOGIN PAGE ===== */
+.stApp:has(.login-page) {
+    background:
+        linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px),
+        linear-gradient(135deg, #2547a8 0%, #1f45ad 48%, #2d5bd0 100%) !important;
+    background-size: 28px 28px, 28px 28px, 100% 100% !important;
 }
 
-/* Membuat tulisan placeholder menjadi abu-abu */
-input::placeholder, textarea::placeholder {
-    color: #94A3B8 !important;
-    -webkit-text-fill-color: #94A3B8 !important;
-    opacity: 1 !important;
+.stApp:has(.login-page) .block-container {
+    max-width: 900px !important;
+    padding-top: 26px !important;
+    padding-bottom: 24px !important;
 }
 
-.stTextInput label, .stSelectbox label,
-.stMultiSelect label, .stRadio label {
-    color: #1E293B !important;
-    font-weight: 600 !important;
+/* Hide Streamlit decorations on login */
+.login-page ~ div,
+.login-page {
+    color: white;
 }
 
-.brand-icon-box {
+.login-hero {
+    text-align: center;
+    color: white;
+    margin: 0 auto 28px auto;
+}
+
+.login-icon {
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 14px auto;
+    border-radius: 24px;
     display: flex;
-    justify-content: center;
     align-items: center;
-    margin-bottom: 12px;
+    justify-content: center;
+    font-size: 38px;
+    background: rgba(255,255,255,.10);
+    border: 1px solid rgba(255,255,255,.30);
+    box-shadow: 0 10px 30px rgba(0,0,0,.12);
 }
 
-.app-header {
-    background: linear-gradient(135deg, #0F172A 0%, #1E3A8A 55%, #2563EB 100%) !important;
+.login-badge {
+    display: inline-block;
+    padding: 8px 16px;
+    margin-left: 8px;
+    border: 1px solid rgba(255,255,255,.32);
+    border-radius: 999px;
+    color: rgba(255,255,255,.90);
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: .2px;
+    vertical-align: middle;
+    background: rgba(255,255,255,.08);
+}
+
+.login-title {
+    margin: 0;
+    color: #fff !important;
+    font-size: clamp(38px, 6vw, 52px) !important;
+    line-height: 1.05;
+    font-weight: 800;
+    letter-spacing: -2px;
+}
+
+.login-title span {
+    color: #74a9ff !important;
+}
+
+.login-subtitle {
+    margin: 10px auto 0;
+    max-width: 520px;
+    color: rgba(255,255,255,.88) !important;
+    font-size: 16px;
+    line-height: 1.5;
+}
+
+.login-subtitle strong {
+    color: #fff !important;
+}
+
+/* ===== STAT CARDS ===== */
+.stat-card {
+    min-height: 88px;
     border-radius: 16px;
+    padding: 14px 10px;
+    box-sizing: border-box;
+    text-align: center;
+    color: white;
+    background: rgba(219,228,255,.82);
+    border: 1px solid rgba(255,255,255,.28);
+    box-shadow: 0 8px 22px rgba(11,36,108,.12);
+    backdrop-filter: blur(8px);
+}
+
+.stat-icon {
+    font-size: 21px;
+    line-height: 1;
+    margin-bottom: 7px;
+    opacity: .95;
+}
+
+.stat-number {
+    font-size: 14px;
+    font-weight: 800;
+    color: #fff !important;
+    margin: 0;
+}
+
+.stat-label {
+    font-size: 11px;
+    color: rgba(255,255,255,.72) !important;
+    margin-top: 2px;
+}
+
+/* ===== LOGIN FORM CARD ===== */
+.login-form-wrap {
+    background: #fff;
+    border-radius: 18px;
+    padding: 30px 30px 28px;
+    margin-top: 24px;
+    box-shadow: 0 18px 45px rgba(11, 31, 88, .20);
+    border: 1px solid rgba(255,255,255,.7);
+}
+
+.login-form-title {
+    color: #172033 !important;
+    font-size: 19px;
+    font-weight: 800;
+    margin: 0 0 2px 0;
+}
+
+.login-form-desc {
+    color: #94a3b8 !important;
+    font-size: 13px;
+    margin: 0 0 18px 0;
+}
+
+/* Streamlit input styling */
+.login-form-wrap label {
+    color: #334155 !important;
+    font-size: 13px !important;
+    font-weight: 700 !important;
+}
+
+.login-form-wrap input {
+    background: #fff !important;
+    color: #1e293b !important;
+    border: 1px solid #dbe3ef !important;
+    border-radius: 11px !important;
+    min-height: 48px !important;
+    font-size: 14px !important;
+}
+
+.login-form-wrap input:focus {
+    border-color: #4d83f5 !important;
+    box-shadow: 0 0 0 3px rgba(59,130,246,.10) !important;
+}
+
+.login-form-wrap input::placeholder {
+    color: #c2ccda !important;
+    -webkit-text-fill-color: #c2ccda !important;
+}
+
+.login-form-wrap .stButton > button {
+    margin-top: 10px;
+    min-height: 52px !important;
+    border: none !important;
+    border-radius: 11px !important;
+    background: linear-gradient(90deg, #2760df 0%, #2d68ee 100%) !important;
+    box-shadow: 0 8px 18px rgba(37,99,235,.24) !important;
+    transition: transform .15s ease, box-shadow .15s ease !important;
+}
+
+.login-form-wrap .stButton > button:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 11px 22px rgba(37,99,235,.30) !important;
+}
+
+.login-form-wrap .stButton > button,
+.login-form-wrap .stButton > button * {
+    color: white !important;
+    font-weight: 800 !important;
+    font-size: 15px !important;
+}
+
+/* Help link */
+.api-help {
+    margin: 7px 0 2px;
+    font-size: 12px;
+}
+
+.api-help a {
+    color: #2563eb !important;
+    text-decoration: none !important;
+    font-weight: 700;
+}
+
+/* ===== LOGIN FOOTER ===== */
+.login-footer {
+    text-align: center;
+    color: rgba(255,255,255,.80);
+    font-size: 12px;
+    margin: 22px 0 0;
+}
+
+.creator-pill {
+    display: inline-block;
+    padding: 7px 15px;
+    border: 1px solid rgba(255,255,255,.18);
+    border-radius: 999px;
+    background: rgba(255,255,255,.06);
+}
+
+.creator-dot {
+    display: inline-block;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    background: #42d3b2;
+    margin-right: 6px;
+}
+
+/* ===== ALERTS ===== */
+.stAlert {
+    border-radius: 10px !important;
+}
+
+/* ===== AFTER LOGIN ===== */
+.app-header {
+    background: linear-gradient(135deg, #162b69 0%, #2347a7 58%, #2d68ee 100%) !important;
+    border-radius: 18px;
     padding: 28px 32px;
     margin-bottom: 24px;
-    box-shadow: 0 10px 25px -5px rgba(15, 23, 42, 0.12);
+    box-shadow: 0 12px 30px rgba(15, 23, 42, .12);
 }
 
 .app-header h1 {
     font-size: 26px;
     font-weight: 800;
     margin: 0 0 6px 0;
-    color: #FFFFFF !important;
+    color: #fff !important;
 }
 
 .app-header p {
     font-size: 14px;
-    color: #CBD5E1 !important;
+    color: #dbeafe !important;
     margin: 0;
     line-height: 1.5;
 }
 
-/* Perbaikan total teks expander agar bersih */
 details[data-testid="stExpander"] {
-    border: 1px solid #E2E8F0 !important;
+    border: 1px solid #e2e8f0 !important;
     border-radius: 10px !important;
-    background-color: #FFFFFF !important;
+    background: #fff !important;
     margin-bottom: 12px;
 }
 
@@ -106,48 +309,34 @@ details[data-testid="stExpander"] summary {
     font-weight: 600 !important;
 }
 
-details[data-testid="stExpander"] summary span div p {
-    display: inline-block !important;
+input, textarea, select {
+    color: #0f172a !important;
+    background-color: #fff !important;
+    -webkit-text-fill-color: #0f172a !important;
 }
 
-/* KUNCI UTAMA: Membuat kedua kotak card login sejajar tinggi dan simetris */
-div[data-testid="stHorizontalBlock"] {
-    align-items: stretch !important;
+input::placeholder, textarea::placeholder {
+    color: #94a3b8 !important;
+    -webkit-text-fill-color: #94a3b8 !important;
+    opacity: 1 !important;
 }
 
-div[data-testid="stHorizontalBlock"] > div {
-    display: flex;
-    flex-direction: column;
-}
-
-div[data-testid="stHorizontalBlock"] > div > div[data-testid="stVerticalBlock"] {
-    height: 100%;
-}
-
-div[data-testid="stVerticalBlock"] > div[style*="border"] {
-    background: #FFFFFF !important;
-    border-radius: 16px !important;
-    border: 1px solid #E2E8F0 !important;
-    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
-    padding: 32px 28px !important;
-    margin-bottom: 0px !important;
-    height: 100% !important;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
+.stTextInput label, .stSelectbox label, .stMultiSelect label, .stRadio label {
+    color: #1e293b !important;
+    font-weight: 600 !important;
 }
 
 .stButton > button {
-    background: linear-gradient(135deg, #1E3A8A 0%, #2563EB 100%) !important;
+    background: linear-gradient(135deg, #1e3a8a 0%, #2563eb 100%) !important;
     border: none !important;
     border-radius: 10px !important;
     padding: 12px 24px !important;
-    box-shadow: 0 4px 12px rgba(37, 99, 235, 0.25) !important;
+    box-shadow: 0 4px 12px rgba(37,99,235,.25) !important;
     width: 100% !important;
 }
 
 .stButton > button, .stButton > button * {
-    color: #FFFFFF !important;
+    color: #fff !important;
     font-weight: 700 !important;
     font-size: 15px !important;
 }
@@ -160,14 +349,14 @@ div[data-testid="stVerticalBlock"] > div[style*="border"] {
 }
 
 .paper-a4 {
-    background: #FFFFFF !important;
-    border: 1px solid #CBD5E1;
-    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.08);
+    background: #fff !important;
+    border: 1px solid #cbd5e1;
+    box-shadow: 0 12px 30px rgba(0,0,0,.08);
     padding: 44px 50px;
     margin: 16px auto;
     border-radius: 4px;
     max-width: 900px;
-    color: #0F172A !important;
+    color: #0f172a !important;
 }
 
 .paper-a4 table {
@@ -178,7 +367,7 @@ div[data-testid="stVerticalBlock"] > div[style*="border"] {
 }
 
 .paper-a4 th {
-    background: #F1F5F9 !important;
+    background: #f1f5f9 !important;
     border: 1px solid #475569 !important;
     padding: 8px 10px !important;
     text-align: left;
@@ -186,32 +375,63 @@ div[data-testid="stVerticalBlock"] > div[style*="border"] {
 }
 
 .paper-a4 td {
-    border: 1px solid #64748B !important;
+    border: 1px solid #64748b !important;
     padding: 7px 10px !important;
 }
 
 .footer-box {
     text-align: center;
     padding: 24px 10px 10px;
-    color: #64748B !important;
+    color: #64748b !important;
     font-size: 12px;
-    border-top: 1px solid #E2E8F0;
+    border-top: 1px solid #e2e8f0;
     margin-top: 40px;
 }
 
 section[data-testid="stSidebar"] {
-    background-color: #FFFFFF !important;
-    border-right: 1px solid #E2E8F0;
+    background-color: #fff !important;
+    border-right: 1px solid #e2e8f0;
+}
+
+/* Remove excess Streamlit vertical gaps in login */
+.stApp:has(.login-page) [data-testid="stVerticalBlock"] {
+    gap: .55rem;
 }
 
 @media (max-width: 768px) {
-    .paper-a4 { padding: 20px 16px; }
-    .app-header { padding: 22px 18px; }
+    .stApp:has(.login-page) .block-container {
+        padding: 18px 14px 24px !important;
+    }
+
+    .login-icon {
+        width: 68px;
+        height: 68px;
+        font-size: 31px;
+    }
+
+    .login-title {
+        font-size: 38px !important;
+    }
+
+    .login-subtitle {
+        font-size: 14px;
+    }
+
+    .login-form-wrap {
+        padding: 24px 18px 22px;
+        margin-top: 18px;
+    }
+
+    .stat-card {
+        min-height: 78px;
+        padding: 11px 5px;
+    }
 }
 </style>
 """,
     unsafe_allow_html=True,
 )
+
 
 LOGO_URL = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f393.png"
 
@@ -456,90 +676,126 @@ def buat_instruksi_prompt(data: dict) -> str:
 # =========================================================
 
 if not st.session_state.authenticated:
-    col_left, col_right = st.columns(2, gap="large")
-
-    with col_left:
-        with st.container(border=True):
-            render_logo(85)
-            st.markdown(
-                "<p style='text-align:center;font-size:11px;font-weight:700;"
-                "color:#2563EB;letter-spacing:.5px;margin-bottom:6px;'>"
-                "✨ SISTEM INFORMASI ASISTEN PERANGKAT AJAR</p>",
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                "<h2 style='text-align:center;font-weight:800;margin:0 0 4px 0;font-size:24px;'>"
-                "SIAP AJAR 22</h2>",
-                unsafe_allow_html=True,
-            )
-            st.markdown(
-                "<p style='text-align:center;font-size:13px;font-style:italic;"
-                "color:#64748B;margin-bottom:16px;'>“Satu Portal, Solusi Lengkap 22 Perangkat Pembelajaran”</p>",
-                unsafe_allow_html=True,
-            )
-            st.divider()
-            st.markdown("##### 📌 Keunggulan Platform")
-            st.markdown(
-                """
-- 📋 **22 jenis perangkat pembelajaran lengkap**
-- 🤖 **Penyusunan cerdas dengan Google Gemini AI**
-- 📄 **Ekspor instan ke Microsoft Word (.docx)**
-- 📝 **Cadangan teks mentah (.txt) praktis**
-- 👁️ **Live preview dokumen gaya A4**
-- 🔐 **Keamanan terjamin (API Key berbasis sesi browser)**
-                """
-            )
-            st.caption("SIAP AJAR 22 • Creator: Andar")
-
-    with col_right:
-        with st.container(border=True):
-            st.markdown("### 🔐 Akses Masuk Pendidik")
-            st.write("")
-
-            nama_guru_input = st.text_input(
-                "Nama Lengkap & Gelar",
-                placeholder="Contoh: Muhammad Nurzuliandar, S.Pd.",
-            )
-
-            api_key_masuk = st.text_input(
-                "Gemini API Key Pribadi",
-                type="password",
-                placeholder="AIza...",
-            )
-
-            with st.expander("📖 Cara mendapatkan Gemini API Key"):
-                st.markdown(
-                    """
-1. Buka **Google AI Studio** di browser Anda.
-2. Login menggunakan akun Google pribadi.
-3. Klik tombol **Get API key**.
-4. Buat atau pilih API key yang tersedia.
-5. Salin dan tempelkan kunci tersebut ke kolom di atas.
-                    """
-                )
-
-            st.write("")
-
-            if st.button("MASUK KE PORTAL", use_container_width=True):
-                if not nama_guru_input.strip():
-                    st.warning("⚠️ Mohon isi Nama Lengkap & Gelar terlebih dahulu.")
-                elif not api_key_masuk.strip():
-                    st.warning("⚠️ Mohon isi Gemini API Key terlebih dahulu.")
-                else:
-                    st.session_state.user_name = nama_guru_input.strip()
-                    st.session_state.user_api_key = api_key_masuk.strip()
-                    st.session_state.authenticated = True
-                    st.rerun()
+    # Penanda mode login untuk mengaktifkan background landing page
+    st.markdown('<div class="login-page"></div>', unsafe_allow_html=True)
 
     st.markdown(
         """
-<div class="footer-box">
-SIAP AJAR 22 • Creator: Andar<br>
-© 2026 SIAP AJAR 22 • Engine AI Pembelajaran
-</div>
+        <div class="login-hero">
+            <div style="display:flex;justify-content:center;align-items:center;gap:0;">
+                <div class="login-icon">🎓</div>
+                <div class="login-badge">✦ &nbsp; KURIKULUM MERDEKA</div>
+            </div>
+
+            <h1 class="login-title">SIAP AJAR <span>22</span></h1>
+
+            <div class="login-subtitle">
+                Satu Portal, Solusi Lengkap <strong>22 Perangkat Pembelajaran</strong>
+            </div>
+        </div>
         """,
         unsafe_allow_html=True,
     )
+
+    # Tiga kartu statistik seperti desain referensi
+    s1, s2, s3 = st.columns(3, gap="small")
+
+    with s1:
+        st.markdown(
+            """
+            <div class="stat-card">
+                <div class="stat-icon">▱</div>
+                <div class="stat-number">4 Kategori</div>
+                <div class="stat-label">Terorganisir</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with s2:
+        st.markdown(
+            """
+            <div class="stat-card">
+                <div class="stat-icon">▤</div>
+                <div class="stat-number">22 Dokumen</div>
+                <div class="stat-label">AI Generated</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    with s3:
+        st.markdown(
+            """
+            <div class="stat-card">
+                <div class="stat-icon">▣</div>
+                <div class="stat-number">Gemini AI</div>
+                <div class="stat-label">Flash Model</div>
+            </div>
+            """,
+            unsafe_allow_html=True,
+        )
+
+    # Kartu form utama
+    st.markdown('<div class="login-form-wrap">', unsafe_allow_html=True)
+
+    st.markdown(
+        """
+        <div class="login-form-title">Masuk ke Portal</div>
+        <div class="login-form-desc">Isi data berikut untuk memulai</div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    nama_guru_input = st.text_input(
+        "Nama Lengkap & Gelar",
+        placeholder="Contoh: Andar Prasetyo, S.Pd.",
+        key="login_nama",
+    )
+
+    api_key_masuk = st.text_input(
+        "Gemini API Key",
+        type="password",
+        placeholder="AIza...",
+        key="login_api_key",
+    )
+
+    st.markdown(
+        """
+        <div class="api-help">
+            <a href="https://aistudio.google.com/apikey" target="_blank">
+                ⓘ &nbsp; Bagaimana cara mendapatkan API key gratis?
+            </a>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
+    if st.button("Masuk ke Portal  →", use_container_width=True):
+        if not nama_guru_input.strip():
+            st.warning("⚠️ Mohon isi Nama Lengkap & Gelar terlebih dahulu.")
+        elif not api_key_masuk.strip():
+            st.warning("⚠️ Mohon isi Gemini API Key terlebih dahulu.")
+        else:
+            st.session_state.user_name = nama_guru_input.strip()
+            st.session_state.user_api_key = api_key_masuk.strip()
+            st.session_state.authenticated = True
+            st.rerun()
+
+    st.markdown("</div>", unsafe_allow_html=True)
+
+    st.markdown(
+        """
+        <div class="login-footer">
+            <span class="creator-pill">
+                <span class="creator-dot"></span>
+                Creator: <strong>Andar</strong>
+            </span>
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
+
     st.stop()
 
 
