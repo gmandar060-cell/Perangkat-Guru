@@ -222,8 +222,7 @@ if not st.session_state.authenticated:
         '<div class="kurikulum">✦ KURIKULUM MERDEKA</div>',
         unsafe_allow_html=True
     )
-
-  st.markdown(
+st.markdown(
     """
     <div style="
         background:#ffffff;
@@ -242,7 +241,6 @@ if not st.session_state.authenticated:
         ">
             🔐 Masuk ke Portal
         </div>
-
         <div style="
             color:#64748b;
             font-size:13px;
@@ -256,13 +254,16 @@ if not st.session_state.authenticated:
     unsafe_allow_html=True
 )
 
-    st.markdown(
-        '<div class="subjudul">'
-        'Satu Portal, Solusi Lengkap 22 Perangkat Pembelajaran'
-        '</div>',
-        unsafe_allow_html=True
-    )
+nama = st.text_input(
+    "Nama Lengkap & Gelar",
+    placeholder="Contoh: Andar, S.Pd."
+)
 
+api_key = st.text_input(
+    "Gemini API Key",
+    type="password",
+    placeholder="Masukkan Gemini API Key Anda"
+)
     # -----------------------------------------------------
     # STATISTIK
     # -----------------------------------------------------
