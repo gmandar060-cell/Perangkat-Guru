@@ -223,10 +223,38 @@ if not st.session_state.authenticated:
         unsafe_allow_html=True
     )
 
-    st.markdown(
-        '<div class="judul">SIAP AJAR 22</div>',
-        unsafe_allow_html=True
-    )
+  st.markdown(
+    """
+    <div style="
+        background:#ffffff;
+        border:1px solid #e2e8f0;
+        border-radius:20px;
+        padding:28px;
+        margin-top:25px;
+        margin-bottom:20px;
+        box-shadow:0 8px 25px rgba(15,23,42,0.06);
+    ">
+        <div style="
+            color:#0f172a;
+            font-size:22px;
+            font-weight:800;
+            margin-bottom:8px;
+        ">
+            🔐 Masuk ke Portal
+        </div>
+
+        <div style="
+            color:#64748b;
+            font-size:13px;
+            line-height:1.6;
+        ">
+            Masukkan nama Anda dan Gemini API Key untuk
+            menggunakan SIAP AJAR 22.
+        </div>
+    </div>
+    """,
+    unsafe_allow_html=True
+)
 
     st.markdown(
         '<div class="subjudul">'
