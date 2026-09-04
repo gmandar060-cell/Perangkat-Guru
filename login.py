@@ -299,10 +299,6 @@ st.markdown(
             🔐 Masuk ke Portal
         </div>
 
-        <div class="login-text">
-            Masukkan nama Anda dan Gemini API Key untuk
-            menggunakan SIAP AJAR 22.
-        </div>
     </div>
     """,
     unsafe_allow_html=True
