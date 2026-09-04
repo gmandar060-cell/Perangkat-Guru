@@ -719,7 +719,10 @@ if not st.session_state.authenticated:
                     href="https://aistudio.google.com/apikey"
                     target="_blank"
                 >
-                    ⓘ Cara mendapatkan API Key gratis
+             st.markdown(
+    "ⓘ Cara mendapatkan API Key gratis",
+    unsafe_allow_html=True
+)
                 </a>
             </div>
             """,
