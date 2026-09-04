@@ -27,7 +27,7 @@ st.set_page_config(
 # =========================================================
 
 if not st.session_state.get("authenticated", False):
-    st.switch_page("login.py")
+    st.stop()
 
 # =========================================================
 # SESSION STATE
