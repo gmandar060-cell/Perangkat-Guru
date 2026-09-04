@@ -1,3 +1,4 @@
+```python
 import streamlit as st
 from google import genai
 from datetime import datetime
@@ -9,12 +10,10 @@ from docx import Document
 from docx.shared import Pt, Inches
 from docx.enum.text import WD_ALIGN_PARAGRAPH
 from docx.enum.table import WD_TABLE_ALIGNMENT
-from docx.oxml import parse_xml
-from docx.oxml.ns import nsdecls
 
 
 # =========================================================
-# SIAP AJAR 22 - APP UTAMA
+# KONFIGURASI HALAMAN
 # =========================================================
 
 st.set_page_config(
@@ -31,614 +30,297 @@ st.set_page_config(
 
 st.markdown(
     """
-<style>
-
-@import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
-
-html, body, [class*="css"], .stMarkdown, p, span, label,
-h1, h2, h3, h4, h5, h6, button, input, textarea {
-    font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif !important;
-}
-
-.stApp {
-    background: #f8fafc !important;
-}
-
-.block-container {
-    padding-top: 1.5rem !important;
-    padding-bottom: 3rem !important;
-    max-width: 1120px !important;
-}
-
-
-/* =========================================================
-   LOGIN
-   ========================================================= */
-
-.stApp:has(.login-page) {
-    background:
-        linear-gradient(rgba(255,255,255,.055) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,.055) 1px, transparent 1px),
-        linear-gradient(135deg, #2547a8 0%, #1f45ad 48%, #2d5bd0 100%) !important;
-
-    background-size:
-        28px 28px,
-        28px 28px,
-        100% 100% !important;
-}
-
-.stApp:has(.login-page) .block-container {
-    max-width: 900px !important;
-    padding-top: 26px !important;
-    padding-bottom: 24px !important;
-}
-
-.login-page {
-    color: white;
-}
-
-.login-hero {
-    text-align: center;
-    color: white;
-    margin: 0 auto 28px auto;
-}
-
-.login-icon {
-    width: 80px;
-    height: 80px;
-    margin: 0 auto 14px auto;
-    border-radius: 24px;
-
-    display: flex;
-    align-items: center;
-    justify-content: center;
-
-    background: rgba(255,255,255,.10);
-    border: 1px solid rgba(255,255,255,.30);
-
-    box-shadow: 0 10px 30px rgba(0,0,0,.12);
-
-    overflow: hidden;
-}
-
-.login-icon img {
-    width: 58px;
-    height: 58px;
-    object-fit: contain;
-    display: block;
-}
-
-.login-badge {
-    display: inline-block;
-
-    padding: 8px 16px;
-    margin-left: 8px;
-
-    border: 1px solid rgba(255,255,255,.32);
-    border-radius: 999px;
-
-    color: rgba(255,255,255,.90);
-
-    font-size: 12px;
-    font-weight: 700;
-    letter-spacing: .2px;
-
-    vertical-align: middle;
-
-    background: rgba(255,255,255,.08);
-}
-
-.login-title {
-    margin: 0;
-
-    color: #fff !important;
-
-    font-size: clamp(38px, 6vw, 52px) !important;
-
-    line-height: 1.05;
-
-    font-weight: 800;
-
-    letter-spacing: -2px;
-}
-
-.login-title span {
-    color: #74a9ff !important;
-}
-
-.login-subtitle {
-    margin: 10px auto 0;
-
-    max-width: 520px;
-
-    color: rgba(255,255,255,.88) !important;
-
-    font-size: 16px;
-
-    line-height: 1.5;
-}
-
-.login-subtitle strong {
-    color: #fff !important;
-}
-
-
-/* =========================================================
-   STAT CARD
-   ========================================================= */
-
-.stat-card {
-    min-height: 88px;
-
-    border-radius: 16px;
-
-    padding: 14px 10px;
-
-    box-sizing: border-box;
-
-    text-align: center;
-
-    color: white;
-
-    background: rgba(219,228,255,.82);
-
-    border: 1px solid rgba(255,255,255,.28);
-
-    box-shadow:
-        0 8px 22px rgba(11,36,108,.12);
-
-    backdrop-filter: blur(8px);
-}
-
-.stat-icon {
-    font-size: 21px;
-
-    line-height: 1;
-
-    margin-bottom: 7px;
-}
-
-.stat-number {
-    font-size: 14px;
-
-    font-weight: 800;
-
-    color: #fff !important;
-
-    margin: 0;
-}
-
-.stat-label {
-    font-size: 11px;
-
-    color: rgba(255,255,255,.72) !important;
-
-    margin-top: 2px;
-}
-
-
-/* =========================================================
-   LOGIN FORM
-   ========================================================= */
-
-.login-form-title {
-    color: #172033 !important;
-
-    font-size: 19px;
-
-    font-weight: 800;
-
-    margin: 0 0 2px 0;
-}
-
-.login-form-desc {
-    color: #94a3b8 !important;
-
-    font-size: 13px;
-
-    margin: 0 0 18px 0;
-}
-
-.stApp:has(.login-page) [data-testid="stForm"] {
-    background: #fff !important;
-
-    border: 1px solid rgba(255,255,255,.75) !important;
-
-    border-radius: 18px !important;
-
-    padding: 28px 30px !important;
-
-    margin: 24px auto 0 !important;
-
-    box-shadow:
-        0 18px 45px rgba(11,31,88,.20) !important;
-
-    box-sizing: border-box !important;
-
-    max-width: 100% !important;
-}
-
-.stApp:has(.login-page)
-[data-testid="stForm"]
-.stTextInput label {
-
-    color: #334155 !important;
-
-    font-size: 13px !important;
-
-    font-weight: 700 !important;
-}
-
-.stApp:has(.login-page)
-[data-testid="stForm"]
-.stTextInput input {
-
-    background: #fff !important;
-
-    color: #1e293b !important;
-
-    border: 1px solid #dbe3ef !important;
-
-    border-radius: 11px !important;
-
-    min-height: 48px !important;
-
-    font-size: 14px !important;
-}
-
-.stApp:has(.login-page)
-[data-testid="stForm"]
-.stTextInput input::placeholder {
-
-    color: #c2ccda !important;
-
-    -webkit-text-fill-color: #c2ccda !important;
-}
-
-.stApp:has(.login-page)
-[data-testid="stForm"]
-.stButton > button {
-
-    margin-top: 10px !important;
-
-    min-height: 52px !important;
-
-    border: none !important;
-
-    border-radius: 11px !important;
-
-    background:
-        linear-gradient(
-            90deg,
-            #2760df 0%,
-            #2d68ee 100%
-        ) !important;
-
-    box-shadow:
-        0 8px 18px rgba(37,99,235,.24) !important;
-}
-
-.stApp:has(.login-page)
-[data-testid="stForm"]
-.stButton > button,
-.stApp:has(.login-page)
-[data-testid="stForm"]
-.stButton > button * {
-
-    color: white !important;
-
-    font-weight: 800 !important;
-
-    font-size: 15px !important;
-}
-
-.api-help {
-    margin: 7px 0 2px;
-
-    font-size: 12px;
-}
-
-.api-help a {
-    color: #2563eb !important;
-
-    text-decoration: none !important;
-
-    font-weight: 700;
-}
-
-.login-footer {
-    text-align: center;
-
-    color: rgba(255,255,255,.80);
-
-    font-size: 12px;
-
-    margin: 22px 0 0;
-}
-
-.creator-pill {
-    display: inline-block;
-
-    padding: 7px 15px;
-
-    border: 1px solid rgba(255,255,255,.18);
-
-    border-radius: 999px;
-
-    background: rgba(255,255,255,.06);
-}
-
-.creator-dot {
-    display: inline-block;
-
-    width: 8px;
-    height: 8px;
-
-    border-radius: 50%;
-
-    background: #42d3b2;
-
-    margin-right: 6px;
-}
-
-
-/* =========================================================
-   DASHBOARD
-   ========================================================= */
-
-.stAlert {
-    border-radius: 10px !important;
-}
-
-.app-header {
-    background:
-        linear-gradient(
-            135deg,
-            #162b69 0%,
-            #2347a7 58%,
-            #2d68ee 100%
-        ) !important;
-
-    border-radius: 18px;
-
-    padding: 28px 32px;
-
-    margin-bottom: 24px;
-
-    box-shadow:
-        0 12px 30px rgba(15, 23, 42, .12);
-}
-
-.app-header h1 {
-    font-size: 26px;
-
-    font-weight: 800;
-
-    margin: 0 0 6px 0;
-
-    color: #fff !important;
-}
-
-.app-header p {
-    font-size: 14px;
-
-    color: #dbeafe !important;
-
-    margin: 0;
-
-    line-height: 1.5;
-}
-
-details[data-testid="stExpander"] {
-    border: 1px solid #e2e8f0 !important;
-
-    border-radius: 10px !important;
-
-    background: #fff !important;
-}
-
-input,
-textarea,
-select {
-
-    color: #0f172a !important;
-
-    background-color: #fff !important;
-
-    -webkit-text-fill-color: #0f172a !important;
-}
-
-input::placeholder,
-textarea::placeholder {
-
-    color: #94a3b8 !important;
-
-    -webkit-text-fill-color: #94a3b8 !important;
-
-    opacity: 1 !important;
-}
-
-.stTextInput label,
-.stSelectbox label,
-.stMultiSelect label,
-.stRadio label {
-
-    color: #1e293b !important;
-
-    font-weight: 600 !important;
-}
-
-.stButton > button {
-
-    background:
-        linear-gradient(
-            135deg,
-            #1e3a8a 0%,
-            #2563eb 100%
-        ) !important;
-
-    border: none !important;
-
-    border-radius: 10px !important;
-
-    padding: 12px 24px !important;
-
-    box-shadow:
-        0 4px 12px rgba(37,99,235,.25) !important;
-
-    width: 100% !important;
-}
-
-.stButton > button,
-.stButton > button * {
-
-    color: #fff !important;
-
-    font-weight: 700 !important;
-
-    font-size: 15px !important;
-}
-
-.stDownloadButton > button {
-
-    font-weight: 700 !important;
-
-    border-radius: 10px !important;
-
-    padding: 12px 20px !important;
-
-    width: 100% !important;
-}
-
-.paper-a4 {
-
-    background: #fff !important;
-
-    border: 1px solid #cbd5e1;
-
-    box-shadow:
-        0 12px 30px rgba(0,0,0,.08);
-
-    padding: 44px 50px;
-
-    margin: 16px auto;
-
-    border-radius: 4px;
-
-    max-width: 900px;
-
-    color: #0f172a !important;
-}
-
-.paper-a4 table {
-
-    width: 100% !important;
-
-    border-collapse: collapse !important;
-
-    margin: 14px 0 !important;
-
-    font-size: 13px !important;
-}
-
-.paper-a4 th {
-
-    background: #f1f5f9 !important;
-
-    border: 1px solid #475569 !important;
-
-    padding: 8px 10px !important;
-
-    text-align: left;
-
-    font-weight: 700;
-}
-
-.paper-a4 td {
-
-    border: 1px solid #64748b !important;
-
-    padding: 7px 10px !important;
-}
-
-.footer-box {
-
-    text-align: center;
-
-    padding: 24px 10px 10px;
-
-    color: #64748b !important;
-
-    font-size: 12px;
-
-    border-top: 1px solid #e2e8f0;
-
-    margin-top: 40px;
-}
-
-section[data-testid="stSidebar"] {
-
-    background-color: #fff !important;
-
-    border-right: 1px solid #e2e8f0;
-}
-
-
-/* =========================================================
-   MOBILE
-   ========================================================= */
-
-@media (max-width: 768px) {
-
-    .stApp:has(.login-page) .block-container {
-
-        padding: 18px 14px 24px !important;
+    <style>
+
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap');
+
+    * {
+        font-family: 'Plus Jakarta Sans', sans-serif;
+    }
+
+    .stApp {
+        background: #f8fafc;
+    }
+
+    .block-container {
+        max-width: 1120px;
+        padding-top: 2rem;
+        padding-bottom: 2rem;
+    }
+
+    /* ================= LOGIN ================= */
+
+    .login-page {
+        position: fixed;
+        inset: 0;
+        background:
+            radial-gradient(circle at 20% 20%, rgba(37,99,235,.12), transparent 30%),
+            radial-gradient(circle at 80% 80%, rgba(14,165,233,.10), transparent 30%),
+            #f8fafc;
+        z-index: -1;
+    }
+
+    .login-hero {
+        text-align: center;
+        padding: 30px 20px 18px 20px;
     }
 
     .login-icon {
+        width: 82px;
+        height: 82px;
+        margin: 0 auto;
+        border-radius: 22px;
+        background: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        box-shadow: 0 12px 30px rgba(15,23,42,.12);
+        border: 1px solid rgba(15,23,42,.06);
+    }
 
-        width: 68px;
-        height: 68px;
+    .login-icon img {
+        width: 65px;
+        height: 65px;
+        object-fit: contain;
+    }
 
-        font-size: 31px;
+    .login-badge {
+        display: inline-block;
+        padding: 8px 15px;
+        border-radius: 999px;
+        background: #eff6ff;
+        color: #2563eb;
+        font-size: 12px;
+        font-weight: 800;
+        letter-spacing: .7px;
     }
 
     .login-title {
+        margin: 20px 0 8px 0;
+        font-size: 46px !important;
+        line-height: 1.1;
+        font-weight: 800 !important;
+        color: #0f172a;
+    }
 
-        font-size: 38px !important;
+    .login-title span {
+        color: #2563eb;
     }
 
     .login-subtitle {
-
-        font-size: 14px;
+        color: #64748b;
+        font-size: 15px;
+        line-height: 1.7;
     }
 
-    .paper-a4 {
-
-        padding: 20px 16px;
+    .login-subtitle strong {
+        color: #334155;
     }
 
-    .app-header {
-
-        padding: 22px 18px;
+    .stats-row {
+        display: flex;
+        justify-content: center;
+        gap: 14px;
+        margin: 15px auto 25px auto;
+        max-width: 760px;
     }
 
     .stat-card {
-
-        min-height: 78px;
-
-        padding: 11px 5px;
+        flex: 1;
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 16px 12px;
+        box-shadow: 0 8px 25px rgba(15,23,42,.05);
     }
-}
 
-</style>
-""",
+    .stat-number {
+        font-size: 22px;
+        font-weight: 800;
+        color: #2563eb;
+    }
+
+    .stat-label {
+        font-size: 11px;
+        color: #64748b;
+        margin-top: 4px;
+    }
+
+    .login-form-title {
+        font-size: 24px;
+        font-weight: 800;
+        color: #0f172a;
+        text-align: center;
+        margin-bottom: 4px;
+    }
+
+    .login-form-desc {
+        color: #64748b;
+        text-align: center;
+        font-size: 13px;
+        margin-bottom: 20px;
+    }
+
+    .login-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 22px;
+        padding: 28px;
+        box-shadow: 0 15px 45px rgba(15,23,42,.08);
+        max-width: 560px;
+        margin: 0 auto;
+    }
+
+    .api-help {
+        margin-top: -5px;
+        margin-bottom: 12px;
+        font-size: 12px;
+        text-align: right;
+    }
+
+    .api-help a {
+        color: #2563eb;
+        text-decoration: none;
+        font-weight: 600;
+    }
+
+    .creator-box {
+        text-align: center;
+        margin-top: 20px;
+        color: #94a3b8;
+        font-size: 12px;
+    }
+
+    /* ================= DASHBOARD ================= */
+
+    .app-header {
+        background: linear-gradient(
+            135deg,
+            #1d4ed8,
+            #2563eb,
+            #0ea5e9
+        );
+        color: white;
+        padding: 30px;
+        border-radius: 22px;
+        margin-bottom: 24px;
+        box-shadow: 0 15px 35px rgba(37,99,235,.20);
+    }
+
+    .app-header h1 {
+        color: white !important;
+        margin: 0 0 8px 0;
+        font-size: 30px;
+        font-weight: 800;
+    }
+
+    .app-header p {
+        margin: 0;
+        color: rgba(255,255,255,.88);
+        line-height: 1.7;
+    }
+
+    .section-title {
+        font-size: 21px;
+        font-weight: 800;
+        color: #0f172a;
+        margin: 10px 0 5px 0;
+    }
+
+    .section-desc {
+        color: #64748b;
+        font-size: 13px;
+        margin-bottom: 18px;
+    }
+
+    .device-card {
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 15px;
+        padding: 14px;
+        margin-bottom: 10px;
+    }
+
+    .paper-a4 {
+        background: white;
+        width: 100%;
+        min-height: 800px;
+        padding: 55px;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        box-shadow: 0 8px 30px rgba(15,23,42,.08);
+        line-height: 1.7;
+        color: #111827;
+    }
+
+    .paper-a4 h1,
+    .paper-a4 h2,
+    .paper-a4 h3 {
+        color: #111827;
+    }
+
+    .paper-a4 table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 15px 0;
+    }
+
+    .paper-a4 th,
+    .paper-a4 td {
+        border: 1px solid #cbd5e1;
+        padding: 8px;
+        vertical-align: top;
+    }
+
+    .paper-a4 th {
+        background: #f1f5f9;
+        font-weight: 700;
+    }
+
+    .footer-box {
+        text-align: center;
+        color: #94a3b8;
+        font-size: 11px;
+        padding: 30px 0 10px 0;
+    }
+
+    /* ================= SIDEBAR ================= */
+
+    section[data-testid="stSidebar"] {
+        background: #ffffff;
+        border-right: 1px solid #e2e8f0;
+    }
+
+    /* ================= MOBILE ================= */
+
+    @media (max-width: 700px) {
+
+        .login-title {
+            font-size: 36px !important;
+        }
+
+        .stats-row {
+            flex-direction: column;
+        }
+
+        .login-card {
+            padding: 20px;
+        }
+
+        .paper-a4 {
+            padding: 25px;
+        }
+
+    }
+
+    </style>
+    """,
     unsafe_allow_html=True,
 )
 
 
 # =========================================================
-# LOGO TUT WURI HANDAYANI
+# LOGO
 # =========================================================
 
 LOGO_URL = (
@@ -666,10 +348,9 @@ def render_logo(width=90):
                 alt="Logo SIAP AJAR 22"
                 style="
                     object-fit:contain;
-                    filter:
-                        drop-shadow(
-                            0 4px 6px rgba(0,0,0,.1)
-                        );
+                    filter:drop-shadow(
+                        0 4px 6px rgba(0,0,0,.1)
+                    );
                 "
             >
 
@@ -684,280 +365,145 @@ def render_logo(width=90):
 # =========================================================
 
 defaults = {
-
     "authenticated": False,
-
     "user_name": "",
-
     "user_api_key": "",
-
     "hasil_teks": "",
-
     "nama_file_base": "Perangkat_Kurikulum",
 }
 
 for key, value in defaults.items():
 
     if key not in st.session_state:
-
         st.session_state[key] = value
 
 
 # =========================================================
-# EXPORT WORD
+# FUNGSI DOCX
 # =========================================================
 
 def buat_file_docx(markdown_text: str) -> io.BytesIO:
 
-    doc = Document()
+    document = Document()
 
-    for section in doc.sections:
+    section = document.sections[0]
+    section.top_margin = Inches(0.7)
+    section.bottom_margin = Inches(0.7)
+    section.left_margin = Inches(0.8)
+    section.right_margin = Inches(0.8)
 
-        section.top_margin = Inches(1)
+    for line in markdown_text.splitlines():
 
-        section.bottom_margin = Inches(1)
+        line = line.strip()
 
-        section.left_margin = Inches(1)
+        if not line:
+            document.add_paragraph()
+            continue
 
-        section.right_margin = Inches(1)
+        # Heading
+        if line.startswith("### "):
 
-    lines = markdown_text.splitlines()
-
-    i = 0
-
-    while i < len(lines):
-
-        line = lines[i].strip()
-
-        if line.startswith("```"):
-
-            i += 1
+            p = document.add_paragraph()
+            run = p.add_run(line[4:])
+            run.bold = True
+            run.font.size = Pt(13)
 
             continue
 
-        # =================================================
-        # TABLE
-        # =================================================
+        if line.startswith("## "):
 
-        if line.startswith("|") and line.endswith("|"):
-
-            table_lines = []
-
-            while (
-                i < len(lines)
-                and lines[i].strip().startswith("|")
-                and lines[i].strip().endswith("|")
-            ):
-
-                raw = lines[i].strip()
-
-                if not re.match(
-                    r"^\|[\s\-:|]+\|$",
-                    raw
-                ):
-
-                    cells = [
-                        c.strip()
-                        for c in raw[1:-1].split("|")
-                    ]
-
-                    table_lines.append(cells)
-
-                i += 1
-
-            if table_lines:
-
-                rows = len(table_lines)
-
-                cols = max(
-                    len(row)
-                    for row in table_lines
-                )
-
-                table = doc.add_table(
-                    rows=rows,
-                    cols=cols
-                )
-
-                table.alignment = (
-                    WD_TABLE_ALIGNMENT.CENTER
-                )
-
-                table.autofit = True
-
-                for r_idx, row_data in enumerate(
-                    table_lines
-                ):
-
-                    for c_idx in range(cols):
-
-                        value = (
-                            row_data[c_idx]
-                            if c_idx < len(row_data)
-                            else ""
-                        )
-
-                        value = (
-                            value
-                            .replace("<br>", "\n")
-                            .replace("<br/>", "\n")
-                            .replace("**", "")
-                        )
-
-                        cell = table.cell(
-                            r_idx,
-                            c_idx
-                        )
-
-                        cell.text = value
-
-                        for paragraph in cell.paragraphs:
-
-                            for run in paragraph.runs:
-
-                                run.font.name = "Calibri"
-
-                                run.font.size = Pt(9.5)
-
-                                if r_idx == 0:
-
-                                    run.font.bold = True
-
-                        if r_idx == 0:
-
-                            shading = parse_xml(
-                                r'<w:shd {} w:fill="E2E8F0"/>'
-                                .format(
-                                    nsdecls("w")
-                                )
-                            )
-
-                            cell._tc.get_or_add_tcPr().append(
-                                shading
-                            )
-
-                borders = parse_xml(
-                    f"""
-                    <w:tblBorders {nsdecls("w")}>
-                        <w:top
-                            w:val="single"
-                            w:sz="4"
-                            w:color="94A3B8"/>
-
-                        <w:bottom
-                            w:val="single"
-                            w:sz="4"
-                            w:color="94A3B8"/>
-
-                        <w:insideH
-                            w:val="single"
-                            w:sz="4"
-                            w:color="CBD5E1"/>
-
-                        <w:insideV
-                            w:val="single"
-                            w:sz="4"
-                            w:color="CBD5E1"/>
-                    </w:tblBorders>
-                    """
-                )
-
-                table._tbl.tblPr.append(
-                    borders
-                )
-
-                doc.add_paragraph()
+            p = document.add_paragraph()
+            run = p.add_run(line[3:])
+            run.bold = True
+            run.font.size = Pt(15)
 
             continue
-
-        # =================================================
-        # HEADING
-        # =================================================
 
         if line.startswith("# "):
 
-            p = doc.add_heading(
+            p = document.add_paragraph()
+            run = p.add_run(line[2:])
+            run.bold = True
+            run.font.size = Pt(17)
+
+            continue
+
+        # Horizontal rule
+        if line in ["---", "***", "___"]:
+
+            document.add_paragraph("_" * 90)
+            continue
+
+        # Bullet
+        if line.startswith("- "):
+
+            document.add_paragraph(
                 line[2:],
-                level=1
+                style="List Bullet"
             )
 
-            p.alignment = (
-                WD_ALIGN_PARAGRAPH.CENTER
-            )
+            continue
 
-        elif line.startswith("## "):
+        # Numbered list
+        if re.match(r"^\d+\.\s", line):
 
-            doc.add_heading(
-                line[3:],
-                level=2
-            )
-
-        elif line.startswith("### "):
-
-            doc.add_heading(
-                line[4:],
-                level=3
-            )
-
-        elif line.startswith("---"):
-
-            p = doc.add_paragraph()
-
-            border = parse_xml(
-                f'<w:pBdr {nsdecls("w")}>'
-                f'<w:bottom '
-                f'w:val="single" '
-                f'w:sz="12" '
-                f'w:space="1" '
-                f'w:color="000000"/>'
-                f'</w:pBdr>'
-            )
-
-            p._p.get_or_add_pPr().append(
-                border
-            )
-
-        elif line:
-
-            clean = re.sub(
-                r"<.*?>",
+            text = re.sub(
+                r"^\d+\.\s",
                 "",
                 line
             )
 
-            clean = re.sub(
-                r"\*\*(.*?)\*\*",
-                r"\1",
-                clean
+            document.add_paragraph(
+                text,
+                style="List Number"
             )
 
-            p = doc.add_paragraph(
-                clean
+            continue
+
+        # Table
+        if "|" in line:
+
+            parts = [
+                p.strip()
+                for p in line.strip("|").split("|")
+            ]
+
+            if all(
+                re.fullmatch(r":?-+:?", p)
+                for p in parts
+            ):
+                continue
+
+            table = document.add_table(
+                rows=1,
+                cols=len(parts)
             )
 
-            p.paragraph_format.line_spacing = 1.15
+            table.alignment = WD_TABLE_ALIGNMENT.CENTER
 
-            p.paragraph_format.space_after = Pt(4)
+            for i, part in enumerate(parts):
 
-            for run in p.runs:
+                table.rows[0].cells[i].text = part
 
-                run.font.name = "Calibri"
+            continue
 
-                run.font.size = Pt(11)
+        # Normal paragraph
+        p = document.add_paragraph(line)
 
-        i += 1
+        for run in p.runs:
+            run.font.size = Pt(11)
 
-    stream = io.BytesIO()
+    output = io.BytesIO()
 
-    doc.save(stream)
+    document.save(output)
 
-    stream.seek(0)
+    output.seek(0)
 
-    return stream
+    return output
 
 
 # =========================================================
-# MARKDOWN -> HTML
+# MARKDOWN → HTML
 # =========================================================
 
 def markdown_to_html(text: str) -> str:
@@ -968,310 +514,217 @@ def markdown_to_html(text: str) -> str:
 
     in_table = False
 
-    table_rows = []
+    for line in lines:
 
-    def flush_table():
+        stripped = line.strip()
 
-        nonlocal table_rows, in_table
+        if not stripped:
 
-        if not table_rows:
+            if in_table:
 
-            return
+                html.append("</table>")
+                in_table = False
 
-        html.append("<table>")
+            continue
 
-        for r_idx, row in enumerate(
-            table_rows
-        ):
+        if stripped.startswith("### "):
 
-            tag = (
-                "th"
-                if r_idx == 0
-                else "td"
+            html.append(
+                f"<h3>{stripped[4:]}</h3>"
             )
+
+            continue
+
+        if stripped.startswith("## "):
+
+            html.append(
+                f"<h2>{stripped[3:]}</h2>"
+            )
+
+            continue
+
+        if stripped.startswith("# "):
+
+            html.append(
+                f"<h1>{stripped[2:]}</h1>"
+            )
+
+            continue
+
+        if stripped.startswith("- "):
+
+            html.append(
+                f"<li>{stripped[2:]}</li>"
+            )
+
+            continue
+
+        if "|" in stripped:
+
+            parts = [
+                p.strip()
+                for p in stripped.strip("|").split("|")
+            ]
+
+            if all(
+                re.fullmatch(r":?-+:?", p)
+                for p in parts
+            ):
+                continue
+
+            if not in_table:
+
+                html.append("<table>")
+                in_table = True
 
             html.append("<tr>")
 
-            for cell in row:
-
-                cell_html = (
-                    cell
-                    .replace("<br/>", "<br>")
-                    .replace("<br>", "<br>")
-                )
+            for part in parts:
 
                 html.append(
-                    f"<{tag}>{cell_html}</{tag}>"
+                    f"<td>{part}</td>"
                 )
 
             html.append("</tr>")
 
-        html.append("</table>")
-
-        table_rows = []
-
-        in_table = False
-
-    for raw in lines:
-
-        line = raw.strip()
-
-        if line.startswith("```"):
-
             continue
 
-        if (
-            line.startswith("|")
-            and line.endswith("|")
-        ):
-
-            if re.match(
-                r"^\|[\s\-:|]+\|$",
-                line
-            ):
-
-                continue
-
-            in_table = True
-
-            cells = [
-                c.strip()
-                for c in line[1:-1].split("|")
-            ]
-
-            table_rows.append(cells)
-
-            continue
-
-        if in_table:
-
-            flush_table()
-
-        if not line:
-
-            html.append("<p>&nbsp;</p>")
-
-            continue
-
-        escaped = (
-            line
-            .replace("&", "&amp;")
-            .replace("<", "&lt;")
-            .replace(">", "&gt;")
+        html.append(
+            f"<p>{stripped}</p>"
         )
-
-        escaped = re.sub(
-            r"\*\*(.*?)\*\*",
-            r"<strong>\1</strong>",
-            escaped
-        )
-
-        if escaped.startswith("### "):
-
-            html.append(
-                f"<h3>{escaped[4:]}</h3>"
-            )
-
-        elif escaped.startswith("## "):
-
-            html.append(
-                f"<h2>{escaped[3:]}</h2>"
-            )
-
-        elif escaped.startswith("# "):
-
-            html.append(
-                f"<h1>{escaped[2:]}</h1>"
-            )
-
-        elif escaped.startswith("---"):
-
-            html.append("<hr>")
-
-        else:
-
-            html.append(
-                f"<p>{escaped}</p>"
-            )
 
     if in_table:
-
-        flush_table()
+        html.append("</table>")
 
     return "\n".join(html)
 
 
 # =========================================================
-# PROMPT
+# PROMPT AI
 # =========================================================
 
 def buat_instruksi_prompt(data: dict) -> str:
 
-    p3 = (
-
-        ", ".join(
-            data["profil_pancasila"]
-        )
-
-        if data["profil_pancasila"]
-
-        else "Sesuai karakteristik materi"
+    perangkat = "\n".join(
+        [
+            f"{i + 1}. {item}"
+            for i, item in enumerate(
+                data["perangkat"]
+            )
+        ]
     )
 
-    tanda_tangan = (
+    prompt = f"""
+Anda adalah ahli penyusunan perangkat pembelajaran
+Kurikulum Merdeka di Indonesia.
 
-        "| Mengetahui,<br>Pengawas Pembina | "
-        "Mengetahui,<br>Kepala Sekolah | "
-        + data["kota_sekolah"]
-        + ", "
-        + data["tanggal_hari_ini"]
-        + "<br>"
-        + data["jabatan_guru"]
-        + " |\n"
+Buat perangkat pembelajaran yang lengkap, rapi,
+praktis digunakan guru, dan siap disalin ke Microsoft Word.
 
-        "| :---: | :---: | :---: |\n"
+IDENTITAS PEMBELAJARAN
 
-        "| <br><br><br><br> | "
-        "<br><br><br><br> | "
-        "<br><br><br><br> |\n"
+Nama Guru:
+{data["guru_nama"]}
 
-        "| **"
-        + data["pengawas_nama"]
-        + "**<br>NIP. "
-        + data["pengawas_nip"]
-        + " | **"
-        + data["ks_nama"]
-        + "**<br>NIP. "
-        + data["ks_nip"]
-        + " | **"
-        + data["guru_nama"]
-        + "**<br>NIP. "
-        + data["guru_nip"]
-        + " |"
-    )
+NIP Guru:
+{data["guru_nip"]}
 
-    return (
+Jabatan:
+{data["jabatan"]}
 
-        "Bertindaklah sebagai ahli penyusunan "
-        "perangkat pembelajaran Indonesia yang "
-        "memahami Kurikulum Merdeka dan regulasi "
-        "pendidikan yang berlaku.\n\n"
+Kepala Sekolah:
+{data["kepala_sekolah"]}
 
-        "Tugas: susun dokumen \""
-        + data["jenis_perangkat"]
-        + "\" yang lengkap, detail, operasional, "
-        "sistematis, dan siap disalin ke dokumen "
-        "resmi sekolah.\n\n"
+NIP Kepala Sekolah:
+{data["kepala_sekolah_nip"]}
 
-        "IDENTITAS SATUAN PENDIDIKAN\n"
+Pengawas Pembina:
+{data["pengawas"]}
 
-        "- Dinas Pendidikan: "
-        + data["dinas"]
-        + "\n"
+NIP Pengawas:
+{data["pengawas_nip"]}
 
-        "- Satuan Pendidikan: "
-        + data["sekolah"]
-        + "\n"
+Dinas Pendidikan:
+{data["dinas"]}
 
-        "- Alamat dan Kontak: "
-        + data["alamat"]
-        + "\n"
+Satuan Pendidikan:
+{data["sekolah"]}
 
-        "- Kota/Kabupaten: "
-        + data["kota_sekolah"]
-        + "\n\n"
+Alamat:
+{data["alamat"]}
 
-        "IDENTITAS PENDIDIK DAN PEJABAT\n"
+Kota/Kabupaten:
+{data["kota"]}
 
-        "- "
-        + data["jabatan_guru"]
-        + ": "
-        + data["guru_nama"]
-        + " (NIP: "
-        + data["guru_nip"]
-        + ")\n"
+Fase/Kelas:
+{data["fase_kelas"]}
 
-        "- Kepala Sekolah: "
-        + data["ks_nama"]
-        + " (NIP: "
-        + data["ks_nip"]
-        + ")\n"
+Mata Pelajaran:
+{data["mapel"]}
 
-        "- Pengawas Pembina: "
-        + data["pengawas_nama"]
-        + " (NIP: "
-        + data["pengawas_nip"]
-        + ")\n\n"
+Materi Pokok:
+{data["materi"]}
 
-        "PARAMETER PEMBELAJARAN\n"
+Alokasi Waktu:
+{data["alokasi"]}
 
-        "- Mata Pelajaran: "
-        + data["mapel"]
-        + "\n"
+Semester:
+{data["semester"]}
 
-        "- Fase/Kelas: "
-        + data["fase_kelas"]
-        + "\n"
+Profil Pelajar Pancasila:
+{", ".join(data["profil_pancasila"])}
 
-        "- Semester: "
-        + data["semester"]
-        + "\n"
+PERANGKAT YANG DIMINTA
 
-        "- Alokasi Waktu: "
-        + data["alokasi_waktu"]
-        + "\n"
+{perangkat}
 
-        "- Materi Pokok: "
-        + data["materi_pokok"]
-        + "\n"
+KETENTUAN:
 
-        "- Dimensi Profil Pelajar Pancasila: "
-        + p3
-        + "\n"
+1. Gunakan bahasa Indonesia yang formal,
+   jelas, dan mudah digunakan guru.
 
-        "- Tanggal: "
-        + data["tanggal_hari_ini"]
-        + "\n\n"
+2. Sesuaikan seluruh isi dengan Kurikulum Merdeka.
 
-        "ATURAN OUTPUT\n"
+3. Jangan membuat data yang tidak relevan
+   dengan fase, kelas, mata pelajaran, dan materi.
 
-        "1. Langsung mulai dengan KOP SURAT resmi "
-        "lembaga pendidikan.\n"
+4. Gunakan tabel apabila format perangkat
+   lebih mudah dibaca dalam bentuk tabel.
 
-        "2. Gunakan judul dokumen yang jelas "
-        "menggunakan heading Markdown.\n"
+5. Buat isi yang praktis dan siap digunakan.
 
-        "3. Gunakan tabel Markdown yang rapi untuk "
-        "identitas dokumen, rincian materi, atau "
-        "kisi-kisi.\n"
+6. Setiap perangkat harus memiliki judul yang jelas.
 
-        "4. DILARANG menggunakan simbol '...', "
-        "'[lanjutkan]', '[sesuaikan]', 'dst.', "
-        "atau 'dan seterusnya'.\n"
+7. Sertakan identitas sekolah dan guru
+   jika relevan.
 
-        "5. Jangan mengarang nomor regulasi atau "
-        "undang-undang spesifik jika tidak yakin.\n"
+8. Pastikan tujuan pembelajaran,
+   kegiatan pembelajaran, asesmen,
+   dan materi saling berkaitan.
 
-        "6. Gunakan bahasa Indonesia formal, baku, "
-        "edukatif, dan mudah diedit oleh guru.\n"
+9. Hindari penjelasan yang terlalu teoritis.
 
-        "7. Jangan menyertakan blok kode Markdown "
-        "berpagar.\n"
+10. Hasil akhir harus langsung berupa
+    dokumen perangkat pembelajaran,
+    bukan penjelasan tentang cara membuatnya.
 
-        "8. Akhiri dokumen dengan lembar pengesahan "
-        "tiga kolom berikut:\n\n"
+Di bagian akhir, buat tabel tanda tangan:
 
-        + tanda_tangan
+Guru,
+{data["guru_nama"]}
 
-        + "\n\n"
+Kepala Sekolah,
+{data["kepala_sekolah"]}
 
-        "Jangan menambahkan salam pembuka atau "
-        "kalimat percakapan di luar dokumen."
-    )
+Pengawas Pembina,
+{data["pengawas"]}
+"""
+
+    return prompt
 
 
 # =========================================================
-# LOGIN
+# HALAMAN LOGIN
 # =========================================================
 
 if not st.session_state.authenticated:
@@ -1281,10 +734,7 @@ if not st.session_state.authenticated:
         unsafe_allow_html=True
     )
 
-    # =====================================================
     # HERO LOGIN
-    # =====================================================
-
     st.markdown(
         """
         <div class="login-hero">
@@ -1312,21 +762,15 @@ if not st.session_state.authenticated:
 
             </div>
 
-
             <h1 class="login-title">
-
                 SIAP AJAR <span>22</span>
-
             </h1>
 
-
             <div class="login-subtitle">
-
                 Satu Portal, Solusi Lengkap
                 <strong>
                     22 Perangkat Pembelajaran
                 </strong>
-
             </div>
 
         </div>
@@ -1334,89 +778,44 @@ if not st.session_state.authenticated:
         unsafe_allow_html=True,
     )
 
-
-    # =====================================================
     # STATISTIK
-    # =====================================================
+    st.markdown(
+        """
+        <div class="stats-row">
 
-    s1, s2, s3 = st.columns(
-        3,
-        gap="small"
-    )
-
-    with s1:
-
-        st.markdown(
-            """
             <div class="stat-card">
-
-                <div class="stat-icon">
-                    ▱
-                </div>
-
-                <div class="stat-number">
-                    4 Kategori
-                </div>
-
+                <div class="stat-number">4</div>
                 <div class="stat-label">
-                    Terorganisir
+                    Kategori Terorganisir
                 </div>
-
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
 
-    with s2:
-
-        st.markdown(
-            """
             <div class="stat-card">
-
-                <div class="stat-icon">
-                    ▤
-                </div>
-
-                <div class="stat-number">
-                    22 Dokumen
-                </div>
-
+                <div class="stat-number">22</div>
                 <div class="stat-label">
-                    AI Generated
+                    Dokumen AI Generated
                 </div>
-
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
 
-    with s3:
-
-        st.markdown(
-            """
             <div class="stat-card">
-
-                <div class="stat-icon">
-                    ▣
-                </div>
-
                 <div class="stat-number">
                     Gemini AI
                 </div>
-
                 <div class="stat-label">
                     Flash Model
                 </div>
-
             </div>
-            """,
-            unsafe_allow_html=True,
-        )
 
+        </div>
+        """,
+        unsafe_allow_html=True,
+    )
 
-    # =====================================================
     # FORM LOGIN
-    # =====================================================
+    st.markdown(
+        '<div class="login-card">',
+        unsafe_allow_html=True
+    )
 
     with st.form(
         "login_form",
@@ -1427,41 +826,28 @@ if not st.session_state.authenticated:
         st.markdown(
             """
             <div class="login-form-title">
-
                 Masuk ke Portal
-
             </div>
 
             <div class="login-form-desc">
-
                 Isi data berikut untuk memulai
-
             </div>
             """,
             unsafe_allow_html=True,
         )
 
-
         nama_guru_input = st.text_input(
             "Nama Lengkap & Gelar",
-
-            placeholder=
-            "Contoh: Andar Prasetyo, S.Pd.",
-
+            placeholder="Contoh: Andar Prasetyo, S.Pd.",
             key="login_nama",
         )
 
-
         api_key_masuk = st.text_input(
             "Gemini API Key",
-
             type="password",
-
             placeholder="AIza...",
-
             key="login_api_key",
         )
-
 
         st.markdown(
             """
@@ -1471,10 +857,8 @@ if not st.session_state.authenticated:
                     href="https://aistudio.google.com/apikey"
                     target="_blank"
                 >
-
                     ⓘ &nbsp;
                     Bagaimana cara mendapatkan API key gratis?
-
                 </a>
 
             </div>
@@ -1482,30 +866,28 @@ if not st.session_state.authenticated:
             unsafe_allow_html=True,
         )
 
-
         masuk = st.form_submit_button(
             "Masuk ke Portal  →",
-
             use_container_width=True
         )
 
-
-    # =====================================================
-    # VALIDASI LOGIN
-    # =====================================================
+    st.markdown(
+        "</div>",
+        unsafe_allow_html=True
+    )
 
     if masuk:
 
         if not nama_guru_input.strip():
 
             st.warning(
-                "⚠️ Mohon isi Nama Lengkap & Gelar terlebih dahulu."
+                "⚠️ Silakan isi Nama Lengkap & Gelar."
             )
 
         elif not api_key_masuk.strip():
 
             st.warning(
-                "⚠️ Mohon isi Gemini API Key terlebih dahulu."
+                "⚠️ Silakan masukkan Gemini API Key."
             )
 
         else:
@@ -1522,74 +904,53 @@ if not st.session_state.authenticated:
 
             st.rerun()
 
-
-    # =====================================================
-    # FOOTER LOGIN
-    # =====================================================
-
     st.markdown(
         """
-        <div class="login-footer">
-
-            <span class="creator-pill">
-
-                <span class="creator-dot"></span>
-
-                Creator:
-                <strong>Andar</strong>
-
-            </span>
-
+        <div class="creator-box">
+            Creator: <strong>Andar</strong><br>
+            SIAP AJAR 22 • Portal Administrasi Pembelajaran
         </div>
         """,
         unsafe_allow_html=True,
     )
 
-
     st.stop()
 
 
 # =========================================================
-# SIDEBAR
+# SIDEBAR DASHBOARD
 # =========================================================
 
 with st.sidebar:
 
     render_logo(70)
 
-
     st.markdown(
         """
-        <h3 style="
+        <div style="
             text-align:center;
-            margin:2px 0;
-            font-size:16px;
+            font-weight:800;
+            font-size:18px;
+            color:#0f172a;
         ">
             SIAP AJAR 22
-        </h3>
+        </div>
         """,
         unsafe_allow_html=True,
     )
-
 
     st.caption(
         "Portal Administrasi Pembelajaran"
     )
 
-
     st.divider()
 
-
-    st.markdown(
-        "#### 👤 Pendidik Aktif"
-    )
-
+    st.markdown("#### 👤 Pendidik Aktif")
 
     st.success(
         f"**{st.session_state.user_name}**\n\n"
         "🟢 Sesi AI aktif"
     )
-
 
     if st.button(
         "🔄 Keluar / Ganti Akun",
@@ -1597,18 +958,13 @@ with st.sidebar:
     ):
 
         st.session_state.authenticated = False
-
         st.session_state.user_name = ""
-
         st.session_state.user_api_key = ""
-
         st.session_state.hasil_teks = ""
 
         st.rerun()
 
-
     st.divider()
-
 
     st.markdown(
         """
@@ -1622,7 +978,7 @@ with st.sidebar:
 
 
 # =========================================================
-# DASHBOARD
+# HEADER DASHBOARD
 # =========================================================
 
 st.markdown(
@@ -1630,19 +986,14 @@ st.markdown(
     <div class="app-header">
 
         <h1>
-
             Selamat Berkarya,
             {st.session_state.user_name}
-
         </h1>
 
         <p>
-
-            Susun perangkat pembelajaran secara
-            terstruktur dan ekspor langsung ke
-            Microsoft Word melalui platform
-            SIAP AJAR 22.
-
+            Susun perangkat pembelajaran secara terstruktur
+            dan ekspor langsung ke Microsoft Word melalui
+            platform SIAP AJAR 22.
         </p>
 
     </div>
@@ -1652,463 +1003,419 @@ st.markdown(
 
 
 # =========================================================
-# KONFIGURASI
+# KONFIGURASI PEMBELAJARAN
 # =========================================================
 
-with st.container(border=True):
+st.markdown(
+    '<div class="section-title">📚 Konfigurasi Pembelajaran</div>',
+    unsafe_allow_html=True
+)
 
-    st.markdown(
-        "### 📋 1. Konfigurasi Kurikulum & Jenjang"
+st.markdown(
+    '<div class="section-desc">Tentukan identitas pembelajaran sebelum membuat perangkat.</div>',
+    unsafe_allow_html=True
+)
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    fase_kelas = st.selectbox(
+        "Fase / Kelas",
+        [
+            "Fase A — Kelas 1 SD/MI",
+            "Fase A — Kelas 2 SD/MI",
+            "Fase B — Kelas 3 SD/MI",
+            "Fase B — Kelas 4 SD/MI",
+            "Fase C — Kelas 5 SD/MI",
+            "Fase C — Kelas 6 SD/MI",
+            "Fase D — Kelas 7 SMP/MTs",
+            "Fase D — Kelas 8 SMP/MTs",
+            "Fase D — Kelas 9 SMP/MTs",
+            "Fase E — Kelas 10 SMA/MA/SMK",
+            "Fase F — Kelas 11 SMA/MA/SMK",
+            "Fase F — Kelas 12 SMA/MA/SMK",
+        ]
     )
 
-
-    col1, col2 = st.columns(2)
-
-
-    with col1:
-
-        fase_kelas = st.selectbox(
-            "Tingkatan Kelas / Fase",
-
-            [
-                "Fase A - Kelas 1 SD/MI",
-                "Fase A - Kelas 2 SD/MI",
-                "Fase B - Kelas 3 SD/MI",
-                "Fase B - Kelas 4 SD/MI",
-                "Fase C - Kelas 5 SD/MI",
-                "Fase C - Kelas 6 SD/MI",
-                "Fase D - Kelas 7 SMP/MTs",
-                "Fase D - Kelas 8 SMP/MTs",
-                "Fase D - Kelas 9 SMP/MTs",
-                "Fase E - Kelas 10 SMA/MA/SMK",
-                "Fase F - Kelas 11 SMA/MA/SMK",
-                "Fase F - Kelas 12 SMA/MA/SMK",
-            ],
-
-            index=3,
-        )
-
-
-        is_sd = "SD/MI" in fase_kelas
-
-
-        if is_sd:
-
-            match = re.search(
-                r"Kelas (\d+)",
-                fase_kelas
-            )
-
-
-            angka_kelas = (
-
-                match.group(1)
-
-                if match
-
-                else ""
-            )
-
-
-            jabatan_guru_otomatis = (
-
-                f"Guru Kelas {angka_kelas}"
-
-                if angka_kelas
-
-                else "Guru Kelas"
-            )
-
-
-            label_mapel = (
-                "Mata Pelajaran / Muatan Pelajaran"
-            )
-
-
-            default_mapel = "IPAS"
-
-
-        else:
-
-            jabatan_guru_otomatis = (
-                "Guru Mata Pelajaran"
-            )
-
-            label_mapel = "Mata Pelajaran"
-
-            default_mapel = "Fisika"
-
-
-        mapel = st.text_input(
-            label_mapel,
-
-            value=default_mapel,
-
-            placeholder="Contoh: Fisika"
-        )
-
-
-        materi_pokok = st.text_input(
-            "Fokus Topik / Materi Pokok",
-
-            placeholder=
-            "Contoh: Usaha dan Energi"
-        )
-
-
-    with col2:
-
-        alokasi_waktu = st.text_input(
-            "Alokasi Waktu / Target JP",
-
-            value=(
-                "4 JP / Minggu"
-                if is_sd
-                else "3 JP / Minggu"
-            )
-        )
-
-
-        profil_pancasila = st.multiselect(
-            "Dimensi Profil Pelajar Pancasila",
-
-            [
-                "Beriman, Bertakwa kepada Tuhan YME, & Berakhlak Mulia",
-                "Berkebinekaan Global",
-                "Gotong Royong",
-                "Mandiri",
-                "Bernalar Kritis",
-                "Kreatif",
-            ],
-
-            default=[
-                "Bernalar Kritis",
-                "Gotong Royong",
-                "Mandiri",
-            ],
-        )
-
-
-        daftar_22_perangkat = [
-
-            "01. Analisis Capaian Pembelajaran (CP) & Pemetaan Elemen",
-
-            "02. Alur Tujuan Pembelajaran (ATP) Lengkap",
-
-            "03. Program Tahunan (PROTA)",
-
-            "04. Program Semester (PROMES)",
-
-            "05. Kriteria Ketercapaian Tujuan Pembelajaran (KKTP)",
-
-            "06. Modul Ajar Lengkap (Format Baku Kurikulum Merdeka)",
-
-            "07. Lembar Kerja Peserta Didik (LKPD) Berdiferensiasi",
-
-            "08. Modul / Panduan Projek Profil Pancasila (P5)",
-
-            "09. Jurnal Mengajar Harian & Agenda Guru Terstruktur",
-
-            "10. Format & Kisi-kisi Asesmen Diagnostik",
-
-            "11. Kisi-kisi & Instrumen Asesmen Formatif",
-
-            "12. Kisi-kisi, Naskah Soal, & Kunci Jawaban Asesmen Sumatif",
-
-            "13. Rubrik Penilaian Kinerja, Portofolio, serta Proyek",
-
-            "14. Rekapitulasi Daftar Nilai Kurikulum Merdeka",
-
-            "15. Buku Presensi / Lembar Absensi Siswa",
-
-            "16. Format Program Pembelajaran Remedial & Pengayaan",
-
-            "17. Distribusi Sumber Belajar & Buku Teks Pembelajaran",
-
-            "18. Analisis Alokasi Waktu Efektif",
-
-            "19. Format Analisis Kuantitatif Butir Soal Evaluasi",
-
-            "20. Jurnal Sikap & Catatan Dimensi Profil Pelajar Pancasila",
-
-            "21. Panduan Layanan Bimbingan & Konsultasi Akademik",
-
-            "22. Format Laporan Evaluasi Diri Guru & Rencana Tindak Lanjut",
-        ]
-
-
-        jenis_perangkat = st.selectbox(
-            "Pilih Dokumen yang Diterbitkan",
-
-            daftar_22_perangkat
-        )
-
+with col2:
 
     semester = st.radio(
-        "Semester Berjalan",
-
+        "Semester",
         [
-            "Semester Ganjil",
-            "Semester Genap",
-            "Semester Ganjil & Genap (1 Tahun Penuh)",
+            "Ganjil",
+            "Genap",
         ],
-
-        horizontal=True,
+        horizontal=True
     )
+
+
+is_sd = "SD/MI" in fase_kelas
+
+match_kelas = re.search(
+    r"Kelas\s+(\d+)",
+    fase_kelas
+)
+
+angka_kelas = (
+    match_kelas.group(1)
+    if match_kelas
+    else "1"
+)
+
+if is_sd:
+
+    jabatan_guru_otomatis = (
+        f"Guru Kelas {angka_kelas}"
+    )
+
+    label_mapel = (
+        "Mata Pelajaran / Muatan Pelajaran"
+    )
+
+    default_mapel = "IPAS"
+
+else:
+
+    jabatan_guru_otomatis = (
+        "Guru Mata Pelajaran"
+    )
+
+    label_mapel = "Mata Pelajaran"
+
+    default_mapel = "Fisika"
+
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    mapel = st.text_input(
+        label_mapel,
+        value=default_mapel
+    )
+
+with col2:
+
+    materi_pokok = st.text_input(
+        "Materi Pokok",
+        placeholder="Contoh: Pembangunan Ekonomi"
+    )
+
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    alokasi_waktu = st.text_input(
+        "Alokasi Waktu",
+        value="2 x 45 menit"
+    )
+
+with col2:
+
+    profil_pancasila = st.multiselect(
+        "Profil Pelajar Pancasila",
+        [
+            "Beriman, bertakwa kepada Tuhan YME, dan berakhlak mulia",
+            "Berkebinekaan global",
+            "Gotong royong",
+            "Mandiri",
+            "Bernalar kritis",
+            "Kreatif",
+        ],
+        default=[
+            "Bernalar kritis",
+            "Mandiri",
+        ]
+    )
+
+
+# =========================================================
+# 22 PERANGKAT
+# =========================================================
+
+daftar_22_perangkat = [
+
+    "Analisis CP & Pemetaan Elemen",
+
+    "ATP Lengkap",
+
+    "PROTA",
+
+    "PROMES",
+
+    "KKTP",
+
+    "Modul Ajar Lengkap",
+
+    "LKPD Berdiferensiasi",
+
+    "Modul/Panduan P5",
+
+    "Jurnal Mengajar Harian & Agenda Guru",
+
+    "Asesmen Diagnostik",
+
+    "Asesmen Formatif",
+
+    "Asesmen Sumatif",
+
+    "Rubrik Penilaian Kinerja/Portofolio/Proyek",
+
+    "Rekap Daftar Nilai",
+
+    "Presensi",
+
+    "Remedial & Pengayaan",
+
+    "Sumber Belajar & Buku Teks",
+
+    "Analisis Alokasi Waktu Efektif",
+
+    "Analisis Kuantitatif Butir Soal",
+
+    "Jurnal Sikap & Catatan P5",
+
+    "Bimbingan & Konsultasi Akademik",
+
+    "Evaluasi Diri Guru & RTL",
+]
+
+
+st.markdown(
+    '<div class="section-title">🗂️ Pilih Perangkat Pembelajaran</div>',
+    unsafe_allow_html=True
+)
+
+st.markdown(
+    '<div class="section-desc">Pilih satu atau beberapa perangkat yang ingin dibuat.</div>',
+    unsafe_allow_html=True
+)
+
+perangkat_dipilih = st.multiselect(
+    "22 Perangkat",
+    daftar_22_perangkat,
+    default=[
+        "Modul Ajar Lengkap"
+    ]
+)
 
 
 # =========================================================
 # IDENTITAS SEKOLAH
 # =========================================================
 
-tab1, tab2 = st.tabs(
+st.markdown(
+    '<div class="section-title">🏫 Identitas Satuan Pendidikan</div>',
+    unsafe_allow_html=True
+)
+
+tab1, tab2, tab3, tab4 = st.tabs(
     [
-        "🏛️ 2. Identitas Satuan Pendidikan",
-        "✍️ 3. Pejabat & Penandatangan",
+        "Dinas Pendidikan Pembina",
+        "Nama Satuan Pendidikan",
+        "Alamat & Kontak Sekolah",
+        "Kota/Kabupaten",
     ]
 )
+
+if is_sd:
+
+    default_dinas = (
+        "DINAS PENDIDIKAN KOTA PONTIANAK"
+    )
+
+    default_sekolah = (
+        "SDN 01 PONTIANAK"
+    )
+
+else:
+
+    default_dinas = (
+        "DINAS PENDIDIKAN PROVINSI KALIMANTAN BARAT"
+    )
+
+    default_sekolah = (
+        "SMAS NUSA HARAPAN"
+    )
 
 
 with tab1:
 
-    c1, c2 = st.columns(2)
+    dinas = st.text_input(
+        "Dinas Pendidikan",
+        value=default_dinas
+    )
 
-
-    with c1:
-
-        dinas_pendidikan = st.text_input(
-            "Dinas Pendidikan Pembina",
-
-            value=(
-
-                "DINAS PENDIDIKAN KOTA PONTIANAK"
-
-                if is_sd
-
-                else
-                "DINAS PENDIDIKAN PROVINSI KALIMANTAN BARAT"
-            )
-        )
-
-
-        nama_sekolah = st.text_input(
-            "Nama Satuan Pendidikan",
-
-            value=(
-
-                "SDN 01 PONTIANAK"
-
-                if is_sd
-
-                else
-                "SMAS NUSA HARAPAN"
-            )
-        )
-
-
-    with c2:
-
-        alamat_sekolah = st.text_input(
-            "Alamat & Kontak Sekolah",
-
-            value=
-            "Jl. Pancasila No. 10, Telp. (0561) 734567"
-        )
-
-
-        kota_sekolah = st.text_input(
-            "Kota / Kabupaten Domisili",
-
-            value="Pontianak"
-        )
-
-
-# =========================================================
-# PEJABAT
-# =========================================================
 
 with tab2:
 
-    c1, c2, c3 = st.columns(3)
+    sekolah = st.text_input(
+        "Nama Satuan Pendidikan",
+        value=default_sekolah
+    )
 
 
-    with c1:
+with tab3:
 
-        st.markdown(
-            f"**{jabatan_guru_otomatis}**"
-        )
-
-
-        guru_nama = st.text_input(
-            f"Nama & Gelar ({jabatan_guru_otomatis})",
-
-            value=st.session_state.user_name,
-
-            key="g_nama",
-        )
+    alamat = st.text_input(
+        "Alamat & Kontak",
+        value="Jl. Pancasila No. 10, Telp. (0561) 734567"
+    )
 
 
-        guru_nip = st.text_input(
-            "NIP Guru",
+with tab4:
 
-            value="-",
-
-            key="g_nip",
-        )
-
-
-    with c2:
-
-        st.markdown(
-            "**Kepala Sekolah**"
-        )
-
-
-        ks_nama = st.text_input(
-            "Nama Kepala Sekolah",
-
-            placeholder=
-            "Contoh: ZULKIFLI, S.Pd.",
-
-            key="ks_nama",
-        )
-
-
-        ks_nip = st.text_input(
-            "NIP Kepala Sekolah",
-
-            placeholder=
-            "Contoh: 197508122005011004",
-
-            key="ks_nip",
-        )
-
-
-    with c3:
-
-        st.markdown(
-            "**Pengawas Pembina**"
-        )
-
-
-        pengawas_nama = st.text_input(
-            "Nama Pengawas Pembina",
-
-            placeholder=
-            "Contoh: Andar",
-
-            key="p_nama",
-        )
-
-
-        pengawas_nip = st.text_input(
-            "NIP Pengawas",
-
-            placeholder=
-            "Contoh: 196811231993032003",
-
-            key="p_nip",
-        )
+    kota = st.text_input(
+        "Kota/Kabupaten",
+        value="Pontianak"
+    )
 
 
 # =========================================================
-# TERBITKAN DOKUMEN
+# DATA PEJABAT
 # =========================================================
 
-if st.button(
-    "✨ Terbitkan Dokumen Administrasi Resmi",
+st.markdown(
+    '<div class="section-title">✍️ Data Penandatangan</div>',
+    unsafe_allow_html=True
+)
 
+col1, col2 = st.columns(2)
+
+with col1:
+
+    guru_nama = st.text_input(
+        "Nama Guru",
+        value=st.session_state.user_name
+    )
+
+    guru_nip = st.text_input(
+        "NIP Guru",
+        placeholder="Masukkan NIP jika ada"
+    )
+
+with col2:
+
+    kepala_sekolah = st.text_input(
+        "Nama Kepala Sekolah",
+        placeholder="Nama Kepala Sekolah"
+    )
+
+    kepala_sekolah_nip = st.text_input(
+        "NIP Kepala Sekolah",
+        placeholder="Masukkan NIP jika ada"
+    )
+
+
+col1, col2 = st.columns(2)
+
+with col1:
+
+    pengawas = st.text_input(
+        "Nama Pengawas Pembina",
+        placeholder="Nama Pengawas"
+    )
+
+with col2:
+
+    pengawas_nip = st.text_input(
+        "NIP Pengawas",
+        placeholder="Masukkan NIP jika ada"
+    )
+
+
+# =========================================================
+# TOMBOL GENERATE
+# =========================================================
+
+st.divider()
+
+generate = st.button(
+    "🚀 GENERATE PERANGKAT PEMBELAJARAN",
+    type="primary",
     use_container_width=True
-):
+)
 
-    # =====================================================
-    # VALIDASI
-    # =====================================================
+
+# =========================================================
+# PROSES GENERATE
+# =========================================================
+
+if generate:
 
     if not mapel.strip():
 
-        st.warning(
-            "⚠️ Mata pelajaran wajib diisi."
+        st.error(
+            "❌ Mata pelajaran belum diisi."
         )
 
         st.stop()
-
-
-    if (
-        not dinas_pendidikan.strip()
-        or not nama_sekolah.strip()
-    ):
-
-        st.warning(
-            "⚠️ Data instansi belum lengkap."
-        )
-
-        st.stop()
-
 
     if not materi_pokok.strip():
 
-        st.warning(
-            "⚠️ Fokus topik/materi pokok wajib diisi."
+        st.error(
+            "❌ Materi pokok belum diisi."
+        )
+
+        st.stop()
+
+    if not sekolah.strip():
+
+        st.error(
+            "❌ Nama satuan pendidikan belum diisi."
+        )
+
+        st.stop()
+
+    if not perangkat_dipilih:
+
+        st.error(
+            "❌ Pilih minimal satu perangkat."
+        )
+
+        st.stop()
+
+    if not st.session_state.user_api_key.strip():
+
+        st.error(
+            "❌ Gemini API Key belum tersedia."
         )
 
         st.stop()
 
 
-    # =====================================================
-    # DATA
-    # =====================================================
-
     data_input = {
 
-        "dinas": dinas_pendidikan,
-
-        "sekolah": nama_sekolah,
-
-        "alamat": alamat_sekolah,
-
-        "kota_sekolah": kota_sekolah,
-
-        "jabatan_guru": jabatan_guru_otomatis,
-
         "guru_nama": guru_nama,
-
         "guru_nip": guru_nip,
 
-        "ks_nama": ks_nama or "-",
+        "jabatan": jabatan_guru_otomatis,
 
-        "ks_nip": ks_nip or "-",
+        "kepala_sekolah": kepala_sekolah,
+        "kepala_sekolah_nip": kepala_sekolah_nip,
 
-        "pengawas_nama":
-            pengawas_nama or "-",
+        "pengawas": pengawas,
+        "pengawas_nip": pengawas_nip,
 
-        "pengawas_nip":
-            pengawas_nip or "-",
+        "dinas": dinas,
+        "sekolah": sekolah,
+
+        "alamat": alamat,
+        "kota": kota,
+
+        "fase_kelas": fase_kelas,
 
         "mapel": mapel,
+        "materi": materi_pokok,
 
-        "materi_pokok":
-            materi_pokok,
+        "alokasi": alokasi_waktu,
+        "semester": semester,
 
-        "profil_pancasila":
-            profil_pancasila,
+        "profil_pancasila": profil_pancasila,
 
-        "fase_kelas":
-            fase_kelas,
-
-        "semester":
-            semester,
-
-        "alokasi_waktu":
-            alokasi_waktu,
-
-        "jenis_perangkat":
-            jenis_perangkat,
-
-        "tanggal_hari_ini":
-            datetime.now().strftime(
-                "%d-%m-%Y"
-            ),
+        "perangkat": perangkat_dipilih,
     }
 
 
@@ -2121,343 +1428,231 @@ if st.button(
 
     status = st.empty()
 
+    status.info(
+        "⏳ Menghubungkan ke Google Gemini..."
+    )
 
-    # =====================================================
-    # GEMINI
-    # =====================================================
 
     try:
 
-        status.info(
-            "⚡ Menginisialisasi Google Gemini..."
-        )
-
-
         client = genai.Client(
-            api_key=
-            st.session_state.user_api_key
+            api_key=st.session_state.user_api_key
         )
-
-
-        progress.progress(15)
-
-
-        # =================================================
-        # MODEL
-        # =================================================
 
         model_list = [
 
             "gemini-3.6-flash",
 
             "gemini-3.8-flash",
-
         ]
-
 
         response = None
 
-        model_berhasil = None
+        error_messages = []
 
-        errors = []
-
-
-        # =================================================
-        # COBA MODEL
-        # =================================================
 
         for model_name in model_list:
 
-            if response:
-
+            if response is not None:
                 break
 
+            status.info(
+                f"🤖 Menggunakan model {model_name}..."
+            )
 
-            for percobaan in range(3):
+            for attempt in range(3):
 
                 try:
 
-                    status.info(
-                        f"📝 Menghasilkan dokumen "
-                        f"dengan {model_name} "
-                        f"(percobaan "
-                        f"{percobaan + 1}/3)"
-                    )
-
-
-                    response = (
-                        client.models.generate_content(
-                            model=model_name,
-
-                            contents=prompt_final,
+                    progress.progress(
+                        min(
+                            90,
+                            10
+                            + (
+                                attempt * 15
+                            )
                         )
                     )
 
+                    response = client.models.generate_content(
 
-                    if (
-                        response
-                        and getattr(
-                            response,
-                            "text",
-                            None
-                        )
-                    ):
+                        model=model_name,
 
-                        model_berhasil = (
-                            model_name
-                        )
+                        contents=prompt_final,
+                    )
+
+                    if response and response.text:
 
                         break
 
 
-                except Exception as exc:
+                except Exception as e:
 
-                    error_text = str(exc)
+                    error_text = str(e)
 
-
-                    errors.append(
-                        f"{model_name} | "
-                        f"Percobaan "
-                        f"{percobaan + 1} | "
-                        f"{error_text}"
+                    error_messages.append(
+                        f"{model_name} percobaan "
+                        f"{attempt + 1}: {error_text}"
                     )
-
-
-                    # =================================
-                    # 503
-                    # =================================
 
                     if (
                         "503" in error_text
-                        or
-                        "UNAVAILABLE"
+                        or "UNAVAILABLE"
                         in error_text.upper()
                     ):
 
-                        if percobaan < 2:
+                        time.sleep(
+                            2 ** attempt
+                        )
 
-                            waktu_tunggu = (
-                                2 ** percobaan
-                            )
+                    else:
 
-
-                            status.warning(
-                                f"⏳ Server Gemini "
-                                f"sedang sibuk. "
-                                f"Mencoba kembali "
-                                f"dalam "
-                                f"{waktu_tunggu} "
-                                f"detik..."
-                            )
+                        break
 
 
-                            time.sleep(
-                                waktu_tunggu
-                            )
+        if response is None or not response.text:
 
+            progress.progress(100)
 
-                            continue
+            status.empty()
 
-
-                    break
-
-
-            if response:
-
-                break
-
-
-        progress.progress(90)
-
-
-        # =================================================
-        # SEMUA MODEL GAGAL
-        # =================================================
-
-        if (
-            not response
-            or not getattr(
-                response,
-                "text",
-                None
-            )
-        ):
-
-            detail_error = (
-
-                "\n".join(
-                    errors[-6:]
-                )
-
-                if errors
-
-                else
-                "Tidak ada respons dari Gemini."
+            st.error(
+                "❌ Gagal menghasilkan perangkat."
             )
 
+            if error_messages:
 
-            raise RuntimeError(
+                with st.expander(
+                    "Detail error"
+                ):
 
-                "Semua model Gemini gagal "
-                "memproses permintaan.\n\n"
+                    for error in error_messages:
 
-                + detail_error
+                        st.write(error)
+
+        else:
+
+            progress.progress(100)
+
+            status.success(
+                "✅ Perangkat berhasil dibuat."
             )
 
+            st.session_state.hasil_teks = (
+                response.text
+            )
 
-        # =================================================
-        # SIMPAN HASIL
-        # =================================================
-
-        st.session_state.hasil_teks = (
-            response.text
-        )
-
-
-        # =================================================
-        # NAMA FILE
-        # =================================================
-
-        nama_perangkat_bersih = re.sub(
-
-            r"^\d+\.\s*",
-
-            "",
-
-            jenis_perangkat
-        )
-
-
-        nama_file = (
-
-            f"{nama_perangkat_bersih}_"
-
-            f"{mapel}_"
-
-            f"{fase_kelas}"
-        )
-
-
-        st.session_state.nama_file_base = (
-
-            re.sub(
+            safe_name = re.sub(
                 r"[^A-Za-z0-9_-]+",
                 "_",
-                nama_file
+                materi_pokok.strip()
             )
-            .strip("_")
-        )
+
+            st.session_state.nama_file_base = (
+                f"SIAP_AJAR_22_"
+                f"{safe_name}"
+            )
+
+            st.success(
+                "🎉 Dokumen siap dipreview dan diunduh."
+            )
 
 
-        # =================================================
-        # BERHASIL
-        # =================================================
+    except Exception as e:
 
         progress.progress(100)
 
-
-        status.success(
-
-            f"✅ Dokumen berhasil diterbitkan "
-            f"menggunakan {model_berhasil}."
-        )
-
-
-        time.sleep(0.8)
-
-
         status.empty()
-
-        progress.empty()
-
-
-    except Exception as exc:
-
-        progress.empty()
-
-        status.empty()
-
 
         st.error(
-            "❌ Gagal menerbitkan dokumen."
+            "❌ Terjadi kesalahan saat menjalankan AI."
         )
 
+        with st.expander(
+            "Detail error"
+        ):
 
-        st.code(
-            str(exc),
-
-            language="text"
-        )
+            st.code(str(e))
 
 
 # =========================================================
-# PREVIEW DAN DOWNLOAD
+# PREVIEW HASIL
 # =========================================================
 
 if st.session_state.hasil_teks:
 
-    st.markdown(
-        "### 📄 Preview Lembar Kerja A4"
-    )
+    st.divider()
 
+    st.markdown(
+        '<div class="section-title">📄 Preview Dokumen</div>',
+        unsafe_allow_html=True
+    )
 
     preview_html = markdown_to_html(
         st.session_state.hasil_teks
     )
 
-
     st.markdown(
         f"""
         <div class="paper-a4">
-
             {preview_html}
-
         </div>
         """,
-
-        unsafe_allow_html=True,
+        unsafe_allow_html=True
     )
 
 
-    c1, c2 = st.columns(2)
+    st.markdown("### 📥 Download Dokumen")
+
+    col1, col2 = st.columns(2)
 
 
-    with c1:
+    # DOCX
+
+    with col1:
 
         docx_file = buat_file_docx(
             st.session_state.hasil_teks
         )
 
-
         st.download_button(
 
-            "📄 Unduh Berkas Word (.DOCX)",
+            label="📘 Download DOCX",
 
             data=docx_file,
 
             file_name=(
-                f"{st.session_state.nama_file_base}.docx"
+                st.session_state.nama_file_base
+                + ".docx"
             ),
 
             mime=(
-                "application/vnd.openxmlformats-officedocument."
-                "wordprocessingml.document"
+                "application/vnd.openxmlformats-"
+                "officedocument.wordprocessingml.document"
             ),
 
             use_container_width=True,
         )
 
 
-    with c2:
+    # TXT
+
+    with col2:
+
+        txt_file = (
+            st.session_state.hasil_teks
+            .encode("utf-8")
+        )
 
         st.download_button(
 
-            "📝 Unduh Teks Mentah (.TXT)",
+            label="📝 Download TXT",
 
-            data=st.session_state.hasil_teks,
+            data=txt_file,
 
             file_name=(
-                f"{st.session_state.nama_file_base}.txt"
+                st.session_state.nama_file_base
+                + ".txt"
             ),
 
             mime="text/plain",
@@ -2480,6 +1675,6 @@ st.markdown(
 
     </div>
     """,
-
     unsafe_allow_html=True,
 )
+```
