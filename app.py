@@ -13,11 +13,11 @@ from docx.oxml import parse_xml
 from docx.oxml.ns import nsdecls
 
 # =========================================================
-# PERANGKAT GURU - Streamlit
+# SIAP AJAR 22 - Streamlit
 # =========================================================
 
 st.set_page_config(
-    page_title="SIAP AJAR 22 | Sistem Administrasi Perangkat Ajar",
+    page_title="SIAP AJAR 22 | Portal Administrasi Kurikulum",
     page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded",
@@ -62,7 +62,7 @@ input, textarea, select {
     display: flex;
     justify-content: center;
     align-items: center;
-    margin-bottom: 8px;
+    margin-bottom: 12px;
 }
 
 .app-header {
@@ -87,7 +87,7 @@ input, textarea, select {
     line-height: 1.5;
 }
 
-/* Membuat card login simetris dan sejajar tinggi */
+/* Kartu login simetris dan sejajar tinggi */
 div[data-testid="stHorizontalBlock"] > div {
     display: flex;
     flex-direction: column;
@@ -102,7 +102,7 @@ div[data-testid="stVerticalBlock"] > div[style*="border"] {
     border-radius: 16px !important;
     border: 1px solid #E2E8F0 !important;
     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.04);
-    padding: 28px 26px !important;
+    padding: 32px 28px !important;
     margin-bottom: 12px;
     height: 100%;
     display: flex;
@@ -194,7 +194,7 @@ def render_logo(width=90):
         f"""
         <div class="brand-icon-box">
             <img src="{LOGO_URL}" width="{width}" height="{width}"
-                 alt="Logo Perangkat Guru"
+                 alt="Logo SIAP AJAR 22"
                  style="filter:drop-shadow(0 4px 6px rgba(0,0,0,.1));">
         </div>
         """,
@@ -495,33 +495,33 @@ if not st.session_state.authenticated:
             render_logo(85)
             st.markdown(
                 "<p style='text-align:center;font-size:11px;font-weight:700;"
-                "color:#2563EB;letter-spacing:.5px;margin-bottom:4px;'>"
-                "🔵 PORTAL ADMINISTRASI PEMBELAJARAN</p>",
+                "color:#2563EB;letter-spacing:.5px;margin-bottom:6px;'>"
+                "✨ SISTEM INFORMASI ASISTEN PERANGKAT AJAR</p>",
                 unsafe_allow_html=True,
             )
             st.markdown(
-                "<h2 style='text-align:center;font-weight:800;margin:0 0 4px 0;font-size:22px;'>"
-                "PERANGKAT GURU</h2>",
+                "<h2 style='text-align:center;font-weight:800;margin:0 0 4px 0;font-size:24px;'>"
+                "SIAP AJAR 22</h2>",
                 unsafe_allow_html=True,
             )
             st.markdown(
                 "<p style='text-align:center;font-size:13px;font-style:italic;"
-                "color:#64748B;margin-bottom:16px;'>“Guru Lengkap, Murid Hebat”</p>",
+                "color:#64748B;margin-bottom:16px;'>“Satu Portal, Solusi Lengkap 22 Perangkat Pembelajaran”</p>",
                 unsafe_allow_html=True,
             )
             st.divider()
-            st.markdown("##### 📌 Fitur Utama")
+            st.markdown("##### 📌 Keunggulan Platform")
             st.markdown(
                 """
-- 📋 **22 jenis perangkat pembelajaran**
-- 🤖 **Penyusunan dokumen dengan Google Gemini**
-- 📄 **Ekspor Microsoft Word (.docx)**
-- 📝 **Ekspor teks (.txt)**
-- 👁️ **Preview dokumen**
-- 🔐 **API Key aman (sesi browser)**
+- 📋 **22 jenis perangkat pembelajaran lengkap**
+- 🤖 **Penyusunan cerdas dengan Google Gemini AI**
+- 📄 **Ekspor instan ke Microsoft Word (.docx)**
+- 📝 **Cadangan teks mentah (.txt) praktis**
+- 👁️ **Live preview dokumen gaya A4**
+- 🔐 **Keamanan terjamin (API Key berbasis sesi browser)**
                 """
             )
-            st.caption("PERANGKAT GURU • Creator: Andar")
+            st.caption("SIAP AJAR 22 • Creator: Andar")
 
     with col_right:
         with st.container(border=True):
@@ -542,8 +542,8 @@ if not st.session_state.authenticated:
             with st.expander("📖 Cara mendapatkan Gemini API Key"):
                 st.markdown(
                     """
-1. Buka **Google AI Studio** di browser.
-2. Login menggunakan akun Google Anda.
+1. Buka **Google AI Studio** di browser Anda.
+2. Login menggunakan akun Google pribadi.
 3. Klik tombol **Get API key**.
 4. Buat atau pilih API key yang tersedia.
 5. Salin dan tempelkan kunci tersebut ke kolom di atas.
@@ -552,7 +552,7 @@ if not st.session_state.authenticated:
 
             st.write("")
 
-            if st.button("MASUK", use_container_width=True):
+            if st.button("MASUK KE PORTAL", use_container_width=True):
                 if not nama_guru_input.strip():
                     st.warning("⚠️ Mohon isi Nama Lengkap & Gelar terlebih dahulu.")
                 elif not api_key_masuk.strip():
@@ -566,8 +566,8 @@ if not st.session_state.authenticated:
     st.markdown(
         """
 <div class="footer-box">
-PERANGKAT GURU • Creator: Andar<br>
-© 2026 Engine AI Perangkat Pembelajaran
+SIAP AJAR 22 • Creator: Andar<br>
+© 2026 SIAP AJAR 22 • Engine AI Pembelajaran
 </div>
         """,
         unsafe_allow_html=True,
@@ -584,7 +584,7 @@ with st.sidebar:
 
     st.markdown(
         "<h3 style='text-align:center;margin:2px 0;font-size:16px;'>"
-        "PERANGKAT GURU</h3>",
+        "SIAP AJAR 22</h3>",
         unsafe_allow_html=True,
     )
 
@@ -627,7 +627,7 @@ st.markdown(
     <h1>Selamat Berkarya, {st.session_state.user_name}</h1>
     <p>
     Susun perangkat pembelajaran secara terstruktur dan ekspor langsung
-    ke Microsoft Word.
+    ke Microsoft Word melalui platform SIAP AJAR 22.
     </p>
 </div>
     """,
@@ -1024,8 +1024,8 @@ if st.session_state.hasil_teks:
 st.markdown(
     """
 <div class="footer-box">
-PERANGKAT GURU • Creator: Andar<br>
-© 2026 Engine AI Perangkat Pembelajaran
+SIAP AJAR 22 • Creator: Andar<br>
+© 2026 SIAP AJAR 22 • Engine AI Pembelajaran
 </div>
     """,
     unsafe_allow_html=True,
