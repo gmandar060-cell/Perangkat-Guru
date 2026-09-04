@@ -641,14 +641,7 @@ if not st.session_state.authenticated:
         """
         <div class="login-hero">
 
-            <div class="login-logo">
-
-                <img
-                    src="https://raw.githubusercontent.com/gmandar060-cell/Perangkat-Guru/main/logo.png"
-                    alt="Tut Wuri Handayani"
-                >
-
-            </div>
+          </div>
 
             <div class="login-badge">
                 ✦ &nbsp; KURIKULUM MERDEKA
