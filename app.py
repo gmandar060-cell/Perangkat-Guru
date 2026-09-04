@@ -17,7 +17,7 @@ from docx.oxml.ns import nsdecls
 # =========================================================
 
 st.set_page_config(
-    page_title="PERANGKAT GURU | Portal Administrasi Kurikulum",
+    page_title="SIAP AJAR 22 | Sistem Administrasi Perangkat Ajar",
     page_icon="🎓",
     layout="wide",
     initial_sidebar_state="expanded",
