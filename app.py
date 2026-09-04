@@ -222,12 +222,10 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
     while i < len(lines):
         line = lines[i].strip()
 
-        # Lewatkan pembungkus markdown block jika tak sengaja terbawa AI
         if line.startswith("```"):
             i += 1
             continue
 
-        # Markdown table
         if line.startswith("|") and line.endswith("|"):
             table_lines = []
 
@@ -238,7 +236,6 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
             ):
                 raw = lines[i].strip()
 
-                # Skip separator row
                 if not re.match(r"^\|[\s\-:|]+\|$", raw):
                     cells = [
                         c.strip()
@@ -535,6 +532,8 @@ if not st.session_state.authenticated:
 5. Salin API key dan tempelkan di kolom di atas.
                     """
                 )
+
+            st.markdown("<div style='margin-top: 10px;'></div>", unsafe_allow_html=True)
 
             if st.button("MASUK", use_container_width=True):
                 if not nama_guru_input.strip():
@@ -884,7 +883,6 @@ if st.button(
 
         progress.progress(20)
 
-        # Model aktif saat ini
         model_list = [
             "gemini-3.7-flash",
             "gemini-3.5-flash",
