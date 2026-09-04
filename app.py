@@ -21,6 +21,17 @@ st.set_page_config(
 
 
 # =========================================================
+# LOGO
+# =========================================================
+
+LOGO_URL = (
+    "https://raw.githubusercontent.com/"
+    "gmandar060-cell/Perangkat-Guru/"
+    "main/logo.png"
+)
+
+
+# =========================================================
 # CSS
 # =========================================================
 
@@ -47,7 +58,9 @@ st.markdown(
         padding-bottom: 2rem;
     }
 
-    /* LOGIN */
+    /* =====================================================
+       LOGIN
+       ===================================================== */
 
     .login-hero {
         max-width: 820px;
@@ -173,7 +186,9 @@ st.markdown(
         line-height: 1.7;
     }
 
-    /* DASHBOARD */
+    /* =====================================================
+       DASHBOARD
+       ===================================================== */
 
     .app-header {
         background: linear-gradient(
@@ -281,14 +296,6 @@ st.markdown(
     </style>
     """,
     unsafe_allow_html=True,
-)# =========================================================
-# LOGO
-# =========================================================
-
-LOGO_URL = (
-    "https://raw.githubusercontent.com/"
-    "gmandar060-cell/Perangkat-Guru/"
-    "main/logo.png"
 )
 
 
@@ -645,10 +652,7 @@ Pengawas Pembina,
 
 if not st.session_state.authenticated:
 
-    # -----------------------------------------------------
     # HERO
-    # -----------------------------------------------------
-
     st.markdown(
         f"""
         <div class="login-hero">
@@ -679,10 +683,7 @@ if not st.session_state.authenticated:
     )
 
 
-    # -----------------------------------------------------
     # STATISTIK
-    # -----------------------------------------------------
-
     st.markdown(
         """
         <div class="stats-row">
@@ -729,10 +730,7 @@ if not st.session_state.authenticated:
     )
 
 
-    # -----------------------------------------------------
-    # FORM LOGIN
-    # -----------------------------------------------------
-
+    # JUDUL FORM
     st.markdown(
         """
         <div class="login-form-title">
@@ -747,6 +745,7 @@ if not st.session_state.authenticated:
     )
 
 
+    # FORM LOGIN
     with st.form(
         "login_form",
         clear_on_submit=False
@@ -786,10 +785,7 @@ if not st.session_state.authenticated:
         )
 
 
-    # -----------------------------------------------------
     # PROSES LOGIN
-    # -----------------------------------------------------
-
     if masuk:
 
         if not nama.strip():
@@ -815,10 +811,7 @@ if not st.session_state.authenticated:
             st.rerun()
 
 
-    # -----------------------------------------------------
     # CREATOR
-    # -----------------------------------------------------
-
     st.markdown(
         """
         <div class="creator-box">
@@ -916,7 +909,7 @@ with st.sidebar:
 
 
 # =========================================================
-# HEADER
+# HEADER DASHBOARD
 # =========================================================
 
 st.markdown(
@@ -961,6 +954,7 @@ st.markdown(
 
 col1, col2 = st.columns(2)
 
+
 with col1:
 
     fase_kelas = st.selectbox(
@@ -981,6 +975,7 @@ with col1:
         ]
     )
 
+
 with col2:
 
     semester = st.radio(
@@ -990,12 +985,18 @@ with col2:
     )
 
 
+# =========================================================
+# TENTUKAN JABATAN
+# =========================================================
+
 is_sd = "SD/MI" in fase_kelas
+
 
 hasil_kelas = re.search(
     r"Kelas\s+(\d+)",
     fase_kelas
 )
+
 
 angka_kelas = (
     hasil_kelas.group(1)
@@ -1021,7 +1022,12 @@ else:
     default_mapel = "Fisika"
 
 
+# =========================================================
+# MAPEL & MATERI
+# =========================================================
+
 col1, col2 = st.columns(2)
+
 
 with col1:
 
@@ -1029,6 +1035,7 @@ with col1:
         label_mapel,
         value=default_mapel
     )
+
 
 with col2:
 
@@ -1040,12 +1047,14 @@ with col2:
 
 col1, col2 = st.columns(2)
 
+
 with col1:
 
     alokasi = st.text_input(
         "Alokasi Waktu",
         value="2 x 45 menit"
     )
+
 
 with col2:
 
@@ -1071,49 +1080,27 @@ with col2:
 # =========================================================
 
 daftar_perangkat = [
-
     "Analisis CP & Pemetaan Elemen",
-
     "ATP Lengkap",
-
     "PROTA",
-
     "PROMES",
-
     "KKTP",
-
     "Modul Ajar Lengkap",
-
     "LKPD Berdiferensiasi",
-
     "Modul/Panduan P5",
-
     "Jurnal Mengajar Harian & Agenda Guru",
-
     "Asesmen Diagnostik",
-
     "Asesmen Formatif",
-
     "Asesmen Sumatif",
-
     "Rubrik Penilaian Kinerja/Portofolio/Proyek",
-
     "Rekap Daftar Nilai",
-
     "Presensi",
-
     "Remedial & Pengayaan",
-
     "Sumber Belajar & Buku Teks",
-
     "Analisis Alokasi Waktu Efektif",
-
     "Analisis Kuantitatif Butir Soal",
-
     "Jurnal Sikap & Catatan P5",
-
     "Bimbingan & Konsultasi Akademik",
-
     "Evaluasi Diri Guru & RTL",
 ]
 
@@ -1124,6 +1111,7 @@ st.markdown(
     '</div>',
     unsafe_allow_html=True
 )
+
 
 st.markdown(
     '<div class="section-desc">'
@@ -1164,17 +1152,24 @@ tab1, tab2, tab3, tab4 = st.tabs(
 
 if is_sd:
 
-    default_dinas = "DINAS PENDIDIKAN KOTA PONTIANAK"
+    default_dinas = (
+        "DINAS PENDIDIKAN KOTA PONTIANAK"
+    )
 
-    default_sekolah = "SDN 01 PONTIANAK"
+    default_sekolah = (
+        "SDN 01 PONTIANAK"
+    )
 
 else:
 
     default_dinas = (
-        "DINAS PENDIDIKAN PROVINSI KALIMANTAN BARAT"
+        "DINAS PENDIDIKAN PROVINSI "
+        "KALIMANTAN BARAT"
     )
 
-    default_sekolah = "SMAS NUSA HARAPAN"
+    default_sekolah = (
+        "SMAS NUSA HARAPAN"
+    )
 
 
 with tab1:
@@ -1197,7 +1192,10 @@ with tab3:
 
     alamat = st.text_input(
         "Alamat & Kontak",
-        value="Jl. Pancasila No. 10, Telp. (0561) 734567"
+        value=(
+            "Jl. Pancasila No. 10, "
+            "Telp. (0561) 734567"
+        )
     )
 
 
@@ -1222,6 +1220,7 @@ st.markdown(
 
 
 col1, col2 = st.columns(2)
+
 
 with col1:
 
@@ -1250,6 +1249,7 @@ with col2:
 
 
 col1, col2 = st.columns(2)
+
 
 with col1:
 
@@ -1389,16 +1389,9 @@ if generate:
         )
 
 
-        # =================================================
-        # MODEL GEMINI
-        # =================================================
-
         model_list = [
-
             "gemini-2.5-flash",
-
             "gemini-2.0-flash",
-
         ]
 
 
@@ -1474,10 +1467,6 @@ if generate:
         progress.progress(100)
 
 
-        # =================================================
-        # GAGAL
-        # =================================================
-
         if response is None or not response.text:
 
             status.empty()
@@ -1495,10 +1484,6 @@ if generate:
 
                     st.write(error)
 
-
-        # =================================================
-        # BERHASIL
-        # =================================================
 
         else:
 
