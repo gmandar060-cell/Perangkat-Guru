@@ -53,6 +53,18 @@ input, textarea, select {
     margin-bottom: 12px;
 }
 
+/* Memperbaiki bug teks arrow berlebih pada expander */
+details[data-testid="stExpander"] {
+    border: 1px solid #E2E8F0 !important;
+    border-radius: 10px !important;
+    background-color: #FFFFFF !important;
+    margin-bottom: 12px;
+}
+
+details[data-testid="stExpander"] summary p {
+    display: inline-block !important;
+}
+
 /* Memastikan tinggi kartu login simetris */
 div[data-testid="stHorizontalBlock"] > div {
     display: flex;
@@ -91,13 +103,6 @@ div[data-testid="stVerticalBlock"] > div[style*="border"] {
     font-size: 15px !important;
 }
 
-details[data-testid="stExpander"] {
-    border: 1px solid #E2E8F0 !important;
-    border-radius: 10px !important;
-    background-color: #FFFFFF !important;
-    margin-bottom: 12px;
-}
-
 .footer-box {
     text-align: center;
     padding: 24px 10px 10px;
@@ -110,21 +115,6 @@ details[data-testid="stExpander"] {
 """,
     unsafe_allow_html=True,
 )
-
-LOGO_URL = "https://cdn.jsdelivr.net/gh/twitter/twemoji@14.0.2/assets/72x72/1f393.png"
-
-def render_logo(width=90):
-    st.markdown(
-        f"""
-        <div class="brand-icon-box">
-            <img src="{LOGO_URL}" width="{width}" height="{width}"
-                 alt="Logo SIAP AJAR 22"
-                 style="filter:drop-shadow(0 4px 6px rgba(0,0,0,.1));">
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
-
 # =========================================================
 # SESSION STATE INISIALISASI
 # =========================================================
