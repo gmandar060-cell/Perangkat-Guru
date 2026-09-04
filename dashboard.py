@@ -707,7 +707,12 @@ if st.button("✨ Terbitkan Dokumen Administrasi Resmi", use_container_width=Tru
         client = genai.Client(api_key=st.session_state.user_api_key)
         progress.progress(20)
 
-        model_list = ["gemini-3.7-flash", "gemini-3.5-flash"]
+        model_list = [
+    "gemini-3.8-flash",
+    "gemini-3.6-flash",
+    "gemini-3.5-flash",
+    "gemini-3.7-flash",
+]
         response = None
         errors = []
 
