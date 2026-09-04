@@ -222,6 +222,11 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
     while i < len(lines):
         line = lines[i].strip()
 
+        # Lewatkan pembungkus markdown block jika tak sengaja terbawa AI
+        if line.startswith("```"):
+            i += 1
+            continue
+
         # Markdown table
         if line.startswith("|") and line.endswith("|"):
             table_lines = []
@@ -314,8 +319,8 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
             p._p.get_or_add_pPr().append(border)
 
         elif line:
-            clean = re.sub(r"\*\*(.*?)\*\*", r"\1", line)
-            clean = clean.replace("<br>", "\n").replace("<br/>", "\n")
+            clean = re.sub(r"<.*?>", "", line)
+            clean = re.sub(r"\*\*(.*?)\*\*", r"\1", clean)
 
             p = doc.add_paragraph(clean)
             p.paragraph_format.line_spacing = 1.15
@@ -338,7 +343,6 @@ def buat_file_docx(markdown_text: str) -> io.BytesIO:
 # =========================================================
 
 def markdown_to_html(text: str) -> str:
-    """Preview sederhana untuk output Gemini tanpa dependensi tambahan."""
     lines = text.splitlines()
     html = []
     in_table = False
@@ -367,6 +371,9 @@ def markdown_to_html(text: str) -> str:
 
     for raw in lines:
         line = raw.strip()
+
+        if line.startswith("```"):
+            continue
 
         if line.startswith("|") and line.endswith("|"):
             if re.match(r"^\|[\s\-:|]+\|$", line):
@@ -445,23 +452,21 @@ PARAMETER PEMBELAJARAN
 - Tanggal: {data['tanggal_hari_ini']}
 
 ATURAN OUTPUT
-1. Langsung mulai dengan KOP SURAT.
-2. Gunakan judul dokumen yang jelas.
-3. Sertakan tabel identitas dokumen.
-4. Susun isi secara lengkap dan operasional.
-5. Gunakan tabel Markdown jika struktur data lebih jelas dalam tabel.
-6. Jangan menggunakan "...", "[lanjutkan]", "[sesuaikan]", "dst.",
-    atau "dan seterusnya".
-7. Jangan mengarang nomor regulasi spesifik jika tidak yakin.
-8. Gunakan bahasa Indonesia formal dan mudah diedit oleh guru.
-9. Akhiri dengan lembar pengesahan tiga kolom:
+1. Langsung mulai dengan KOP SURAT resmi lembaga pendidikan.
+2. Gunakan judul dokumen yang jelas menggunakan heading Markdown (`#` atau `##`).
+3. Selalu gunakan tabel Markdown yang rapi untuk identitas dokumen, rincian materi, atau kisi-kisi. Pastikan jumlah kolom pembuka dan penutup tabel konsisten (`| kolom 1 | kolom 2 |`).
+4. **DILARANG KERAS** menggunakan simbol "...", "[lanjutkan]", "[sesuaikan]", "dst.", atau "dan seterusnya". Semua isi paragraf dan poin harus ditulis secara **lengkap, penuh, dan tuntas sampai selesai**.
+5. Jangan mengarang nomor regulasi atau undang-undang spesifik jika tidak yakin.
+6. Gunakan bahasa Indonesia formal, baku, edukatif, dan mudah diedit oleh guru.
+7. **PENTING:** Jangan pernah menyertakan blok kode Markdown berpagar (seperti ```html atau ```markdown) di dalam teks jawaban Anda. Tuliskan teks murni atau tabel Markdown biasa.
+8. Akhiri dokumen dengan lembar pengesahan tiga kolom berbentuk tabel yang rapi:
 
 | Mengetahui,<br>Pengawas Pembina | Mengetahui,<br>Kepala Sekolah | {data['kota_sekolah']}, {data['tanggal_hari_ini']}<br>{data['jabatan_guru']} |
 | :---: | :---: | :---: |
 | <br><br><br><br> | <br><br><br><br> | <br><br><br><br> |
 | **{data['pengawas_nama']}**<br>NIP. {data['pengawas_nip']} | **{data['ks_nama']}**<br>NIP. {data['ks_nip']} | **{data['guru_nama']}**<br>NIP. {data['guru_nip']} |
 
-Jangan menambahkan salam pembuka atau kalimat penutup di luar dokumen.
+Jangan menambahkan salam pembuka atau kalimat percakapan di luar dokumen.
 """.strip()
 
 
@@ -879,7 +884,7 @@ if st.button(
 
         progress.progress(20)
 
-        # Daftar model terbaru yang aktif saat ini
+        # Model aktif saat ini
         model_list = [
             "gemini-3.7-flash",
             "gemini-3.5-flash",
