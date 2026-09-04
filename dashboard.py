@@ -724,29 +724,18 @@ with st.sidebar:
         """
     )
 
-
 # =========================================================
 # HEADER DASHBOARD
 # =========================================================
 
-st.markdown(
-    f"""
-    <div class="dashboard-header">
-
-        <h1>
-            Selamat Berkarya, {st.session_state.user_name}
-        </h1>
-
-        <p>
-            Susun perangkat pembelajaran secara otomatis,
-            lengkap, sistematis, dan siap digunakan.
-        </p>
-
-    </div>
-    """,
-    unsafe_allow_html=True,
+st.title(
+    f"Selamat Berkarya, {st.session_state.user_name}"
 )
 
+st.caption(
+    "Susun perangkat pembelajaran secara otomatis, "
+    "lengkap, sistematis, dan siap digunakan."
+)
 
 # =========================================================
 # STATISTIK
