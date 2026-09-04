@@ -456,12 +456,421 @@ def markdown_to_html(teks):
 
     return "\n".join(html)
 
+# =========================================================
+# ATURAN 22 PERANGKAT
+# =========================================================
+
+ATURAN_22 = {
+
+    "01. Capaian Pembelajaran (CP)": """
+FORMAT WAJIB CP:
+1. Identitas mata pelajaran.
+2. Fase dan kelas.
+3. Rasional mata pelajaran.
+4. Tujuan mata pelajaran.
+5. Karakteristik mata pelajaran.
+6. Capaian Pembelajaran.
+7. Capaian per elemen sesuai fase.
+8. Catatan sumber/acuan.
+
+ATURAN:
+- CP resmi pemerintah tidak boleh dikarang.
+- Jika teks CP resmi tidak tersedia dalam data pengguna,
+  jangan mengklaim teks tersebut sebagai kutipan resmi.
+- Bedakan antara kutipan CP resmi dan penjelasan/struktur
+  pendukung.
+""",
+
+    "02. Alur Tujuan Pembelajaran (ATP)": """
+FORMAT WAJIB ATP:
+Tabel dengan kolom:
+| No | Elemen | Capaian Pembelajaran | Tujuan Pembelajaran (TP) | Alokasi Waktu | Sumber |
+
+ATURAN:
+- TP harus diturunkan secara logis dari CP.
+- Urutan TP harus sistematis dari sederhana ke kompleks.
+- Alokasi waktu harus realistis.
+- Jangan membuat TP yang tidak berhubungan dengan materi.
+""",
+
+    "03. Modul Ajar (RPP Plus)": """
+FORMAT WAJIB MODUL AJAR:
+
+A. INFORMASI UMUM
+- Identitas modul
+- Kompetensi awal
+- Profil Pelajar Pancasila
+- Sarana dan prasarana
+- Target peserta didik
+- Model/metode pembelajaran
+
+B. KOMPONEN INTI
+- Tujuan pembelajaran
+- Pemahaman bermakna
+- Pertanyaan pemantik
+- Persiapan pembelajaran
+- Langkah-langkah pembelajaran
+- Kegiatan pendahuluan
+- Kegiatan inti
+- Kegiatan penutup
+- Asesmen diagnostik
+- Asesmen formatif
+- Asesmen sumatif
+- Diferensiasi pembelajaran
+- Remedial
+- Pengayaan
+- Refleksi guru
+- Refleksi peserta didik
+
+C. LAMPIRAN
+- LKPD
+- Bahan bacaan
+- Instrumen asesmen
+- Rubrik penilaian
+- Kunci jawaban jika diperlukan
+- Glosarium
+- Daftar pustaka
+""",
+
+    "04. Kriteria Ketercapaian Tujuan Pembelajaran (KKTP)": """
+FORMAT WAJIB KKTP:
+
+Tabel:
+| No | Tujuan Pembelajaran | Indikator/Kriteria Ketercapaian | Bukti Asesmen | Kategori/Interval | Tindak Lanjut |
+
+Gunakan salah satu pendekatan yang jelas:
+- Rubrik
+- Deskripsi kriteria
+- Interval nilai
+
+ATURAN:
+- Kriteria harus dapat diamati dan diukur.
+- Jelaskan indikator ketercapaian.
+- Hubungkan KKTP dengan TP.
+""",
+
+    "05. Modul Projek (P5)": """
+FORMAT WAJIB MODUL PROJEK:
+
+1. Profil Modul
+2. Tema Projek
+3. Topik Projek
+4. Dimensi Profil Pelajar Pancasila
+5. Elemen dan subelemen
+6. Tujuan projek
+7. Target peserta didik
+8. Sarana dan prasarana
+9. Tahapan projek
+10. Jadwal kegiatan
+11. Aktivitas peserta didik
+12. Peran guru
+13. Asesmen diagnostik
+14. Asesmen formatif
+15. Asesmen sumatif
+16. Rubrik penilaian
+17. Refleksi
+18. Tindak lanjut
+""",
+
+    "06. Kalender Pendidikan": """
+FORMAT WAJIB:
+Tabel kalender pendidikan yang memuat:
+- Bulan
+- Minggu
+- Hari/tanggal
+- Kegiatan
+- Hari efektif
+- Hari libur
+
+ATURAN PENTING:
+- Jangan mengarang tanggal resmi hari libur.
+- Jangan mengklaim kalender sebagai kalender resmi
+  Dinas/Sekolah jika data resmi tidak diberikan.
+- Jika data tanggal resmi belum tersedia, buat FORMAT
+  KALENDER SIAP DIISI dan tandai bagian yang membutuhkan
+  data resmi.
+""",
+
+    "07. Program Tahunan (Prota)": """
+FORMAT WAJIB PROTA:
+
+Tabel:
+| Semester | No | Tujuan Pembelajaran / Lingkup Materi | Alokasi Jam Pelajaran (JP) |
+
+ATURAN:
+- Distribusi harus mencakup satu tahun pembelajaran.
+- Total JP harus konsisten dengan alokasi waktu.
+- Materi harus sesuai fase, kelas dan mata pelajaran.
+""",
+
+    "08. Program Semester (Prosem)": """
+FORMAT WAJIB PROSEM:
+
+Tabel/matriks:
+| No | Materi | JP | Bulan | Minggu ke-1 | Minggu ke-2 | Minggu ke-3 | Minggu ke-4 |
+
+ATURAN:
+- Distribusi JP harus realistis.
+- Sesuaikan dengan semester yang dipilih.
+- Jangan membuat tanggal atau pekan efektif resmi
+  tanpa sumber kalender pendidikan.
+""",
+
+    "09. Jadwal Mengajar": """
+FORMAT WAJIB:
+Tabel:
+| Hari | Jam Ke | Waktu | Kelas | Mata Pelajaran | Materi/Kegiatan | JP |
+
+ATURAN:
+- Jadwal harus mudah dibaca.
+- Jangan membuat jadwal bentrok.
+- Jika data jam sekolah belum tersedia, gunakan format
+  jadwal yang dapat disesuaikan.
+""",
+
+    "10. Bahan Ajar": """
+FORMAT WAJIB:
+1. Identitas bahan ajar
+2. Tujuan pembelajaran
+3. Capaian pembelajaran terkait
+4. Petunjuk penggunaan
+5. Materi pembelajaran
+6. Contoh
+7. Aktivitas belajar
+8. Rangkuman
+9. Latihan
+10. Evaluasi
+11. Kunci jawaban jika diperlukan
+12. Daftar pustaka
+
+ATURAN:
+- Materi harus sesuai kelas, fase dan mata pelajaran.
+- Gunakan bahasa yang mudah dipahami peserta didik.
+""",
+
+    "11. Lembar Kerja Peserta Didik (LKPD)": """
+FORMAT WAJIB LKPD:
+
+1. Judul
+2. Identitas peserta didik
+3. Tujuan pembelajaran
+4. Petunjuk belajar
+5. Alat dan bahan
+6. Tugas/langkah kerja
+7. Pertanyaan
+8. Lembar jawaban
+9. Kesimpulan
+10. Refleksi
+
+ATURAN:
+- Tugas harus dapat dikerjakan peserta didik.
+- Instruksi harus jelas.
+- Sesuaikan tingkat kesulitan dengan fase/kelas.
+""",
+
+    "12. Media Pembelajaran": """
+FORMAT WAJIB:
+
+Tabel:
+| No | Media | Jenis | Tujuan Penggunaan | Cara Penggunaan | Materi | Sumber |
+
+Dapat mencakup:
+- PPT
+- Video pembelajaran
+- Kartu kelompok
+- Infografis
+- Alat peraga
+- Media digital
+- Media fisik
+
+ATURAN:
+- Media harus relevan dengan materi.
+- Jangan mencantumkan tautan palsu.
+""",
+
+    "13. Asesmen Diagnostik": """
+FORMAT WAJIB:
+
+A. Diagnostik Non-Kognitif
+- kondisi belajar
+- minat
+- motivasi
+- kesiapan belajar
+- kebutuhan belajar
+
+B. Diagnostik Kognitif
+- prasyarat materi
+- pertanyaan/soal
+- kunci jawaban
+- pedoman interpretasi hasil
+
+ATURAN:
+- Instrumen harus siap digunakan.
+- Sertakan petunjuk dan cara membaca hasil.
+""",
+
+    "14. Asesmen Formatif": """
+FORMAT WAJIB:
+
+1. Tujuan asesmen
+2. Teknik asesmen
+3. Instrumen
+4. Lembar observasi/catatan
+5. Soal atau tugas
+6. Rubrik/pedoman penilaian
+7. Kriteria ketercapaian
+8. Tindak lanjut
+
+Boleh menggunakan:
+- observasi
+- catatan anekdot
+- penilaian diri
+- penilaian teman
+- kuis
+- tugas
+""",
+
+    "15. Asesmen Sumatif": """
+FORMAT WAJIB:
+
+1. Identitas asesmen
+2. Kisi-kisi soal
+3. Indikator
+4. Soal pilihan ganda dan/atau esai
+5. Kunci jawaban
+6. Pedoman penskoran
+7. Rubrik
+8. Analisis ketercapaian
+
+ATURAN:
+- Soal harus sesuai indikator.
+- Tingkat kesulitan harus sesuai fase/kelas.
+- Jangan membuat soal yang jawabannya ambigu.
+""",
+
+    "16. Daftar Nilai": """
+FORMAT WAJIB:
+
+A. Nilai Formatif per TP
+B. Nilai Sumatif per Lingkup Materi
+C. Nilai Akhir Semester
+D. Rekapitulasi
+
+Tabel minimal:
+| No | Nama Siswa | TP 1 | TP 2 | TP 3 | Sumatif | Nilai Akhir | Keterangan |
+
+ATURAN:
+- Buat format yang siap diisi.
+- Jangan mengarang nama atau nilai siswa.
+""",
+
+    "17. Jurnal Agenda Guru": """
+FORMAT WAJIB:
+
+| Hari/Tanggal | Kelas | Jam Ke- | Materi Pokok | Kehadiran Siswa | Catatan Kejadian |
+
+Sertakan ruang untuk:
+- refleksi singkat
+- tindak lanjut
+- catatan khusus
+""",
+
+    "18. Program Remedial & Pengayaan": """
+FORMAT WAJIB:
+
+Tabel:
+| No | Nama Siswa | Nilai Awal | Tujuan/Kompetensi | Bentuk Intervensi | Nilai Akhir | Status |
+
+Bentuk intervensi dapat berupa:
+- tugas
+- tutor sebaya
+- pembelajaran ulang
+- latihan tambahan
+- pendampingan
+
+Pisahkan program:
+A. Remedial
+B. Pengayaan
+""",
+
+    "19. Refleksi Pembelajaran": """
+FORMAT WAJIB:
+
+A. Apa yang berhasil?
+B. Apa yang belum berhasil?
+C. Kendala pembelajaran
+D. Respons peserta didik
+E. Bukti ketercapaian tujuan
+F. Faktor penyebab
+G. Rencana tindak lanjut
+H. Perbaikan pembelajaran berikutnya
+""",
+
+    "20. Glosarium & Daftar Pustaka": """
+FORMAT WAJIB:
+
+A. GLOSARIUM
+
+| No | Istilah | Pengertian |
+
+B. DAFTAR PUSTAKA
+
+Gunakan sumber yang benar-benar relevan.
+
+ATURAN:
+- Jangan membuat buku, penulis, penerbit, DOI,
+  atau URL palsu.
+- Jika sumber tidak tersedia, gunakan sumber umum
+  yang dapat diverifikasi dan jangan mengarang detail.
+""",
+
+    "21. Buku Absensi Siswa": """
+FORMAT WAJIB:
+
+Tabel rekap kehadiran:
+| No | Nama Siswa | Sakit | Izin | Alfa | Jumlah Kehadiran | Keterangan |
+
+Sertakan format:
+- daftar siswa
+- rekap harian
+- rekap semester
+
+ATURAN:
+- Jangan mengarang nama siswa.
+- Sediakan baris kosong yang siap diisi.
+""",
+
+    "22. Dokumen Analisis Hasil Belajar": """
+FORMAT WAJIB:
+
+1. Identitas pembelajaran
+2. Rekap hasil belajar
+3. Analisis ketercapaian TP
+4. Analisis per indikator
+5. Materi yang belum tuntas
+6. Peserta didik yang memerlukan tindak lanjut
+7. Analisis ketuntasan
+8. Remedial
+9. Pengayaan
+10. Kesimpulan
+11. Rencana tindak lanjut
+
+Tabel utama:
+| No | Indikator/TP | Jumlah Siswa | Tuntas | Belum Tuntas | Persentase | Tindak Lanjut |
+
+ATURAN:
+- Jangan mengarang data siswa atau nilai.
+- Gunakan format siap diisi jika data belum diberikan.
+"""
+}
+
 
 # =========================================================
 # PROMPT GEMINI
 # =========================================================
 
 def buat_prompt(data):
+
     profil = ", ".join(
         data["profil_pancasila"]
     )
@@ -469,15 +878,34 @@ def buat_prompt(data):
     if not profil:
         profil = "Sesuai karakteristik materi"
 
-    return f"""
-Bertindak sebagai ahli penyusunan perangkat pembelajaran
-Indonesia yang memahami Kurikulum Merdeka.
+    aturan = ATURAN_22.get(
+        data["jenis_perangkat"],
+        "Gunakan format administrasi pembelajaran yang sesuai."
+    )
 
-Buat dokumen berikut:
+    return f"""
+Anda adalah ahli penyusunan perangkat pembelajaran
+Kurikulum Merdeka di Indonesia.
+
+TUGAS UTAMA
+Buat SATU dokumen perangkat pembelajaran sesuai pilihan
+perangkat yang diberikan pengguna.
+
+========================================================
+JENIS PERANGKAT
+========================================================
 
 {data["jenis_perangkat"]}
 
-IDENTITAS SEKOLAH
+========================================================
+ATURAN KHUSUS PERANGKAT
+========================================================
+
+{aturan}
+
+========================================================
+IDENTITAS SATUAN PENDIDIKAN
+========================================================
 
 Dinas Pendidikan:
 {data["dinas"]}
@@ -491,7 +919,9 @@ Alamat:
 Kota/Kabupaten:
 {data["kota"]}
 
+========================================================
 IDENTITAS GURU
+========================================================
 
 Jabatan:
 {data["jabatan_guru"]}
@@ -499,7 +929,7 @@ Jabatan:
 Nama Guru:
 {data["guru_nama"]}
 
-NIP:
+NIP Guru:
 {data["guru_nip"]}
 
 Kepala Sekolah:
@@ -514,7 +944,9 @@ Pengawas Pembina:
 NIP Pengawas:
 {data["pengawas_nip"]}
 
+========================================================
 PARAMETER PEMBELAJARAN
+========================================================
 
 Mata Pelajaran:
 {data["mapel"]}
@@ -537,26 +969,106 @@ Profil Pelajar Pancasila:
 Tanggal:
 {data["tanggal"]}
 
-KETENTUAN DOKUMEN
+========================================================
+ATURAN UMUM
+========================================================
 
-1. Gunakan bahasa Indonesia formal dan baku.
-2. Buat dokumen lengkap, rinci, operasional, dan siap digunakan.
-3. Jangan menggunakan placeholder.
-4. Jangan menulis "[isi]", "[sesuaikan]", "...", "dst."
-   atau "dan seterusnya".
-5. Gunakan heading Markdown.
-6. Gunakan tabel Markdown jika diperlukan.
-7. Jangan mengarang nomor regulasi.
-8. Jangan memberikan penjelasan di luar dokumen.
-9. Jangan menggunakan blok kode Markdown.
-10. Akhiri dengan bagian pengesahan.
-11. Sesuaikan isi dengan fase, kelas, mata pelajaran,
-    materi, dan jenis perangkat yang dipilih.
+1. Gunakan bahasa Indonesia formal, baku dan jelas.
 
-Mulai langsung dari dokumen.
+2. Buat dokumen lengkap dan siap digunakan guru.
+
+3. Ikuti ATURAN KHUSUS PERANGKAT di atas.
+
+4. Jangan mencampurkan format perangkat lain.
+
+5. Jangan mengarang data siswa, nilai, tanggal,
+   nomor surat, nomor regulasi, NIP, nama pejabat,
+   alamat, atau data resmi lainnya.
+
+6. Jika data yang diperlukan belum tersedia, gunakan
+   tabel/format yang siap diisi, bukan data palsu.
+
+7. Jangan membuat klaim bahwa suatu dokumen adalah
+   dokumen resmi pemerintah jika sumber resminya
+   tidak diberikan.
+
+8. Untuk CP atau regulasi pemerintah:
+   jangan mengarang kutipan resmi.
+
+9. Untuk kalender pendidikan:
+   jangan mengarang hari libur atau pekan efektif resmi.
+
+10. Untuk daftar pustaka:
+    jangan membuat sumber palsu.
+
+11. Gunakan heading Markdown:
+    # untuk judul utama
+    ## untuk bagian
+    ### untuk subbagian
+
+12. Gunakan tabel Markdown untuk data tabular.
+
+13. Pastikan setiap tabel mempunyai header yang jelas.
+
+14. Jangan menggunakan blok kode Markdown.
+
+15. Jangan memberikan penjelasan di luar dokumen.
+
+16. Jangan menggunakan placeholder seperti:
+    "[isi]"
+    "[sesuaikan]"
+    "[masukkan]"
+    "..."
+    "dst."
+    "dan seterusnya"
+
+17. Jika dokumen membutuhkan pengesahan, buat bagian:
+
+    PENGESAHAN
+
+    Mengetahui,
+    Kepala Sekolah
+
+    Nama:
+    NIP:
+
+    Guru/Pendidik
+
+    Nama:
+    NIP:
+
+    Pengawas Pembina
+    jika relevan.
+
+18. Jangan mengisi nama, NIP atau tanda tangan dengan
+    data yang tidak diberikan.
+
+19. Pastikan dokumen sesuai dengan:
+    - fase
+    - kelas
+    - mata pelajaran
+    - semester
+    - materi pokok
+    - alokasi waktu.
+
+20. Periksa kembali konsistensi antara TP, materi,
+    asesmen dan alokasi waktu sebelum menghasilkan
+    dokumen.
+
+========================================================
+HASIL AKHIR
+========================================================
+
+Mulai langsung dari judul dokumen.
+
+Hasil harus berupa dokumen yang dapat langsung
+dipreview dan diunduh sebagai DOCX.
+
+Jangan memberikan komentar kepada pengguna.
+Jangan menjelaskan proses pembuatan.
+Hanya hasil dokumen.
 """
-
-
+    
 # =========================================================
 # SIDEBAR
 # =========================================================
