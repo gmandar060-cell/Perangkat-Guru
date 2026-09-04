@@ -163,16 +163,6 @@ h1, h2, h3, h4, h5, h6, button, input, textarea {
 }
 
 /* ===== LOGIN FORM CARD ===== */
-.login-form-wrap {
-    background: #fff;
-    border-radius: 18px;
-    padding: 30px 30px 28px;
-    margin-top: 24px;
-    box-shadow: 0 18px 45px rgba(11, 31, 88, .20);
-    border: 1px solid rgba(255,255,255,.7);
-    box-sizing: border-box;
-}
-
 .login-form-title {
     color: #172033 !important;
     font-size: 19px;
@@ -186,18 +176,29 @@ h1, h2, h3, h4, h5, h6, button, input, textarea {
     margin: 0 0 18px 0;
 }
 
-/* ===== LOGIN WIDGETS — applies to real Streamlit DOM ===== */
-.stApp:has(.login-page) .stTextInput {
-    margin-bottom: 4px !important;
+/* st.form creates a real wrapper around ALL login widgets */
+.stApp:has(.login-page) [data-testid="stForm"] {
+    background: #fff !important;
+    border: 1px solid rgba(255,255,255,.75) !important;
+    border-radius: 18px !important;
+    padding: 28px 30px 28px !important;
+    margin: 24px auto 0 !important;
+    box-shadow: 0 18px 45px rgba(11,31,88,.20) !important;
+    box-sizing: border-box !important;
+    max-width: 100% !important;
 }
 
-.stApp:has(.login-page) .stTextInput label {
+.stApp:has(.login-page) [data-testid="stForm"] .stTextInput {
+    margin-bottom: 5px !important;
+}
+
+.stApp:has(.login-page) [data-testid="stForm"] .stTextInput label {
     color: #334155 !important;
     font-size: 13px !important;
     font-weight: 700 !important;
 }
 
-.stApp:has(.login-page) .stTextInput input {
+.stApp:has(.login-page) [data-testid="stForm"] .stTextInput input {
     background: #fff !important;
     color: #1e293b !important;
     border: 1px solid #dbe3ef !important;
@@ -207,37 +208,32 @@ h1, h2, h3, h4, h5, h6, button, input, textarea {
     box-sizing: border-box !important;
 }
 
-.stApp:has(.login-page) .stTextInput input:focus {
+.stApp:has(.login-page) [data-testid="stForm"] .stTextInput input:focus {
     border-color: #4d83f5 !important;
     box-shadow: 0 0 0 3px rgba(59,130,246,.10) !important;
 }
 
-.stApp:has(.login-page) .stTextInput input::placeholder {
+.stApp:has(.login-page) [data-testid="stForm"] .stTextInput input::placeholder {
     color: #c2ccda !important;
     -webkit-text-fill-color: #c2ccda !important;
 }
 
-.stApp:has(.login-page) .stTextInput [data-testid="stTextInputRootElement"] {
-    background: #fff !important;
-}
-
-.stApp:has(.login-page) .stButton > button {
+.stApp:has(.login-page) [data-testid="stForm"] .stButton > button {
     margin-top: 10px !important;
     min-height: 52px !important;
     border: none !important;
     border-radius: 11px !important;
-    background: linear-gradient(90deg, #2760df 0%, #2d68ee 100%) !important;
+    background: linear-gradient(90deg,#2760df 0%,#2d68ee 100%) !important;
     box-shadow: 0 8px 18px rgba(37,99,235,.24) !important;
-    transition: transform .15s ease, box-shadow .15s ease !important;
 }
 
-.stApp:has(.login-page) .stButton > button:hover {
+.stApp:has(.login-page) [data-testid="stForm"] .stButton > button:hover {
     transform: translateY(-1px);
     box-shadow: 0 11px 22px rgba(37,99,235,.30) !important;
 }
 
-.stApp:has(.login-page) .stButton > button,
-.stApp:has(.login-page) .stButton > button * {
+.stApp:has(.login-page) [data-testid="stForm"] .stButton > button,
+.stApp:has(.login-page) [data-testid="stForm"] .stButton > button * {
     color: white !important;
     font-weight: 800 !important;
     font-size: 15px !important;
@@ -427,9 +423,9 @@ section[data-testid="stSidebar"] {
         font-size: 14px;
     }
 
-    .login-form-wrap {
-        padding: 24px 18px 22px;
-        margin-top: 18px;
+    .stApp:has(.login-page) [data-testid="stVerticalBlock"]:has(.login-form-marker) {
+        padding: 24px 18px 22px !important;
+        margin-top: 18px !important;
     }
 
     .stat-card {
@@ -686,9 +682,10 @@ def buat_instruksi_prompt(data: dict) -> str:
 # =========================================================
 
 if not st.session_state.authenticated:
-    # Penanda mode login untuk mengaktifkan background landing page
+    # Penanda untuk mengaktifkan tema background login
     st.markdown('<div class="login-page"></div>', unsafe_allow_html=True)
 
+    # ===== HERO =====
     st.markdown(
         """
         <div class="login-hero">
@@ -696,9 +693,7 @@ if not st.session_state.authenticated:
                 <div class="login-icon">🎓</div>
                 <div class="login-badge">✦ &nbsp; KURIKULUM MERDEKA</div>
             </div>
-
             <h1 class="login-title">SIAP AJAR <span>22</span></h1>
-
             <div class="login-subtitle">
                 Satu Portal, Solusi Lengkap <strong>22 Perangkat Pembelajaran</strong>
             </div>
@@ -707,81 +702,67 @@ if not st.session_state.authenticated:
         unsafe_allow_html=True,
     )
 
-    # Tiga kartu statistik seperti desain referensi
+    # ===== STATISTIK =====
     s1, s2, s3 = st.columns(3, gap="small")
 
     with s1:
         st.markdown(
-            """
-            <div class="stat-card">
-                <div class="stat-icon">▱</div>
-                <div class="stat-number">4 Kategori</div>
-                <div class="stat-label">Terorganisir</div>
-            </div>
-            """,
+            '<div class="stat-card"><div class="stat-icon">▱</div>'
+            '<div class="stat-number">4 Kategori</div>'
+            '<div class="stat-label">Terorganisir</div></div>',
             unsafe_allow_html=True,
         )
 
     with s2:
         st.markdown(
-            """
-            <div class="stat-card">
-                <div class="stat-icon">▤</div>
-                <div class="stat-number">22 Dokumen</div>
-                <div class="stat-label">AI Generated</div>
-            </div>
-            """,
+            '<div class="stat-card"><div class="stat-icon">▤</div>'
+            '<div class="stat-number">22 Dokumen</div>'
+            '<div class="stat-label">AI Generated</div></div>',
             unsafe_allow_html=True,
         )
 
     with s3:
         st.markdown(
-            """
-            <div class="stat-card">
-                <div class="stat-icon">▣</div>
-                <div class="stat-number">Gemini AI</div>
-                <div class="stat-label">Flash Model</div>
-            </div>
-            """,
+            '<div class="stat-card"><div class="stat-icon">▣</div>'
+            '<div class="stat-number">Gemini AI</div>'
+            '<div class="stat-label">Flash Model</div></div>',
             unsafe_allow_html=True,
         )
 
-    # Kartu form utama
-    st.markdown('<div class="login-form-wrap">', unsafe_allow_html=True)
+    # ===== LOGIN FORM =====
+    # st.form menjadikan judul, input, bantuan, dan tombol berada
+    # dalam SATU kartu putih yang benar-benar sama secara DOM.
+    with st.form("login_form", clear_on_submit=False, border=False):
+        st.markdown(
+            '<div class="login-form-title">Masuk ke Portal</div>'
+            '<div class="login-form-desc">Isi data berikut untuk memulai</div>',
+            unsafe_allow_html=True,
+        )
 
-    st.markdown(
-        """
-        <div class="login-form-title">Masuk ke Portal</div>
-        <div class="login-form-desc">Isi data berikut untuk memulai</div>
-        """,
-        unsafe_allow_html=True,
-    )
+        nama_guru_input = st.text_input(
+            "Nama Lengkap & Gelar",
+            placeholder="Contoh: Andar Prasetyo, S.Pd.",
+            key="login_nama",
+        )
 
-    nama_guru_input = st.text_input(
-        "Nama Lengkap & Gelar",
-        placeholder="Contoh: Andar Prasetyo, S.Pd.",
-        key="login_nama",
-    )
+        api_key_masuk = st.text_input(
+            "Gemini API Key",
+            type="password",
+            placeholder="AIza...",
+            key="login_api_key",
+        )
 
-    api_key_masuk = st.text_input(
-        "Gemini API Key",
-        type="password",
-        placeholder="AIza...",
-        key="login_api_key",
-    )
+        st.markdown(
+            '<div class="api-help">'
+            '<a href="https://aistudio.google.com/apikey" target="_blank">'
+            'ⓘ &nbsp; Bagaimana cara mendapatkan API key gratis?'
+            '</a></div>',
+            unsafe_allow_html=True,
+        )
 
-    st.markdown(
-        """
-        <div class="api-help">
-            <a href="https://aistudio.google.com/apikey" target="_blank">
-                ⓘ &nbsp; Bagaimana cara mendapatkan API key gratis?
-            </a>
-        </div>
-        """,
-        unsafe_allow_html=True,
-    )
+        masuk = st.form_submit_button("Masuk ke Portal  →", use_container_width=True)
 
-    if st.button("Masuk ke Portal  →", use_container_width=True):
+    if masuk:
         if not nama_guru_input.strip():
             st.warning("⚠️ Mohon isi Nama Lengkap & Gelar terlebih dahulu.")
         elif not api_key_masuk.strip():
@@ -792,17 +773,11 @@ if not st.session_state.authenticated:
             st.session_state.authenticated = True
             st.rerun()
 
-    st.markdown("</div>", unsafe_allow_html=True)
-
     st.markdown(
-        """
-        <div class="login-footer">
-            <span class="creator-pill">
-                <span class="creator-dot"></span>
-                Creator: <strong>Andar</strong>
-            </span>
-        </div>
-        """,
+        '<div class="login-footer">'
+        '<span class="creator-pill"><span class="creator-dot"></span>'
+        'Creator: <strong>Andar</strong></span>'
+        '</div>',
         unsafe_allow_html=True,
     )
 
@@ -1020,3 +995,4 @@ if st.session_state.hasil_teks:
         st.download_button("📝 Unduh Teks Mentah (.TXT)", data=st.session_state.hasil_teks, file_name=f"{st.session_state.nama_file_base}.txt", mime="text/plain", use_container_width=True)
 
 st.markdown("""<div class="footer-box">SIAP AJAR 22 • Creator: Andar<br>© 2026 SIAP AJAR 22 • Engine AI Pembelajaran</div>""", unsafe_allow_html=True)
+
