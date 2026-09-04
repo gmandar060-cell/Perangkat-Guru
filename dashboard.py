@@ -1165,10 +1165,16 @@ if st.button(
 
         progress.progress(15)
 
-   model_list = [
-    "gemini-3.6-flash",
-]
+          progress.progress(15)
+
+        model_list = [
+            "gemini-3.6-flash",
+        ]
+
         response = None
+        model_berhasil = ""
+
+        errors = []      response = None
         model_berhasil = ""
 
         errors = []
