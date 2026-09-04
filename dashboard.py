@@ -1165,11 +1165,9 @@ if st.button(
 
         progress.progress(15)
 
-        model_list = [
-            "gemini-2.5-flash",
-            "gemini-2.0-flash",
-        ]
-
+   model_list = [
+    "gemini-3.6-flash",
+]
         response = None
         model_berhasil = ""
 
