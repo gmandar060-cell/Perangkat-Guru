@@ -1548,9 +1548,9 @@ if st.button(
         # =================================================
 
         model_list = [
-            "gemini-3.8-flash",
-            "gemini-2.5-flash",
-        ]
+    "gemini-3.6-flash",
+    "gemini-3.8-flash",
+]
 
 
         response = None
